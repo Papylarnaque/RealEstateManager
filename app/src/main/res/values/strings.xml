@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+
+
+
+    <string name="add_property_text">Add a property</string>
 </resources>
