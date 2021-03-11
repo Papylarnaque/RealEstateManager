@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Estate::class], version = 1, exportSchema = false)
+@Database(entities = [Estate::class, Picture::class], version = 1, exportSchema = false)
 abstract class EstateDatabase : RoomDatabase() {
 
     abstract val estateDatabaseDao: EstateDatabaseDao
@@ -41,5 +41,7 @@ abstract class EstateDatabase : RoomDatabase() {
                 return instance
             }
         }
+
     }
 }
+

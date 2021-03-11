@@ -7,9 +7,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "estate_table")
 data class Estate(
-        @PrimaryKey(autoGenerate = true)
-        val estateId: Long = 0L,
+//        @PrimaryKey(autoGenerate = true)
+//        val estateId: Long = 0L,
 
+        @PrimaryKey
         @ColumnInfo(name = "start_time_milli")
         val startTimeMilli: Long = System.currentTimeMillis(),
 
@@ -31,11 +32,11 @@ data class Estate(
         @ColumnInfo(name = "description")
         val estateDescription: String = "",
 
-//        @ColumnInfo(name = "picture_url")
-//        val estateUrlPicture: List<String>,
-//
-//        @ColumnInfo(name = "address")
-//        val estateAddress: Address,
+        @ColumnInfo(name = "street")
+        val estateStreet: String = "",
+
+        @ColumnInfo(name = "city")
+        val estateCity: String = "",
 //
 //        @ColumnInfo(name = "nearby_places")
 //        val estateNearby: List<String>,
@@ -46,5 +47,5 @@ data class Estate(
         @ColumnInfo(name = "employee")
         val estateEmployee: String,
 
-)
+        )
 

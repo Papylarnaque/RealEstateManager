@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.EstateDatabaseDao
+import com.openclassrooms.realestatemanager.database.Picture
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -39,6 +40,17 @@ class EstateDatabaseTest {
         estateEmployee = "Etienne"
     )
 
+    private val picture21 = Picture(
+        start_time_milli = estate2.startTimeMilli,
+        pictureUrl = "TestURLpicture2_1"
+    )
+
+    private val picture22 = Picture(
+        start_time_milli = estate2.startTimeMilli,
+        pictureUrl = "TestURLpicture2_2"
+    )
+
+
 
     @Before
     fun createDb() {
@@ -60,7 +72,7 @@ class EstateDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetEstate() = runBlocking {
-        estateDao.insert(estate1)
+        estateDao.insertEstate(estate1)
         val estateList : List<Estate>? = estateDao.getAllEstates().value
         if (estateList != null) {
             assert(estateList.contains(estate1) )
@@ -70,9 +82,10 @@ class EstateDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetSpecificEstate() = runBlocking {
-        estateDao.insert(estate1)
-        estateDao.insert(estate2)
-        val estate : Estate? = estateDao.get(startTime)
+        estateDao.insertEstate(estate1)
+        estateDao.insertEstate(estate2)
+
+        val estate : Estate? = estateDao.getEstate(startTime)
         if (estate != null) {
             assert(estate == estate2)
         } else assert(false)
@@ -81,8 +94,8 @@ class EstateDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndUpdateThenGetSpecificEstate() = runBlocking {
-        estateDao.insert(estate1)
-        estateDao.insert(estate2)
+        estateDao.insertEstate(estate1)
+        estateDao.insertEstate(estate2)
 
         val newEstate = Estate(
             startTimeMilli = startTime,
@@ -94,9 +107,9 @@ class EstateDatabaseTest {
             estateAvailability = false
         )
 
-        estateDao.update(newEstate)
+        estateDao.updateEstate(newEstate)
 
-        val estate : Estate? = estateDao.get(startTime)
+        val estate : Estate? = estateDao.getEstate(startTime)
 
         if (estate != null) {
             assert(estate != estate2)
@@ -108,15 +121,48 @@ class EstateDatabaseTest {
     @Throws(Exception::class)
     fun insertAndDeleteEstate() = runBlocking {
 
-        estateDao.insert(estate1)
-        estateDao.insert(estate2)
+        estateDao.insertEstate(estate1)
+        estateDao.insertEstate(estate2)
 
-        estateDao.delete(startTime)
+        estateDao.deleteEstate(startTime)
 
         val estateList : List<Estate>? = estateDao.getAllEstates().value
         if (estateList != null) {
             assert(!estateList.contains(estate2) )
             assert(estateList.size==1)
+        } else assert(false)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertAndGetPictures() = runBlocking {
+
+        estateDao.insertEstate(estate2)
+        estateDao.insertPicture(picture21)
+
+        val url = estateDao.getPictures(estate2.startTimeMilli).value
+
+        if (url != null) {
+            assert(url.contains(picture21.pictureUrl))
+            assert(url.contains(picture22.pictureUrl))
+        } else assert(false)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertAndGetPicturesThenDeletePicture() = runBlocking {
+
+        estateDao.insertEstate(estate2)
+        estateDao.insertPicture(picture21)
+        estateDao.insertPicture(picture22)
+
+        val url = estateDao.getPictures(estate2.startTimeMilli).value
+
+        estateDao.deletePicture(estate2.startTimeMilli, picture21.pictureUrl)
+
+        if (url != null) {
+            assert(!url.contains(picture21.pictureUrl))
+            assert(url.contains(picture22.pictureUrl))
         } else assert(false)
     }
 
