@@ -7,8 +7,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "estate_table")
 data class Estate(
-//        @PrimaryKey(autoGenerate = true)
-//        val estateId: Long = 0L,
 
         @PrimaryKey
         @ColumnInfo(name = "start_time_milli")
@@ -18,7 +16,7 @@ data class Estate(
         val endTimeMilli: Long? = startTimeMilli,
 
         @ColumnInfo(name = "type")
-        val estateType: String = "Maison",
+        var estateType: String = "",
 
         @ColumnInfo(name = "price")
         val estatePrice: Int = 0,
@@ -37,15 +35,16 @@ data class Estate(
 
         @ColumnInfo(name = "city")
         val estateCity: String = "",
-//
-//        @ColumnInfo(name = "nearby_places")
-//        val estateNearby: List<String>,
 
-        @ColumnInfo(name = "nearby_places")
+        @ColumnInfo(name = "picture_url")
+        val pictureUrl: String,
+
+        @ColumnInfo(name = "availability")
         val estateAvailability: Boolean = true,
 
         @ColumnInfo(name = "employee")
         val estateEmployee: String,
+
 
         )
 

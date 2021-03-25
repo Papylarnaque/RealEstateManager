@@ -10,12 +10,7 @@ import androidx.room.Update
 interface EstateDatabaseDao {
 
     @Insert
-    suspend fun insertEstate(estate: Estate)
-
-
-    @Insert
-    suspend fun insertPicture(picture: Picture)
-
+    suspend fun insert(estate: Estate)
 
     /**
      * When updating a row with a value already set in a column,
@@ -43,30 +38,10 @@ interface EstateDatabaseDao {
     fun getAllEstates(): LiveData<List<Estate>>
 
 
-    /**
-     * Selects and returns all pictures for an estate,
-     *
-     * sorted by start time in descending order.
-     */
-    @Query("SELECT * FROM picture_table WHERE start_time_milli = :start_time_milli ")
-    fun getPictures(start_time_milli: Long): LiveData<List<Picture>>
+
+    @Query("DELETE FROM estate_table")
+    fun deleteAll()
 
 
 
-    /**
-     * Deletes the row that matches the supplied estateId.
-     *
-     * @param estateId
-     */
-    @Query("DELETE FROM estate_table WHERE start_time_milli = :start_time_milli")
-    suspend fun deleteEstate(start_time_milli: Long)
-
-
-    /**
-     * Deletes the row that matches the supplied estateId.
-     *
-     * @param pictureId
-     */
-    @Query("DELETE FROM picture_table WHERE pictureId = :pictureId AND picture_url = :pictureUrl")
-    suspend fun deletePicture(pictureId: Long, pictureUrl: String)
 }

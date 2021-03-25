@@ -20,8 +20,10 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
 
     compileOptions {
@@ -56,8 +58,9 @@ dependencies {
 
     // Support libraries
     implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.fragment:fragment-ktx:1.3.0"
+    implementation "androidx.fragment:fragment-ktx:1.3.1"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
 
     // Android KTX
     implementation 'androidx.core:core-ktx:1.3.2'
@@ -70,8 +73,14 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigationVersion"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$navigationVersion"
+
     // DataBinding
-    kapt "com.android.databinding:compiler:$rootProject.dataBindingCompilerVersion"
+    kapt "com.android.databinding:compiler:$dataBindingCompilerVersion"
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
