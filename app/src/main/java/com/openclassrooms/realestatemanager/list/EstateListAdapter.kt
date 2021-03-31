@@ -3,15 +3,13 @@ package com.openclassrooms.realestatemanager.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.Estate
-
+import com.openclassrooms.realestatemanager.databinding.ItemEstateBinding
 
 
 class EstateListAdapter(private val onClick: (Estate) -> Unit) :
@@ -22,10 +20,8 @@ class EstateListAdapter(private val onClick: (Estate) -> Unit) :
             RecyclerView.ViewHolder(itemView) {
         // TODO() Handle binding instead of findViewById
 
-        private val estateListFirstLine: TextView = itemView.findViewById(R.id.item_estate_first_line)
-        private val estateListSecondLine: TextView = itemView.findViewById(R.id.item_estate_second_line)
-        private val estateListThirdLine: TextView = itemView.findViewById(R.id.item_estate_third_line)
-        private val estateListImageView: ImageView = itemView.findViewById(R.id.item_estate_picture)
+        private lateinit var binding: ItemEstateBinding
+
         private var currentEstate: Estate? = null
 
         init {
@@ -40,14 +36,14 @@ class EstateListAdapter(private val onClick: (Estate) -> Unit) :
         fun bind(estate: Estate) {
             currentEstate = estate
 
-            estateListFirstLine.text = estate.estateType
-            estateListSecondLine.text = estate.estateCity
-            estateListThirdLine.text = estate.estatePrice.toString()
+            binding.itemEstateFirstLine.text = estate.estateType
+            binding.itemEstateSecondLine.text = estate.estateCity
+            binding.itemEstateThirdLine.text = estate.estatePrice.toString()
             Glide.with(itemView)
                     .load(estate.pictureUrl)
                     .thumbnail(0.33f)
                     .centerCrop()
-                    .into(estateListImageView)
+                    .into(binding.itemEstatePicture)
 
         }
     }
