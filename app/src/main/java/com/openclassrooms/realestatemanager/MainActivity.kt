@@ -10,14 +10,20 @@ import androidx.navigation.fragment.NavHostFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navHostFragment: NavHostFragment
-    private val swPORTRAIT = resources.getInteger(R.integer.sw_portrait_only)
-    private val swLANDSCAPE = resources.getInteger(R.integer.sw_landscape_only)
+
     private var smallestWidth: Float = 0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // get device dimensions
+        setDeviceOrientations()
+
+        setContentView(R.layout.activity_main)
+        navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    }
+
+    private fun setDeviceOrientations() {
         val displayMetrics: DisplayMetrics = resources.displayMetrics
         val dpHeight = displayMetrics.heightPixels / displayMetrics.density
         val dpWidth = displayMetrics.widthPixels / displayMetrics.density
@@ -27,6 +33,9 @@ class MainActivity : AppCompatActivity() {
                 "SMALLER_WIDTH = $smallestWidth " +
                         "/ width = $dpWidth " +
                         "/ height = $dpHeight ")
+
+        val swPORTRAIT = resources.getInteger(R.integer.sw_portrait_only)
+        val swLANDSCAPE = resources.getInteger(R.integer.sw_landscape_only)
 
         when {
             // PORTRAIT if < smartphone size
@@ -43,9 +52,5 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.i("MainActivity", "requestedOrientation = $requestedOrientation")
-
-        setContentView(R.layout.activity_main)
-        navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
 }
