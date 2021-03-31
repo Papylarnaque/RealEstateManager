@@ -84,4 +84,15 @@ class DetailFragment : Fragment() {
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(boolean)
     }
 
+
+    // TODO() Fix DetailFragment alone when rotating from portrait to landscape when on detail view
+//    override fun onResume() {
+//        super.onResume()
+//        // true only in landscape
+//        if (resources.getBoolean(R.bool.is_landscape)) {
+//            NavHostFragment.findNavController(requireParentFragment())
+//                    .navigate(R.id.action_detailFragment_to_listFragment)
+//        }
+//    }
+
 }

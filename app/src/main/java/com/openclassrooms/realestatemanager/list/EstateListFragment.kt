@@ -8,17 +8,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 
+
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
     private lateinit var estateListViewModel: EstateListViewModel
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -32,16 +35,23 @@ class EstateListFragment : Fragment() {
         val estateListAdapter = EstateListAdapter { estate -> adapterOnClick(estate) }
         binding.recyclerviewEstateList.adapter = estateListAdapter
         binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
+        val dividerItemDecoration = DividerItemDecoration(binding.recyclerviewEstateList.context,
+                LinearLayoutManager(context).orientation)
+        binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
+
+
 
         // Get the viewModel
-        estateListViewModel = ViewModelProvider(this).get(EstateListViewModel::class.java)
+        estateListViewModel =
+                ViewModelProvider(this).get(EstateListViewModel::class.java)
 
         // Observe data modification in the VM
-        estateListViewModel.allEstates.observe(viewLifecycleOwner, {
-            it?.let {
-                estateListAdapter.submitList(it as MutableList<Estate>)
-            }
-        })
+        estateListViewModel
+                .allEstates.observe(viewLifecycleOwner, {
+                    it?.let {
+                        estateListAdapter.submitList(it as MutableList<Estate>)
+                    }
+                })
 
         return binding.root
     }
@@ -58,7 +68,6 @@ class EstateListFragment : Fragment() {
                     .navigate(R.id.action_listFragment_to_detailFragment)
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_list, menu);

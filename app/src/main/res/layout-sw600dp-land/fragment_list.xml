@@ -27,6 +27,7 @@
             app:layout_constraintHorizontal_weight="7"
             app:layout_constraintStart_toEndOf="@id/recyclerview_estate_list"
             app:layout_constraintTop_toTopOf="parent"
+            tools:background="@color/colorPrimary"
             tools:layout="@layout/fragment_detail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
