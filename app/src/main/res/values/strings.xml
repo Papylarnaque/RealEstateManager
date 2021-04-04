@@ -5,4 +5,7 @@
     <string name="item_estate_picture_description">Picture of the estate</string>
     <string name="lorem_ipsum">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</string>
     <string name="create_description_text">Description:</string>
+
+
+    <string name="item_estate_first_line_text">%1$s</string>
 </resources>

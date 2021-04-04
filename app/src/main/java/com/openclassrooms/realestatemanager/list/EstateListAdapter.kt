@@ -1,75 +1,63 @@
 package com.openclassrooms.realestatemanager.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.ItemEstateBinding
 
 
-class EstateListAdapter(private val onClick: (Estate) -> Unit) :
-        ListAdapter<Estate, EstateListAdapter.EstateViewHolder>(EstateDiffCallback) {
+class EstateListAdapter(private val clickListener: EstateListener) : ListAdapter<Estate, EstateListAdapter.ViewHolder>(EstateDiffCallback()) {
 
-    /* ViewHolder for Flower, takes in the inflated view and the onClick behavior. */
-    class EstateViewHolder(itemView: View, val onClick: (Estate) -> Unit) :
-            RecyclerView.ViewHolder(itemView) {
-        // TODO() Handle binding instead of findViewById
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position)!!, clickListener)
+    }
 
-        private lateinit var binding: ItemEstateBinding
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
+    }
 
-        private var currentEstate: Estate? = null
+    class ViewHolder private constructor(val binding: ItemEstateBinding) : RecyclerView.ViewHolder(binding.root){
 
-        init {
-            itemView.setOnClickListener {
-                currentEstate?.let {
-                    onClick(it)
-                }
+        fun bind(item: Estate, clickListener: EstateListener) {
+            binding.estate = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemEstateBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
-
-        /* Bind flower name and image. */
-        fun bind(estate: Estate) {
-            currentEstate = estate
-
-            binding.itemEstateFirstLine.text = estate.estateType
-            binding.itemEstateSecondLine.text = estate.estateCity
-            binding.itemEstateThirdLine.text = estate.estatePrice.toString()
-            Glide.with(itemView)
-                    .load(estate.pictureUrl)
-                    .thumbnail(0.33f)
-                    .centerCrop()
-                    .into(binding.itemEstatePicture)
-
-        }
-    }
-
-    /* Creates and inflates view and return EstateViewHolder. */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstateViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_estate, parent, false)
-        return EstateViewHolder(view, onClick)
-    }
-
-    /* Gets current flower and uses it to bind view. */
-    override fun onBindViewHolder(holder: EstateViewHolder, position: Int) {
-        val estate = getItem(position)
-        holder.bind(estate)
-
     }
 }
 
-object EstateDiffCallback : DiffUtil.ItemCallback<Estate>() {
+class EstateDiffCallback : DiffUtil.ItemCallback<Estate>() {
     override fun areItemsTheSame(oldItem: Estate, newItem: Estate): Boolean {
-        return oldItem == newItem
+        return oldItem.startTimeMilli == newItem.startTimeMilli
     }
 
     override fun areContentsTheSame(oldItem: Estate, newItem: Estate): Boolean {
-        return oldItem.startTimeMilli == newItem.startTimeMilli
+        return oldItem == newItem
     }
 }
 
+class EstateListener(val clickListener: (estateId: Long) -> Unit) {
+    fun onClick(estate: Estate) = clickListener(estate.startTimeMilli)
+}
+
+
+@BindingAdapter("pictureUrl")
+fun loadImage(view: ImageView, url: String){
+    Glide.with(view)
+        .load(url)
+        .into(view)
+}

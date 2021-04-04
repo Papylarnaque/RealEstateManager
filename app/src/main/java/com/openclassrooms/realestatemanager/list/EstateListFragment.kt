@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
@@ -22,51 +23,53 @@ class EstateListFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var estateListViewModel: EstateListViewModel
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         setHasOptionsMenu(true);
 
         // Inflate view and obtain an instance of the binding class
         binding = FragmentListBinding.inflate(layoutInflater)
 
-        // Handle estate item by adapter
-        val estateListAdapter = EstateListAdapter { estate -> adapterOnClick(estate) }
+        // Handle estate item by adapter and navigation
+        val estateListAdapter = EstateListAdapter(EstateListener { estateId ->
+            estateListViewModel.onEstateClicked(estateId)
+        })
+
         binding.recyclerviewEstateList.adapter = estateListAdapter
         binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration = DividerItemDecoration(binding.recyclerviewEstateList.context,
-                LinearLayoutManager(context).orientation)
-        binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
 
+        // Add a line between each Estate item
+        val dividerItemDecoration = DividerItemDecoration(
+            binding.recyclerviewEstateList.context,
+            LinearLayoutManager(context).orientation
+        )
+        binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
 
 
         // Get the viewModel
         estateListViewModel =
-                ViewModelProvider(this).get(EstateListViewModel::class.java)
+            ViewModelProvider(this).get(EstateListViewModel::class.java)
 
         // Observe data modification in the VM
         estateListViewModel
-                .allEstates.observe(viewLifecycleOwner, {
-                    it?.let {
-                        estateListAdapter.submitList(it as MutableList<Estate>)
-                    }
-                })
+            .allEstates.observe(viewLifecycleOwner, {
+                it?.let {
+                    estateListAdapter.submitList(it as MutableList<Estate>)
+                }
+            })
 
+        // Add an Observer on the state variable for Navigating when and item is clicked.
+        estateListViewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
+            estate?.let {
+                this.findNavController().navigate(
+                    EstateListFragmentDirections
+                        .actionListFragmentToDetailFragment(estate)
+                )
+            }
+        })
         return binding.root
-    }
-
-    private fun adapterOnClick(estate: Estate) {
-        // TODO() Provide the estate to the DetailFragment (arguments in Navigation ?)
-        if (activity?.resources?.getBoolean(R.bool.is_landscape) == true) {
-            // TODO() Handle dpi AND orientation
-            // no navigation
-
-        } else {
-            NavHostFragment
-                    .findNavController(this)
-                    .navigate(R.id.action_listFragment_to_detailFragment)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -84,7 +87,8 @@ class EstateListFragment : Fragment() {
             R.id.add_estate -> {
                 //Open CreationFragment
                 Log.i("EstateListFragment", "Click on create a new estate")
-                NavHostFragment.findNavController(this).navigate(R.id.action_listFragment_to_creationFragment)
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_listFragment_to_creationFragment)
             }
         }
 
@@ -94,8 +98,8 @@ class EstateListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(
-                requireActivity(),
-                R.id.nav_host_fragment
+            requireActivity(),
+            R.id.nav_host_fragment
         )
     }
 
@@ -104,11 +108,9 @@ class EstateListFragment : Fragment() {
         // true only in landscape
         if (binding.detailFragmentContainer != null) {
             childFragmentManager.beginTransaction()
-                    .replace(binding.detailFragmentContainer!!.id, DetailFragment())
-                    .commit()
+                .replace(binding.detailFragmentContainer!!.id, DetailFragment())
+                .commit()
         }
     }
-
-
 }
 

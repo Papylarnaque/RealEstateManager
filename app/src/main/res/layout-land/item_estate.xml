@@ -3,8 +3,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp">
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    >
 
     <data>
 
@@ -21,15 +22,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/estate_picture_height_tablet"
+        android:layout_height="@dimen/estate_picture_height"
         android:onClick="@{() -> clickListener.onClick(estate)}"
         app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
         app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">
 
         <ImageView
             android:id="@+id/item_estate_picture"
-            android:layout_width="@dimen/estate_picture_width_tablet"
-            android:layout_height="@dimen/estate_picture_height_tablet"
+            android:layout_width="@dimen/estate_picture_width"
+            android:layout_height="@dimen/estate_picture_height"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
             android:contentDescription="@string/item_estate_picture_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,9 +49,8 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
             app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/item_estate_picture"
             tools:text="Flat"
             tools:textColor="@color/black"
             tools:textSize="20sp"
@@ -59,13 +61,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
             android:text="@{estate.estateCity.toString()}"
             android:textColor="@color/grey"
             android:textSize="15sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@+id/item_estate_first_line"
-            app:layout_constraintTop_toTopOf="@+id/item_estate_first_line"
             app:layout_constraintStart_toEndOf="@+id/item_estate_first_line"
+            app:layout_constraintTop_toTopOf="@+id/item_estate_first_line"
             tools:text="Nantes"
             tools:textColor="@color/grey"
             tools:textSize="15sp"
@@ -82,12 +85,29 @@
             android:text="@{Integer.toString(estate.estatePrice)}"
             android:textColor="@color/green"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
             tools:text="475.000 €"
             tools:textColor="@color/green"
             tools:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/item_estate_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:layout_marginEnd="20dp"
+            android:text="@{estate.estateDescription.toString()}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:maxLines="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Description"
+            tools:textColor="@color/black"
+            tools:textSize="15sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

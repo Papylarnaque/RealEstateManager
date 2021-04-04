@@ -34,6 +34,9 @@
         android:name="com.openclassrooms.realestatemanager.detail.DetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="estateKey"
+            app:argType="long" />
         <action
             android:id="@+id/action_detailFragment_to_listFragment"
             app:destination="@id/listFragment"

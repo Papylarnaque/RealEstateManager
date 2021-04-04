@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager
 
+
 const val STRING_SEPARATOR = "||"
 
 class KUtil {
@@ -26,6 +27,5 @@ class KUtil {
     fun StringToArray(string: String): Array<String> {
         return string.split(STRING_SEPARATOR).toTypedArray()
     }
-
 
 }
