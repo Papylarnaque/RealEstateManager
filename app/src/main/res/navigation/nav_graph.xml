@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_creation">
         <action
             android:id="@+id/action_creationFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/listFragment" />
     </fragment>
 
     <fragment
