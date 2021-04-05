@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.list
+package com.openclassrooms.realestatemanager.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,16 +14,23 @@ class EstateListViewModel(application: Application) : AndroidViewModel(applicati
     private val estateDatabaseDao = EstateDatabase.getDatabase(application, viewModelScope).estateDatabaseDao()
     private val repository: EstateRepository = EstateRepository(estateDatabaseDao)
     val allEstates: LiveData<List<Estate>> = repository.allEstates
-    
+
+
+
+    fun getEstateWithId(estateKey: Long): LiveData<Estate> {
+        return repository.getEstate(estateKey)
+    }
+
+
     /**
      * Navigation for the EstateListDetail fragment.
      */
-    private val _navigateToEstateDetail = MutableLiveData<Long>()
+    private val _navigateToEstateDetail = MutableLiveData<Estate>()
     val navigateToEstateDetail
         get() = _navigateToEstateDetail
 
-    fun onEstateClicked(id: Long) {
-        _navigateToEstateDetail.value = id
+    fun onEstateClicked(estate: Estate) {
+        _navigateToEstateDetail.value = estate
     }
 
 

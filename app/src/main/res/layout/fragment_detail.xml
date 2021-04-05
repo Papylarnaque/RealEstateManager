@@ -3,25 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="estate"
+            type="com.openclassrooms.realestatemanager.database.Estate" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_description_content_text"
+        app:layout_constraintEnd_toEndOf="@+id/detail_title_type_text"
+        app:layout_constraintStart_toEndOf="@+id/detail_title_type_text"
+        app:layout_constraintTop_toBottomOf="@+id/detail_description_content_text">
+
+        <!--    TITLE    -->
 
         <TextView
-            android:id="@+id/detail_description_type_text"
-            android:layout_width="wrap_content"
+            android:id="@+id/detail_title_type_text"
+            android:layout_width="194dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:text="@{@string/item_estate_first_line_text(estate.estateType.toString())}"
+            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="1dp"
             tools:text="HOUSE" />
 
+        <TextView
+            android:id="@+id/detail_title_surface_text"
+            android:layout_width="195dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:text="@{@string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}"
+            app:layout_constraintBottom_toBottomOf="@id/detail_title_type_text"
+            app:layout_constraintStart_toEndOf="@+id/detail_title_type_text"
+            tools:text="Surface content" />
+
+        <!--    PICTURES    -->
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
@@ -29,7 +55,7 @@
             android:layout_height="@dimen/detail_estate_picture_height"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_description_type_text">
+            app:layout_constraintTop_toBottomOf="@id/detail_title_type_text">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -54,6 +80,7 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:text="@string/detail_description_title_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
             tools:text="Description:" />
@@ -65,6 +92,7 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:text="@{estate.estateDescription}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_description_title_text"
             tools:text="@string/lorem_ipsum" />
@@ -78,7 +106,8 @@
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_description_content_text"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/ic_baseline_surface_24"
+            tools:srcCompat="@drawable/ic_baseline_surface_24" />
 
         <TextView
             android:id="@+id/detail_surface_title"
@@ -86,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:textStyle="bold"
+            android:text="@string/detail_surface_title"
             app:layout_constraintStart_toEndOf="@id/detail_surface_image"
             app:layout_constraintTop_toTopOf="@id/detail_surface_image"
             tools:text="Surface" />
@@ -95,6 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:text="@{@string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}"
             app:layout_constraintStart_toEndOf="@id/detail_surface_image"
             app:layout_constraintTop_toBottomOf="@id/detail_surface_title"
             tools:text="Surface content" />
@@ -108,7 +139,9 @@
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_surface_content"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/ic_baseline_rooms_24"
+            tools:srcCompat="@drawable/ic_baseline_rooms_24"
+            android:contentDescription="@string/detail_rooms_image_description" />
 
         <TextView
             android:id="@+id/detail_rooms_text"
@@ -116,6 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:textStyle="bold"
+            android:text="@{@string/detail_estate_rooms_text(Integer.toString(estate.estateRooms))}"
             app:layout_constraintStart_toEndOf="@id/detail_rooms_image"
             app:layout_constraintTop_toTopOf="@id/detail_rooms_image"
             tools:text="5 rooms" />

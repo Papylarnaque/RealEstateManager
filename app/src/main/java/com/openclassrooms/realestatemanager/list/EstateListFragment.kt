@@ -15,13 +15,13 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
+import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
 
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
-    private lateinit var estateListViewModel: EstateListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,14 +32,17 @@ class EstateListFragment : Fragment() {
         // Inflate view and obtain an instance of the binding class
         binding = FragmentListBinding.inflate(layoutInflater)
 
+        // Get the viewModel
+        val estateListViewModel =
+                ViewModelProvider(this).get(EstateListViewModel::class.java)
+
         // Handle estate item by adapter and navigation
-        val estateListAdapter = EstateListAdapter(EstateListener { estateId ->
-            estateListViewModel.onEstateClicked(estateId)
+        val estateListAdapter = EstateListAdapter(EstateListener { estate ->
+            estateListViewModel.onEstateClicked(estate)
         })
-
         binding.recyclerviewEstateList.adapter = estateListAdapter
-        binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
 
+        binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
         // Add a line between each Estate item
         val dividerItemDecoration = DividerItemDecoration(
             binding.recyclerviewEstateList.context,
@@ -47,10 +50,6 @@ class EstateListFragment : Fragment() {
         )
         binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
 
-
-        // Get the viewModel
-        estateListViewModel =
-            ViewModelProvider(this).get(EstateListViewModel::class.java)
 
         // Observe data modification in the VM
         estateListViewModel
@@ -65,10 +64,11 @@ class EstateListFragment : Fragment() {
             estate?.let {
                 this.findNavController().navigate(
                     EstateListFragmentDirections
-                        .actionListFragmentToDetailFragment(estate)
+                        .actionListFragmentToDetailFragment(estate.startTimeMilli)
                 )
             }
         })
+
         return binding.root
     }
 

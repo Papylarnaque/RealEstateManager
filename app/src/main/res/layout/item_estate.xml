@@ -82,7 +82,7 @@
             android:text="@{Integer.toString(estate.estatePrice)}"
             android:textColor="@color/green"
             android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
+            app:layout_constraintEnd_toEndOf="@+id/item_estate_second_line"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
             tools:text="475.000 €"
             tools:textColor="@color/green"

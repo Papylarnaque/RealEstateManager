@@ -76,10 +76,17 @@ abstract class EstateDatabase : RoomDatabase() {
                     startTimeMilli = Calendar.getInstance().timeInMillis,
                     endTimeMilli = null,
                     estateType = "House",
-                    estatePrice = 1000,
+                    estatePrice = 100000,
                     estateEmployee = "Etienne",
                     estateCity = "Nantes",
-                    pictureUrl = ""
+                    pictureUrl = "content://com.android.externalstorage.documents/" +
+                            "document/" + // Hardcoded URI of image in a smartphone
+                            "primary%3ADownload%2FMjAyMTAyNjZmNTViNDZhYjQ2YzFmZTE5NGJmMDM1NTZmZWZiNTY.jpeg",
+                    estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
+                    estateSurface = 250,
+                    estateAvailability = true,
+                    estateRooms = 5,
+                    estateStreet = "rue des Ponts"
             )
 
             estateDatabaseDao.insert(estate1)

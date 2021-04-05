@@ -27,7 +27,7 @@ interface EstateDatabaseDao {
      * @param estateId startTimeMilli to match
      */
     @Query("SELECT * FROM estate_table WHERE start_time_milli = :start_time_milli")
-    suspend fun getEstate(start_time_milli: Long): Estate?
+    fun getEstate(start_time_milli: Long): LiveData<Estate>
 
     /**
      * Selects and returns all rows in the table,

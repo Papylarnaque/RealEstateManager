@@ -50,8 +50,8 @@ class EstateDiffCallback : DiffUtil.ItemCallback<Estate>() {
     }
 }
 
-class EstateListener(val clickListener: (estateId: Long) -> Unit) {
-    fun onClick(estate: Estate) = clickListener(estate.startTimeMilli)
+class EstateListener(val clickListener: (estate: Estate) -> Unit) {
+    fun onClick(estate: Estate) = clickListener(estate)
 }
 
 

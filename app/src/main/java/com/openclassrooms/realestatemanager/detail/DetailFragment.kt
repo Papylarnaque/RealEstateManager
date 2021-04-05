@@ -9,17 +9,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
+import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
 class DetailFragment : Fragment() {
 
+    private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
-    private lateinit var viewModel: DetailViewModel
+    private lateinit var viewModel: EstateListViewModel
+
+    // Observe data modification in the VM
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         // Handle the back button event
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -28,21 +33,25 @@ class DetailFragment : Fragment() {
             switchBackButton(false)
         }
 
-
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_detail,
-                container,
-                false
-        )
+                inflater, R.layout.fragment_detail, container, false)
+
+        // Get the ViewModel
+        viewModel = ViewModelProvider(this).get(EstateListViewModel::class.java)
+
+        viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { estate ->
+            binding.estate = estate
+            binding.executePendingBindings()
+        })
 
         setHasOptionsMenu(true)
         // TODO() Change the call to backbutton
         switchBackButton(true)
 
-        // Get the viewModel
-        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+
+//        binding.estate = estate
+//        binding.executePendingBindings()
 
         return binding.root
     }
@@ -85,7 +94,7 @@ class DetailFragment : Fragment() {
     }
 
 
-    // TODO() Fix DetailFragment alone when rotating from portrait to landscape when on detail view
+// TODO() Fix DetailFragment alone when rotating from portrait to landscape when on detail view
 //    override fun onResume() {
 //        super.onResume()
 //        // true only in landscape

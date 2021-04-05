@@ -19,4 +19,8 @@ class EstateRepository (private val estateDao: EstateDatabaseDao) {
     suspend fun insert(estate: Estate) {
         estateDao.insert(estate)
     }
+
+    fun getEstate(estateKey: Long): LiveData<Estate> {
+        return estateDao.getEstate(estateKey)
+    }
 }
