@@ -33,8 +33,14 @@ data class Estate(
         @ColumnInfo(name = "street")
         val estateStreet: String = "",
 
+        @ColumnInfo(name = "street_number")
+        val estateStreetNumber: Int = 0,
+
         @ColumnInfo(name = "city")
         val estateCity: String = "",
+
+        @ColumnInfo(name = "postal_code")
+        val estateCityPostalCode: Int = 0,
 
         @ColumnInfo(name = "picture_url")
         val pictureUrl: String,

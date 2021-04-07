@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-@Database(entities = [Estate::class], version = 1, exportSchema = false)
+@Database(entities = [Estate::class], version = 2, exportSchema = false)
 abstract class EstateDatabase : RoomDatabase() {
 
     abstract fun estateDatabaseDao(): EstateDatabaseDao
@@ -86,7 +86,9 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateSurface = 250,
                     estateAvailability = true,
                     estateRooms = 5,
-                    estateStreet = "rue des Ponts"
+                    estateStreet = "rue des Ponts",
+                    estateStreetNumber = 10,
+                    estateCityPostalCode = 44000
             )
 
             estateDatabaseDao.insert(estate1)
