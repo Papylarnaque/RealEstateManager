@@ -13,7 +13,17 @@
 
     <string name="detail_description_title_text">Description:</string>
 
+    <string name="detail_price_title">Price:</string>
+    <string name="detail_estate_price_text">%1$s €</string>
     <string name="detail_surface_title">"Surface: "</string>
-    <string name="detail_rooms_image_description">Number of rooms</string>
     <string name="detail_estate_rooms_text">%1$s rooms</string>
+    <string name="string_detail_not_selected_text">No estate selected</string>
+
+    <!--  Image descriptions  -->
+    <string name="detail_rooms_image_description">Number of rooms</string>
+    <string name="detail_surface_image_description">Surface of the estate</string>
+    <string name="detail_address_title">Address:</string>
+    <string name="detail_estate_address_text">%1$s %2$s, \n%3$s %4$s</string>
+
+
 </resources>
