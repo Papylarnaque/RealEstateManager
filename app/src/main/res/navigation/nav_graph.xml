@@ -36,6 +36,7 @@
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="estateKey"
+            android:defaultValue="-1L"
             app:argType="long" />
         <action
             android:id="@+id/action_detailFragment_to_listFragment"

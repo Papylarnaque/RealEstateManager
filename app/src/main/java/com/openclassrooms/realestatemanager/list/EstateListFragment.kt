@@ -23,18 +23,16 @@ class EstateListFragment : Fragment() {
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+
         setHasOptionsMenu(true);
 
         // Inflate view and obtain an instance of the binding class
         binding = FragmentListBinding.inflate(layoutInflater)
 
         // Get the viewModel
-        val estateListViewModel =
-                ViewModelProvider(this).get(EstateListViewModel::class.java)
+        val estateListViewModel = ViewModelProvider(this).get(EstateListViewModel::class.java)
 
         // Handle estate item by adapter and navigation
         val estateListAdapter = EstateListAdapter(EstateListener { estate ->
@@ -45,27 +43,36 @@ class EstateListFragment : Fragment() {
         binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
         // Add a line between each Estate item
         val dividerItemDecoration = DividerItemDecoration(
-            binding.recyclerviewEstateList.context,
-            LinearLayoutManager(context).orientation
+                binding.recyclerviewEstateList.context,
+                LinearLayoutManager(context).orientation
         )
         binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
 
 
         // Observe data modification in the VM
         estateListViewModel
-            .allEstates.observe(viewLifecycleOwner, {
-                it?.let {
-                    estateListAdapter.submitList(it as MutableList<Estate>)
-                }
-            })
+                .allEstates.observe(viewLifecycleOwner, {
+                    it?.let {
+                        estateListAdapter.submitList(it as MutableList<Estate>)
+                    }
+                })
 
-        // Add an Observer on the state variable for Navigating when and item is clicked.
+        // When an item is clicked.
         estateListViewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                this.findNavController().navigate(
-                    EstateListFragmentDirections
-                        .actionListFragmentToDetailFragment(estate.startTimeMilli)
-                )
+                // If SINGLE layout mode
+                if (binding.detailFragmentContainer == null) {
+                    this.findNavController().navigate(
+                            EstateListFragmentDirections
+                                    .actionListFragmentToDetailFragment(estate.startTimeMilli))
+                }
+                // If LANDSCAPE and MASTER-DETAIL dual layout
+                else {
+                    // TODO Pass this part to Navigation ?
+                    childFragmentManager.beginTransaction()
+                            .replace(binding.detailFragmentContainer!!.id, DetailFragment())
+                            .commit()
+                }
             }
         })
 
@@ -88,7 +95,7 @@ class EstateListFragment : Fragment() {
                 //Open CreationFragment
                 Log.i("EstateListFragment", "Click on create a new estate")
                 NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_listFragment_to_creationFragment)
+                        .navigate(R.id.action_listFragment_to_creationFragment)
             }
         }
 
@@ -98,19 +105,19 @@ class EstateListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(
-            requireActivity(),
-            R.id.nav_host_fragment
+                requireActivity(),
+                R.id.nav_host_fragment
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        // true only in landscape
-        if (binding.detailFragmentContainer != null) {
-            childFragmentManager.beginTransaction()
-                .replace(binding.detailFragmentContainer!!.id, DetailFragment())
-                .commit()
-        }
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        // true only in landscape
+//        if (binding.detailFragmentContainer != null) {
+//            childFragmentManager.beginTransaction()
+//                .replace(binding.detailFragmentContainer!!.id, DetailFragment())
+//                .commit()
+//        }
+//    }
 }
 

@@ -76,7 +76,7 @@ abstract class EstateDatabase : RoomDatabase() {
                     startTimeMilli = Calendar.getInstance().timeInMillis,
                     endTimeMilli = null,
                     estateType = "House",
-                    estatePrice = 100000,
+                    estatePrice = 450000,
                     estateEmployee = "Etienne",
                     estateCity = "Nantes",
                     pictureUrl = "content://com.android.externalstorage.documents/" +

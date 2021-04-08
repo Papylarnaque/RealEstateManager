@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="is_landscape">false</bool>
-    <bool name="portrait_only">false</bool>
-
-    <bool name="sw400dp">false</bool>
-    <bool name="sw720dp">false</bool>
 </resources>
