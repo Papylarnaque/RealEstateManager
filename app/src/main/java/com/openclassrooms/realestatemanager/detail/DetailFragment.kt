@@ -8,9 +8,11 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
@@ -19,51 +21,29 @@ class DetailFragment : Fragment() {
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
+    private lateinit var estate: Estate
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentDetailBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        // TODO() Change the call to backbutton
-//        switchBackButton(true)
-        // Handle the back button event
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            NavHostFragment.findNavController(requireParentFragment())
-                    .navigate(R.id.action_detailFragment_to_listFragment)
-            switchBackButton(false)
-        }
-
-
-        if (viewModel.navigateToEstateDetail.value != null) {
-            binding.estate = viewModel.navigateToEstateDetail.value
-            binding.executePendingBindings()
-            showEstate()
-        } else if (args.estateKey != null) {
-            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { estate ->
-                binding.estate = estate
-                binding.executePendingBindings()
-                showEstate()
-            })
-        } else {
-            hideEstate()
-        }
-
+        setUpBackNavigation()
+        getEstate()
         super.onViewCreated(view, savedInstanceState)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_detail, menu);
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    /**
-     * Handle item clicks of menu
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //get item id to handle item clicks
         when (item.itemId) {
@@ -74,7 +54,8 @@ class DetailFragment : Fragment() {
                 //Open CreationFragment
                 Log.i("DetailFragment", "Click on edit an estate")
                 Toast.makeText(activity, "Edit an estate", Toast.LENGTH_SHORT).show()
-                NavHostFragment.findNavController(this).navigate(R.id.action_detailFragment_to_creationFragment)
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_detailFragment_to_creationFragment)
             }
 
             android.R.id.home -> {
@@ -86,41 +67,59 @@ class DetailFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-
-    private fun switchBackButton(boolean: Boolean) {
-        (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(boolean)
+    override fun onResume() {
+        setUpBackButton()
+        super.onResume()
     }
 
-
-    //    // TODO() Fix DetailFragment alone when rotating from portrait to landscape when on detail view
-//    override fun onResume() {
-//        super.onResume()
-//        // true only in landscape
-//        if (resources.getBoolean(R.bool.is_landscape)) {
-//            if (args == null) {
-//                hideEstate()
-//            } else
-//            NavHostFragment.findNavController(requireParentFragment())
-//                    .navigate(R.id.listFragment)
-//        }
-    //        else {
-//            if (args == null) {
-//                hideEstate()
-//            } else
-//                NavHostFragment.findNavController(requireParentFragment())
-//                        .navigate(R.id.detailFragment)
-//        }
-//    }
-
-
-    private fun hideEstate() {
-        binding.detailNotSelected.visibility = View.VISIBLE
-        binding.detailEstateScrollview.visibility = View.INVISIBLE
+    private fun getEstate() {
+        if (viewModel.navigateToEstateDetail.value != null) {
+            this.estate = viewModel.navigateToEstateDetail.value!!
+            bindEstate()
+        } else {
+            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { estate ->
+                this.estate = estate
+                bindEstate()
+            })
+        }
     }
 
-    private fun showEstate() {
+    private fun bindEstate() {
+        binding.estate = this.estate
+        binding.executePendingBindings()
         binding.detailNotSelected.visibility = View.INVISIBLE
         binding.detailEstateScrollview.visibility = View.VISIBLE
+    }
+
+
+    /**
+     * Handle back navigation purpose
+     */
+    private fun setUpBackNavigation() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
+                NavHostFragment.findNavController(requireParentFragment())
+                    .navigate(R.id.action_detailFragment_to_listFragment)
+                switchBackButton(false)
+            }
+        }
+        setUpBackButton()
+    }
+
+    /**
+     * Handle back button depending on orientation and currentDestination
+     */
+    private fun setUpBackButton() {
+        val backNavBoolean = !(requireActivity() as MainActivity).twoPane &&
+                this.findNavController().currentDestination?.id == R.id.detailFragment
+        switchBackButton(backNavBoolean)
+    }
+
+    /**
+     * Handle back button on call
+     */
+    private fun switchBackButton(boolean: Boolean) {
+        (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(boolean)
     }
 
 
