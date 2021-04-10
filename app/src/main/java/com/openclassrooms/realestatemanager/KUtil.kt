@@ -1,5 +1,10 @@
 package com.openclassrooms.realestatemanager
 
+import android.graphics.Color
+import android.view.View
+import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
+
 
 const val STRING_SEPARATOR = "||"
 
@@ -27,5 +32,21 @@ class KUtil {
     fun StringToArray(string: String): Array<String> {
         return string.split(STRING_SEPARATOR).toTypedArray()
     }
+
+    companion object {
+        fun infoSnackBar(view: View, MESSAGE: String) {
+            val snackBar = Snackbar.make(
+                view, MESSAGE,
+                Snackbar.LENGTH_LONG
+            )
+            val snackBarView = snackBar.view
+            snackBarView.setBackgroundColor(Color.BLACK)
+            val textView =
+                snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+            textView.setTextColor(Color.WHITE)
+            snackBar.show()
+        }
+    }
+
 
 }

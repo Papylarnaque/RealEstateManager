@@ -28,7 +28,7 @@
 
         <ImageView
             android:id="@+id/item_estate_picture"
-            android:layout_width="@dimen/estate_picture_width_tablet"
+            android:layout_width="@dimen/estate_picture_width"
             android:layout_height="@dimen/estate_picture_height_tablet"
             android:contentDescription="@string/item_estate_picture_description"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,15 +75,19 @@
 
         <TextView
             android:id="@+id/item_estate_third_line"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="1dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="@{@string/detail_estate_price_text(Integer.toString(estate.estatePrice))}"
+            android:textAlignment="textEnd"
             android:textColor="@color/green"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/item_estate_second_line"
+            app:layout_constraintEnd_toStartOf="@+id/item_estate_description"
+            app:layout_constraintStart_toEndOf="@id/item_estate_picture"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
             tools:text="475.000 €"
             tools:textColor="@color/green"
