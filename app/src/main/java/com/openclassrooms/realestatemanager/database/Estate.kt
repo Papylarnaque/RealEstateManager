@@ -16,16 +16,16 @@ data class Estate(
         val endTimeMilli: Long? = startTimeMilli,
 
         @ColumnInfo(name = "type")
-        var estateType: String = "",
+        var estateType: String,
 
         @ColumnInfo(name = "price")
-        val estatePrice: Int = 0,
+        val estatePrice: Int?,
 
         @ColumnInfo(name = "surface")
-        val estateSurface: Int = 0,
+        val estateSurface: Int?,
 
         @ColumnInfo(name = "rooms_count")
-        val estateRooms: Int = 0,
+        val estateRooms: Int?,
 
         @ColumnInfo(name = "description")
         val estateDescription: String = "",
@@ -34,16 +34,16 @@ data class Estate(
         val estateStreet: String = "",
 
         @ColumnInfo(name = "street_number")
-        val estateStreetNumber: Int = 0,
+        val estateStreetNumber: Int?,
 
         @ColumnInfo(name = "city")
-        val estateCity: String = "",
+        val estateCity: String,
 
         @ColumnInfo(name = "postal_code")
-        val estateCityPostalCode: Int = 0,
+        val estateCityPostalCode: String?,
 
         @ColumnInfo(name = "picture_url")
-        val pictureUrl: String,
+        val pictureUrl: String?,
 
         @ColumnInfo(name = "availability")
         val estateAvailability: Boolean = true,

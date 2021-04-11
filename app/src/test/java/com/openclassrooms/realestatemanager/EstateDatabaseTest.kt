@@ -25,9 +25,16 @@ class EstateDatabaseTest {
             startTimeMilli = Calendar.getInstance().timeInMillis,
             endTimeMilli = null,
             estateType = "House",
-            estatePrice = 1000,
+            estatePrice = 650000,
             estateEmployee = "Etienne",
-            pictureUrl = "TestURLpicture1_1"
+            pictureUrl = "TestURLpicture1_1",
+            estateCity = "Nantes",
+            estateCityPostalCode = 44000,
+            estateStreetNumber = 15,
+            estateStreet = "rue de Paris",
+            estateRooms = 8,
+            estateSurface = 320,
+            estateDescription = "Nice house in the heart of Nantes"
     )
 
     private val startTime: Long = 99999999
@@ -38,7 +45,14 @@ class EstateDatabaseTest {
             estateType = "Flat",
             estatePrice = 1000000,
             estateEmployee = "Etienne",
-            pictureUrl = "TestURLpicture2_1"
+            pictureUrl = "TestURLpicture2_1",
+            estateCity = "Lille",
+            estateCityPostalCode = 59000,
+            estateStreetNumber = 23,
+            estateStreet = "rue de Paris",
+            estateRooms = 10,
+            estateSurface = 400,
+            estateDescription = "Nice flat in the heart of Lille"
     )
 
 
@@ -93,7 +107,13 @@ class EstateDatabaseTest {
                 estateEmployee = "Etienne",
                 estateDescription = "Magnificent flat",
                 estateAvailability = false,
-                pictureUrl = "TestURLpicture_1"
+                pictureUrl = "TestURLpicture_1",
+                estateCity = "Nantes",
+                estateCityPostalCode = 44000,
+                estateStreetNumber = 15,
+                estateStreet = "rue de Paris",
+                estateRooms = 8,
+                estateSurface = 320
         )
 
         estateDao.updateEstate(newEstate)

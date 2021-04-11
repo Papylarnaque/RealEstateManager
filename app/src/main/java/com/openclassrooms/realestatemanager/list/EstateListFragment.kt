@@ -23,8 +23,8 @@ class EstateListFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true);
 
@@ -53,16 +53,15 @@ class EstateListFragment : Fragment() {
                 // If SINGLE layout mode
                 if (binding.detailFragmentContainer == null) {
                     navController.navigate(
-                        EstateListFragmentDirections
-                            .actionListFragmentToDetailFragment(estate.startTimeMilli)
+                            EstateListFragmentDirections
+                                    .actionListFragmentToDetailFragment(estate.startTimeMilli)
                     )
                 }
                 // If LANDSCAPE and MASTER-DETAIL dual layout
                 else {
-                    // TODO Pass this part to Navigation ?
                     childFragmentManager.beginTransaction()
-                        .replace(binding.detailFragmentContainer!!.id, DetailFragment())
-                        .commit()
+                            .replace(binding.detailFragmentContainer!!.id, DetailFragment())
+                            .commit()
                 }
             }
         })
@@ -73,8 +72,8 @@ class EstateListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(
-            requireActivity(),
-            R.id.nav_host_fragment
+                requireActivity(),
+                R.id.nav_host_fragment
         )
     }
 
@@ -94,7 +93,7 @@ class EstateListFragment : Fragment() {
                 //Open CreationFragment
                 Log.i("EstateListFragment", "Click on create a new estate")
                 NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_listFragment_to_creationFragment)
+                        .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(-1L))
             }
         }
 

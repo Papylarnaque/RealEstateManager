@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.detail
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.RadioGroup
 import androidx.activity.addCallback
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -56,10 +58,11 @@ class DetailFragment : Fragment() {
         when (item.itemId) {
 
             R.id.edit_estate -> {
-                //Open CreationFragment
+                //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
                 NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_detailFragment_to_editFragment)
+                        .navigate(DetailFragmentDirections.actionDetailFragmentToCreationFragment(estate.startTimeMilli))
+
             }
 
             android.R.id.home -> {
@@ -88,4 +91,11 @@ class DetailFragment : Fragment() {
         binding.detailEstateScrollview.visibility = View.VISIBLE
     }
 
+}
+
+@BindingAdapter("android:checkedButton")
+fun setCheckedChip(view: RadioGroup?, id: Int) {
+    if (id != view?.checkedRadioButtonId) {
+        view?.check(id)
+    }
 }

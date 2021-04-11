@@ -24,6 +24,10 @@
         android:name="com.openclassrooms.realestatemanager.detail.CreationFragment"
         android:label="@string/add_estate_titlebar"
         tools:layout="@layout/fragment_creation">
+        <argument
+            android:name="estateKey"
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_creationFragment_to_listFragment"
             app:destination="@id/listFragment"
@@ -45,17 +49,8 @@
             app:popUpTo="@id/listFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_detailFragment_to_editFragment"
-            app:destination="@id/editFragment" />
+            android:id="@+id/action_detailFragment_to_creationFragment"
+            app:destination="@id/creationFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/editFragment"
-        android:name="com.openclassrooms.realestatemanager.detail.EditFragment"
-        android:label="EditFragment">
-        <argument
-            android:name="estateKey"
-            android:defaultValue="-1L"
-            app:argType="long" />
-    </fragment>
 </navigation>

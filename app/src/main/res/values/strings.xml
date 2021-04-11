@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
-    <string name="add_estate_titlebar">Add a new Estate</string>
+
 
     <string name="add_property_text">Add a property</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
@@ -32,6 +32,9 @@
     <string name="create_address_streetnumber_text">Number</string>
     <string name="create_address_postalcode_text">Postal Code</string>
     <string name="create_address_city_text">City</string>
+    <string name="create_employee_text">Employee</string>
+    <string name="edit_estate_titlebar">Edit the Estate</string>
+    <string name="add_estate_titlebar">Add a new Estate</string>
 
     <!--  CREATE / EDIT Errors  -->
     <string name="create_description_error_text">Estate Description is less than %1$s characters</string>
@@ -44,8 +47,6 @@
     <string name="create_estate_description">Create an estate image</string>
     <string name="detail_rooms_image_description">Number of rooms</string>
     <string name="detail_surface_image_description">Surface of the estate</string>
-
-
 
 
 

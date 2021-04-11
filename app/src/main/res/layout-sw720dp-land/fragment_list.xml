@@ -3,23 +3,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:focusable="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_estate_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/layout_border"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/detail_fragment_container"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
             tools:listitem="@layout/item_estate" />
 
         <androidx.fragment.app.FragmentContainerView

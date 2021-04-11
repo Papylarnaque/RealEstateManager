@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <data>
+
+        <variable
+            name="estate"
+            type="com.openclassrooms.realestatemanager.database.Estate" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,14 +33,16 @@
 
                 <ImageView
                     android:id="@+id/create_image"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="388dp"
                     android:contentDescription="@string/item_estate_picture_description"
                     android:src="@drawable/ic_baseline_image_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:pictureUrl="@{estate.pictureUrl}" />
 
                 <!--    TYPE    -->
                 <TextView
@@ -96,6 +107,7 @@
                         android:drawablePadding="10dp"
                         android:inputType="textMultiLine"
                         android:singleLine="false"
+                        android:text="@{estate.estateDescription}"
                         android:textColor="@color/colorPrimary"
                         tools:textColorHint="@color/colorPrimaryText" />
 
@@ -105,10 +117,13 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/create_price_textLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp"
                     android:hint="@string/create_price_text"
+                    app:layout_constraintEnd_toStartOf="@id/create_employee_textLayout"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/create_description_textLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -117,8 +132,33 @@
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_money_24"
                         android:drawablePadding="10dp"
-                        android:inputType="numberDecimal"
-                        android:maxLength="@integer/create_price_maximum_length"
+                        android:inputType="number|textMultiLine"
+                        android:maxLength="@integer/create_price_maximum_length"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--    EMPLOYEE    -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_employee_textLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/create_employee_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/create_price_textLayout"
+                    app:layout_constraintTop_toBottomOf="@id/create_description_textLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_employee_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_person_24"
+                        android:drawablePadding="10dp"
+                        android:inputType="text"
+                        android:text="@{estate.estateEmployee}"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +182,7 @@
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_surface_24"
                         android:drawablePadding="10dp"
-                        android:inputType="number"
+                        android:inputType="number|textMultiLine"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -166,7 +206,7 @@
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_rooms_24"
                         android:drawablePadding="10dp"
-                        android:inputType="number|textMultiLine"
+                        android:inputType="number"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -191,6 +231,7 @@
                         android:drawableStart="@drawable/ic_baseline_address_24"
                         android:drawablePadding="10dp"
                         android:inputType="textPostalAddress|textCapCharacters"
+                        android:text="@{estate.estateStreet}"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -231,6 +272,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number|textMultiLine"
+                        android:text="@{estate.estateCityPostalCode}"
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -252,18 +294,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPostalAddress|textCapWords"
+                        android:text="@{estate.estateCity}"
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="130dp"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/create_address_city_textLayout" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
