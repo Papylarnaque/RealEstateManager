@@ -21,7 +21,7 @@ public class UtilsUnitTest {
     @Test
     public void testConvertDollarToEuro() {
         int dollars = 100;
-        int euros = (int) (100 * 0.812);
+        int euros = (int) (100 * Utils.EUR_DOLLAR_RATIO);
 
         assertEquals(euros, Utils.convertDollarToEuro(dollars));
     }

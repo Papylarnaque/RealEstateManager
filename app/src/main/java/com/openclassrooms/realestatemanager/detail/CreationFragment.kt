@@ -25,6 +25,7 @@ import kotlin.math.abs
 
 
 private const val PERMISSION_CODE = 10001
+private const val PICK_IMAGE_TYPE = "image/*"
 
 class CreationFragment : Fragment() {
 
@@ -36,39 +37,40 @@ class CreationFragment : Fragment() {
     private var estateCreationOK: Boolean = true
     private var errorMessage: String? = null
     private val actionOpenDocument =
-            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-                // If the user returns to this fragment without selecting a file, uri will be null
-                // In this case, we return void
-                documentUri = uri ?: return@registerForActivityResult
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            // If the user returns to this fragment without selecting a file, uri will be null
+            // In this case, we return void
+            documentUri = uri ?: return@registerForActivityResult
 
-                // TODO() Store the image in app folder instead of external link
+            // TODO() Store the image in app folder instead of external link
 
-                Log.i("Creation Fragment", "New picture added, uri: $documentUri")
+            Log.i("Creation Fragment", "New picture added, uri: $documentUri")
 
-                Glide.with(requireView())
-                        .load(documentUri)
-                        .thumbnail(0.33f)
-                        .centerCrop()
-                        .into(binding.createImage)
-            }
+            Glide.with(requireView())
+                .load(documentUri)
+                .thumbnail(0.33f)
+                .centerCrop()
+                .into(binding.createImage)
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
             editMode = true
-            (activity as MainActivity).supportActionBar!!.title = getString(R.string.edit_estate_titlebar)
+            (activity as MainActivity).supportActionBar!!.title =
+                getString(R.string.edit_estate_titlebar)
         }
 
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         //  Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_creation, container, false
+            inflater, R.layout.fragment_creation, container, false
         )
         // Get the viewModel
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
@@ -88,12 +90,20 @@ class CreationFragment : Fragment() {
                 binding.estate = it
             }
 
+            if (it.estateType == resources.getString(R.string.create_estate_flat)) {
+                binding.flatButton.isChecked = true
+            } else {
+                binding.houseButton.isChecked = true
+            }
+
             // Avoid returning 0 value in number type EditText
             with(TextView.BufferType.EDITABLE) {
                 binding.createPriceEdit.setText(it.estatePrice.toString(), this)
                 binding.createSurfaceEdit.setText(it.estateSurface.toString(), this)
                 binding.createRoomsEdit.setText(it.estateRooms.toString(), this)
-                binding.createAddressStreetnumberEdit.setText(it.estateStreetNumber.toString(), this)
+                binding.createAddressStreetnumberEdit.setText(
+                    it.estateStreetNumber.toString(), this
+                )
             }
         })
 
@@ -139,35 +149,35 @@ class CreationFragment : Fragment() {
         } else if (editMode) {
             GlobalScope.launch {
                 viewModel.updateEstate(
-                        args.estateKey,
-                        documentUri,
-                        estateType,
-                        estateDescription,
-                        estatePrice,
-                        estateSurface,
-                        estateRooms,
-                        estateStreet,
-                        estateStreetNumber,
-                        estatePostalCode,
-                        estateCity,
-                        estateEmployee
+                    args.estateKey,
+                    documentUri,
+                    estateType,
+                    estateDescription,
+                    estatePrice,
+                    estateSurface,
+                    estateRooms,
+                    estateStreet,
+                    estateStreetNumber,
+                    estatePostalCode,
+                    estateCity,
+                    estateEmployee
                 )
             }
             postEstateCreationRedirection()
         } else {
             GlobalScope.launch {
                 viewModel.createNewEstate(
-                        documentUri,
-                        estateType,
-                        estateDescription,
-                        estatePrice,
-                        estateSurface,
-                        estateRooms,
-                        estateStreet,
-                        estateStreetNumber,
-                        estatePostalCode,
-                        estateCity,
-                        estateEmployee
+                    documentUri,
+                    estateType,
+                    estateDescription,
+                    estatePrice,
+                    estateSurface,
+                    estateRooms,
+                    estateStreet,
+                    estateStreetNumber,
+                    estatePostalCode,
+                    estateCity,
+                    estateEmployee
                 )
             }
             postEstateCreationRedirection()
@@ -178,7 +188,7 @@ class CreationFragment : Fragment() {
 
     private fun postEstateCreationRedirection() {
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_creationFragment_to_listFragment)
+            .navigate(R.id.action_creationFragment_to_listFragment)
     }
 
     //------- GET Estate Data for Creation
@@ -186,10 +196,10 @@ class CreationFragment : Fragment() {
     private fun getEstateType(): String {
         return when (binding.radioGroup.checkedRadioButtonId) {
             R.id.flatButton -> {
-                binding.flatButton.text.toString()
+                resources.getString(R.string.create_estate_flat)
             }
             R.id.houseButton -> {
-                binding.houseButton.text.toString()
+                resources.getString(R.string.create_estate_house)
             }
             else -> {
                 errorMessage = getString(R.string.create_type_error_text)
@@ -203,7 +213,7 @@ class CreationFragment : Fragment() {
         val descriptionMin = resources.getInteger(R.integer.create_description_minimum)
         if (binding.createDescriptionEdit.text.toString().length < descriptionMin) {
             errorMessage =
-                    getString(R.string.create_description_error_text, descriptionMin.toString())
+                getString(R.string.create_description_error_text, descriptionMin.toString())
             estateCreationOK = false
         }
         return binding.createDescriptionEdit.text.toString()
