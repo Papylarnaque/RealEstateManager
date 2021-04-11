@@ -2,9 +2,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,18 +17,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/estate_picture_height"
+        android:layout_height="@dimen/item_estate_height"
+        android:background="@drawable/layout_border"
         android:onClick="@{() -> clickListener.onClick(estate)}"
         app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
-        app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">
+        app:layout_constraintTop_toTopOf="@+id/item_estate_third_line"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
         <ImageView
             android:id="@+id/item_estate_picture"
             android:layout_width="@dimen/estate_picture_width"
             android:layout_height="@dimen/estate_picture_height"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:contentDescription="@string/item_estate_picture_description"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:pictureUrl="@{estate.pictureUrl}"
@@ -43,13 +44,11 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="1dp"
             android:text="@{@string/item_estate_first_line_text(estate.estateType.toString())}"
-            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
             app:layout_constraintTop_toTopOf="@+id/item_estate_picture"
             tools:text="Flat"
-            tools:textColor="@color/black"
             tools:textSize="20sp"
             tools:textStyle="bold" />
 
@@ -60,14 +59,12 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
             android:text="@{estate.estateCity.toString()}"
-            android:textColor="@color/grey"
             android:textSize="15sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@+id/item_estate_first_line"
             app:layout_constraintStart_toEndOf="@+id/item_estate_first_line"
             app:layout_constraintTop_toTopOf="@+id/item_estate_first_line"
             tools:text="Nantes"
-            tools:textColor="@color/grey"
             tools:textSize="15sp"
             tools:textStyle="italic" />
 
@@ -82,12 +79,14 @@
             android:text="@{@string/detail_estate_price_text(Integer.toString(estate.estatePrice))}"
             android:textColor="@color/green"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_estate_description"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
             tools:text="475.000 €"
             tools:textColor="@color/green"
-            tools:textSize="20sp" />
+            tools:textSize="20sp"
+            tools:textStyle="bold" />
 
         <TextView
             android:id="@+id/item_estate_description"
@@ -97,13 +96,11 @@
             android:layout_marginEnd="20dp"
             android:maxLines="3"
             android:text="@{estate.estateDescription.toString()}"
-            android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/lorem_ipsum"
-            tools:textColor="@color/black"
             tools:textSize="15sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

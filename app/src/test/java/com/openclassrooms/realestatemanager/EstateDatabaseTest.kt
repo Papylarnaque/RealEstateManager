@@ -75,10 +75,8 @@ class EstateDatabaseTest {
         estateDao.insert(estate1)
         estateDao.insert(estate2)
 
-        val estate: Estate? = estateDao.getEstate(startTime)
-        if (estate != null) {
-            assert(estate == estate2)
-        } else assert(false)
+        assert(estateDao.getEstate(startTime).value == estate2)
+
     }
 
     @Test
@@ -100,12 +98,9 @@ class EstateDatabaseTest {
 
         estateDao.updateEstate(newEstate)
 
-        val estate: Estate? = estateDao.getEstate(startTime)
+        assert(estateDao.getEstate(startTime).value != estate2)
+        assert(estateDao.getEstate(startTime).value == newEstate)
 
-        if (estate != null) {
-            assert(estate != estate2)
-            assert(estate == newEstate)
-        } else assert(false)
     }
 
 

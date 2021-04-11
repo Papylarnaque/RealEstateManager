@@ -85,7 +85,6 @@ class DetailFragment : Fragment() {
     private fun bindEstate() {
         binding.estate = this.estate
         binding.executePendingBindings()
-        binding.detailNotSelected.visibility = View.INVISIBLE
         binding.detailEstateScrollview.visibility = View.VISIBLE
     }
 

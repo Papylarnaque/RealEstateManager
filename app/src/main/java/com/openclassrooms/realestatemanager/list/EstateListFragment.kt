@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.Estate
@@ -40,7 +39,6 @@ class EstateListFragment : Fragment() {
         })
         binding.recyclerviewEstateList.adapter = estateListAdapter
         binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
-        bindingDecoration()
 
         // Observe data modification in the VM
         viewModel.allEstates.observe(viewLifecycleOwner, {
@@ -102,18 +100,6 @@ class EstateListFragment : Fragment() {
 
         return super.onOptionsItemSelected(item)
     }
-
-    /**
-     * Add a line between each Estate item
-     */
-    private fun bindingDecoration() {
-        val dividerItemDecoration = DividerItemDecoration(
-            binding.recyclerviewEstateList.context,
-            LinearLayoutManager(context).orientation
-        )
-        binding.recyclerviewEstateList.addItemDecoration(dividerItemDecoration)
-    }
-
 
 }
 
