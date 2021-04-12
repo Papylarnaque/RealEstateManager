@@ -13,10 +13,18 @@
         tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_listFragment_to_creationFragment"
-            app:destination="@id/creationFragment" />
+            app:destination="@id/creationFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_up" />
     </fragment>
 
     <fragment
@@ -31,7 +39,14 @@
         <action
             android:id="@+id/action_creationFragment_to_listFragment"
             app:destination="@id/listFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_up"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_creationFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_up" />
     </fragment>
 
     <fragment
@@ -46,11 +61,17 @@
         <action
             android:id="@+id/action_detailFragment_to_listFragment"
             app:destination="@id/listFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/listFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_detailFragment_to_creationFragment"
-            app:destination="@id/creationFragment" />
+            app:destination="@id/creationFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_up" />
     </fragment>
 
 </navigation>

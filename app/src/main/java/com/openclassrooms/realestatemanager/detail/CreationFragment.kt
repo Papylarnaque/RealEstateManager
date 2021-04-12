@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -28,6 +27,8 @@ private const val PERMISSION_CODE = 10001
 private const val PICK_IMAGE_TYPE = "image/*"
 
 class CreationFragment : Fragment() {
+
+    // TODO Keep typed data while rotating device
 
     private lateinit var binding: FragmentCreationBinding
     private lateinit var viewModel: CreationViewModel
@@ -90,21 +91,13 @@ class CreationFragment : Fragment() {
                 binding.estate = it
             }
 
+            // Return Estate Type for edition
             if (it.estateType == resources.getString(R.string.create_estate_flat)) {
                 binding.flatButton.isChecked = true
             } else {
                 binding.houseButton.isChecked = true
             }
 
-            // Avoid returning 0 value in number type EditText
-            with(TextView.BufferType.EDITABLE) {
-                binding.createPriceEdit.setText(it.estatePrice.toString(), this)
-                binding.createSurfaceEdit.setText(it.estateSurface.toString(), this)
-                binding.createRoomsEdit.setText(it.estateRooms.toString(), this)
-                binding.createAddressStreetnumberEdit.setText(
-                    it.estateStreetNumber.toString(), this
-                )
-            }
         })
 
         binding.createEstate.setOnClickListener {
@@ -113,12 +106,10 @@ class CreationFragment : Fragment() {
         }
 
     } else {
-
         binding.createImage.setOnClickListener {
             // Open gallery for image
             // TODO() Handle permissions
-            actionOpenDocument.launch(arrayOf("image/*"))
-
+            actionOpenDocument.launch(arrayOf(PICK_IMAGE_TYPE))
             // TODO() Handle case taking a new picture
         }
 
@@ -163,7 +154,11 @@ class CreationFragment : Fragment() {
                     estateEmployee
                 )
             }
-            postEstateCreationRedirection()
+            NavHostFragment.findNavController(this)
+                .navigate(
+                    CreationFragmentDirections
+                        .actionCreationFragmentToDetailFragment(args.estateKey)
+                )
         } else {
             GlobalScope.launch {
                 viewModel.createNewEstate(
@@ -180,18 +175,14 @@ class CreationFragment : Fragment() {
                     estateEmployee
                 )
             }
-            postEstateCreationRedirection()
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_creationFragment_to_listFragment)
         }
 
 
     }
 
-    private fun postEstateCreationRedirection() {
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_creationFragment_to_listFragment)
-    }
-
-    //------- GET Estate Data for Creation
+//------- GET Estate Data for Creation
 
     private fun getEstateType(): String {
         return when (binding.radioGroup.checkedRadioButtonId) {
@@ -213,7 +204,10 @@ class CreationFragment : Fragment() {
         val descriptionMin = resources.getInteger(R.integer.create_description_minimum)
         if (binding.createDescriptionEdit.text.toString().length < descriptionMin) {
             errorMessage =
-                getString(R.string.create_description_error_text, descriptionMin.toString())
+                getString(
+                    R.string.create_description_error_text,
+                    descriptionMin.toString()
+                )
             estateCreationOK = false
         }
         return binding.createDescriptionEdit.text.toString()
@@ -241,7 +235,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getEstateSurface(): Int? {
-        return if (binding.createSurfaceEdit.text.toString() == "") {
+        return if (binding.createSurfaceEdit.text.toString().isBlank()) {
             null
         } else {
             return binding.createSurfaceEdit.text.toString().toInt()
@@ -249,7 +243,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getEstateRooms(): Int? {
-        return if (binding.createRoomsEdit.text.toString() == "") {
+        return if (binding.createRoomsEdit.text.toString().isBlank()) {
             null
         } else {
             binding.createRoomsEdit.text.toString().toInt()
@@ -261,15 +255,19 @@ class CreationFragment : Fragment() {
     }
 
     private fun getEstateStreetNumber(): Int? {
-        return if (binding.createAddressStreetnumberEdit.text.toString() == "") {
+        return if (binding.createAddressStreetnumberEdit.text.toString().isBlank()) {
             null
         } else {
+            if (getEstateStreet().isBlank()) {
+                errorMessage = getString(R.string.create_streetnumber_error_text)
+                estateCreationOK = false
+            }
             binding.createAddressStreetnumberEdit.text.toString().toInt()
         }
     }
 
     private fun getEstatePostalCode(): String? {
-        return if (binding.createAddressPostalcodeEdit.text.toString() == "") {
+        return if (binding.createAddressPostalcodeEdit.text.toString().isBlank()) {
             null
         } else {
             binding.createAddressPostalcodeEdit.text.toString()
@@ -282,7 +280,7 @@ class CreationFragment : Fragment() {
 
     private fun getEstateCity(): String {
         val createEstateCity = binding.createAddressCityEdit.text.toString()
-        if (createEstateCity.isEmpty()) { // https://fr.wikipedia.org/wiki/Y_(Somme)
+        if (createEstateCity.isBlank()) { // https://fr.wikipedia.org/wiki/Y_(Somme)
             // Smallest city name in France is 1 letter length
             errorMessage = getString(R.string.create_city_error_text)
             estateCreationOK = false

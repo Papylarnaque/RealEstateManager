@@ -133,7 +133,8 @@
                         android:drawableStart="@drawable/ic_baseline_money_24"
                         android:drawablePadding="10dp"
                         android:inputType="number|textMultiLine"
-                        android:maxLength="@integer/create_price_maximum_length"/>
+                        android:maxLength="@integer/create_price_maximum_length"
+                        android:text='@{estate.estatePrice== null ? "" : Integer.toString(estate.estatePrice) }' />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,6 +184,7 @@
                         android:drawableStart="@drawable/ic_baseline_surface_24"
                         android:drawablePadding="10dp"
                         android:inputType="number|textMultiLine"
+                        android:text='@{estate.estateSurface== null ? "" : Integer.toString(estate.estateSurface) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -207,6 +209,7 @@
                         android:drawableStart="@drawable/ic_baseline_rooms_24"
                         android:drawablePadding="10dp"
                         android:inputType="number"
+                        android:text='@{estate.estateRooms== null ? "" : Integer.toString(estate.estateRooms) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -251,7 +254,8 @@
                         android:id="@+id/create_address_streetnumber_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="number|textMultiLine"
+                        android:inputType="number"
+                        android:text='@{estate.estateStreetNumber== null ? "" : Integer.toString(estate.estateStreetNumber) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -272,7 +276,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number|textMultiLine"
-                        android:text="@{estate.estateCityPostalCode}"
+                        android:text='@{estate.estateCityPostalCode== null ? "" : estate.estateCityPostalCode }'
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 

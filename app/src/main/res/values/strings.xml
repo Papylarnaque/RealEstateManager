@@ -19,6 +19,11 @@
 
     <string name="detail_address_title">Address:</string>
     <string name="detail_estate_address_text">%1$s %2$s, \n%3$s %4$s</string>
+    <string name="detail_estate_address_streetnumber">%1$s,&#160;  </string>  <!--1 white space-->
+    <string name="detail_estate_address_postalcode">%1$s &#160; </string>
+
+
+
 
     <!--  CREATE  -->
     <string name="create_type_title_text">Type:</string>
@@ -47,7 +52,7 @@
     <string name="create_estate_description">Create an estate image</string>
     <string name="detail_rooms_image_description">Number of rooms</string>
     <string name="detail_surface_image_description">Surface of the estate</string>
-
+    <string name="create_streetnumber_error_text">Provide a street for the street number</string>
 
 
 </resources>

@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@{@string/detail_estate_price_text(Integer.toString(estate.estatePrice))}"
+                android:text='@{estate.estatePrice== null ? "" : @string/detail_estate_price_text(Integer.toString(estate.estatePrice)) }'
                 app:layout_constraintStart_toEndOf="@id/detail_price_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_price_title"
                 tools:text="1.000.000 €" />
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@{@string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}"
+                android:text='@{estate.estateSurface==null ? "" : @string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}'
                 app:layout_constraintStart_toEndOf="@id/detail_surface_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_surface_title"
                 tools:text="300 m²" />
@@ -218,16 +218,44 @@
                 app:layout_constraintTop_toTopOf="@id/detail_address_image"
                 tools:text="Address:" />
 
+            <!--    ADDRESS        -->
+
             <TextView
-                android:id="@+id/detail_address_content"
+                android:id="@+id/detail_address_streetnumber_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@{@string/detail_estate_address_text(estate.estateStreetNumber, estate.estateStreet, estate.estateCityPostalCode, estate.estateCity)}"
+                android:text='@{estate.estateStreetNumber==null ? "" : @string/detail_estate_address_streetnumber(estate.estateStreetNumber)}'
                 app:layout_constraintStart_toEndOf="@id/detail_address_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_address_title"
-                tools:text="rue des As, Nantes" />
+                tools:text="10, " />
 
+            <TextView
+                android:id="@+id/detail_address_street_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{estate.estateStreet}"
+                app:layout_constraintStart_toEndOf="@id/detail_address_streetnumber_content"
+                app:layout_constraintTop_toBottomOf="@id/detail_address_title"
+                tools:text="rue des As" />
+
+            <TextView
+                android:id="@+id/detail_address_postalcode_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{estate.estateCityPostalCode==null? "" : @string/detail_estate_address_postalcode(estate.estateCityPostalCode)}'
+                app:layout_constraintStart_toStartOf="@id/detail_address_streetnumber_content"
+                app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
+                tools:text="44000 " />
+
+            <TextView
+                android:id="@+id/detail_address_city_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{estate.estateCity}"
+                app:layout_constraintStart_toEndOf="@id/detail_address_postalcode_content"
+                app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
+                tools:text="Nantes" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
