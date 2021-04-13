@@ -40,6 +40,8 @@
     <string name="create_employee_text">Employee</string>
     <string name="edit_estate_titlebar">Edit the Estate</string>
     <string name="add_estate_titlebar">Add a new Estate</string>
+    <string name="edit_estate_availability">Available</string>
+    <string name="edit_estate_sold">Sold</string>
 
     <!--  CREATE / EDIT Errors  -->
     <string name="create_description_error_text">Estate Description is less than %1$s characters</string>
@@ -53,6 +55,8 @@
     <string name="detail_rooms_image_description">Number of rooms</string>
     <string name="detail_surface_image_description">Surface of the estate</string>
     <string name="create_streetnumber_error_text">Provide a street for the street number</string>
+    <string name="create_estate_land">Land</string>
+    <string name="sold_tag_description">Sold tag on the estate</string>
 
 
 </resources>

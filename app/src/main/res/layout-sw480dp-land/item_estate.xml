@@ -88,5 +88,15 @@
             tools:textSize="20sp"
             tools:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/estate_sold_tag"
+            android:layout_width="@dimen/item_estate_height"
+            android:layout_height="@dimen/item_estate_height"
+            android:src="@drawable/sold"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/sold_tag_description" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

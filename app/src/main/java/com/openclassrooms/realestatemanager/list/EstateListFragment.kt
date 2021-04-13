@@ -54,7 +54,7 @@ class EstateListFragment : Fragment() {
                 if (binding.detailFragmentContainer == null) {
                     navController.navigate(
                             EstateListFragmentDirections
-                                    .actionListFragmentToDetailFragment(estate.startTimeMilli)
+                                    .actionListFragmentToDetailFragment(estate.startTime)
                     )
                 }
                 // If LANDSCAPE and MASTER-DETAIL dual layout

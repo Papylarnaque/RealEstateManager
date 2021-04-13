@@ -33,16 +33,16 @@
 
                 <ImageView
                     android:id="@+id/create_image"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxHeight="@dimen/detail_estate_picture_height"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="388dp"
                     android:contentDescription="@string/item_estate_picture_description"
                     android:src="@drawable/ic_baseline_image_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:pictureUrl="@{estate.pictureUrl}" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <!--    TYPE    -->
                 <TextView
@@ -297,10 +297,23 @@
                         android:id="@+id/create_address_city_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textPostalAddress|textCapWords"
+                        android:inputType="textPostalAddress|textCapCharacters"
                         android:text="@{estate.estateCity}"
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/edit_estate_availability"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:switchPadding="20dp"
+                    android:checked="@{estate.endTime==null}"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/edit_estate_availability"
+                    android:visibility="visible"
+                    android:layout_marginStart="50dp"
+                    app:layout_constraintStart_toStartOf="@id/create_address_postalcode_textLayout"
+                    app:layout_constraintTop_toBottomOf="@id/create_address_postalcode_textLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

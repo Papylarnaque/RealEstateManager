@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -14,7 +15,8 @@ import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.ItemEstateBinding
 
 
-class EstateListAdapter(private val clickListener: EstateListener) : ListAdapter<Estate, EstateListAdapter.ViewHolder>(EstateDiffCallback()) {
+class EstateListAdapter(private val clickListener: EstateListener) :
+    ListAdapter<Estate, EstateListAdapter.ViewHolder>(EstateDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)
@@ -24,11 +26,13 @@ class EstateListAdapter(private val clickListener: EstateListener) : ListAdapter
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ItemEstateBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(val binding: ItemEstateBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Estate, clickListener: EstateListener) {
             binding.estate = item
             binding.clickListener = clickListener
+            if (item.endTime != null) binding.estateSoldTag.visibility = View.VISIBLE
             binding.executePendingBindings()
         }
 
@@ -44,7 +48,7 @@ class EstateListAdapter(private val clickListener: EstateListener) : ListAdapter
 
 class EstateDiffCallback : DiffUtil.ItemCallback<Estate>() {
     override fun areItemsTheSame(oldItem: Estate, newItem: Estate): Boolean {
-        return oldItem.startTimeMilli == newItem.startTimeMilli
+        return oldItem.startTime == newItem.startTime
     }
 
     override fun areContentsTheSame(oldItem: Estate, newItem: Estate): Boolean {
@@ -62,8 +66,8 @@ fun loadImage(view: ImageView, url: String?) {
 
     if (url != null) {
         Glide.with(view)
-                .load(url)
-                .transform(CenterCrop(), RoundedCorners(16))
-                .into(view)
+            .load(url)
+            .transform(CenterCrop(), RoundedCorners(16))
+            .into(view)
     }
 }

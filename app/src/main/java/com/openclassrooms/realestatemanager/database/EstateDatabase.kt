@@ -48,14 +48,8 @@ abstract class EstateDatabase : RoomDatabase() {
         private class EstateDatabaseCallback(
                 private val scope: CoroutineScope
         ) : RoomDatabase.Callback() {
-            /**
-             * Override the onOpen method to populate the database.
-             * For this sample, we clear the database every time it is created or opened.
-             */
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                // If you want to keep the data through app restarts,
-                // comment out the following line.
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
                 INSTANCE?.let { database ->
                     scope.launch(Dispatchers.IO) {
                         populateDatabase(database.estateDatabaseDao())
@@ -73,18 +67,15 @@ abstract class EstateDatabase : RoomDatabase() {
             estateDatabaseDao.deleteAll()
 
             val estate1 = Estate(
-                    startTimeMilli = Calendar.getInstance().timeInMillis,
-                    endTimeMilli = null,
+                    startTime = Calendar.getInstance().timeInMillis,
+                    endTime = null,
                     estateType = "House",
                     estatePrice = 450000,
                     estateEmployee = "Etienne",
                     estateCity = "Nantes",
-                    pictureUrl = "content://com.android.externalstorage.documents/" +
-                            "document/" + // Hardcoded URI of image in a smartphone
-                            "primary%3ADownload%2FMjAyMTAyNjZmNTViNDZhYjQ2YzFmZTE5NGJmMDM1NTZmZWZiNTY.jpeg",
+                    pictureUrl = "/data/user/0/com.openclassrooms.realestatemanager/files/images/camera-1618268945033.jpg",
                     estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
                     estateSurface = 250,
-                    estateAvailability = true,
                     estateRooms = 5,
                     estateStreet = "rue des Ponts",
                     estateStreetNumber = 10,

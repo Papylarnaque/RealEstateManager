@@ -1,8 +1,6 @@
 package com.openclassrooms.realestatemanager.detail
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
+import com.openclassrooms.realestatemanager.list.loadImage
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
-
-
-private const val PERMISSION_CODE = 10001
-private const val PICK_IMAGE_TYPE = "image/*"
 
 class CreationFragment : Fragment() {
 
@@ -34,26 +28,9 @@ class CreationFragment : Fragment() {
     private lateinit var viewModel: CreationViewModel
     private val args: CreationFragmentArgs by navArgs()
     private var editMode = false
-    private var documentUri: Uri? = null
     private var estateCreationOK: Boolean = true
     private var errorMessage: String? = null
-    private val actionOpenDocument =
-        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            // If the user returns to this fragment without selecting a file, uri will be null
-            // In this case, we return void
-            documentUri = uri ?: return@registerForActivityResult
-
-            // TODO() Store the image in app folder instead of external link
-
-            Log.i("Creation Fragment", "New picture added, uri: $documentUri")
-
-            Glide.with(requireView())
-                .load(documentUri)
-                .thumbnail(0.33f)
-                .centerCrop()
-                .into(binding.createImage)
-        }
-
+    private var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
@@ -85,36 +62,48 @@ class CreationFragment : Fragment() {
     /**
      * View Bindings
      */
-    private fun initBindings() = if (editMode) {
-        viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
-            if (it != null) {
-                binding.estate = it
-            }
+    private fun initBindings() {
 
-            // Return Estate Type for edition
-            if (it.estateType == resources.getString(R.string.create_estate_flat)) {
-                binding.flatButton.isChecked = true
-            } else {
-                binding.houseButton.isChecked = true
-            }
 
-        })
+        if (editMode) {
+            /**
+             * EDIT MODE SPECIFICS
+             */
+            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
 
-        binding.createEstate.setOnClickListener {
-            estateCreationOK = true //init status
-            createEstate()
+                if (it != null) {
+                    binding.estate = it
+
+                    // Return Estate Type for edition
+                    if (it.estateType == resources.getString(R.string.create_estate_flat))
+                        binding.flatButton.isChecked = true
+                    else
+                        binding.houseButton.isChecked = true
+
+
+                    if (it.pictureUrl.isNullOrBlank())
+                        binding.createImage.setImageResource(R.drawable.ic_baseline_image_24)
+                    else {
+                        imageUrl = it.pictureUrl
+                        loadImage(binding.createImage, imageUrl)
+                    }
+
+                    if (it.endTime == null) {
+                        binding.editEstateAvailability.isChecked = true
+                    }
+                }
+
+                binding.editEstateAvailability.visibility = View.VISIBLE
+            })
         }
 
-    } else {
+
         binding.createImage.setOnClickListener {
-            // Open gallery for image
-            // TODO() Handle permissions
-            actionOpenDocument.launch(arrayOf(PICK_IMAGE_TYPE))
-            // TODO() Handle case taking a new picture
+            // Open camera for image
+            takePicture.launch(null)
         }
 
         binding.createEstate.setOnClickListener {
-            estateCreationOK = true //init status
             createEstate()
         }
     }
@@ -133,6 +122,7 @@ class CreationFragment : Fragment() {
         val estateDescription = getEstateDescription()
         val estateType = getEstateType()
         val estateEmployee = getEstateEmployee()
+        val endTimeMilli = getEstateAvailability()
 
         if (!estateCreationOK) {
             errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
@@ -141,7 +131,7 @@ class CreationFragment : Fragment() {
             GlobalScope.launch {
                 viewModel.updateEstate(
                     args.estateKey,
-                    documentUri,
+                    imageUrl,
                     estateType,
                     estateDescription,
                     estatePrice,
@@ -151,7 +141,8 @@ class CreationFragment : Fragment() {
                     estateStreetNumber,
                     estatePostalCode,
                     estateCity,
-                    estateEmployee
+                    estateEmployee,
+                    endTimeMilli
                 )
             }
             NavHostFragment.findNavController(this)
@@ -162,7 +153,7 @@ class CreationFragment : Fragment() {
         } else {
             GlobalScope.launch {
                 viewModel.createNewEstate(
-                    documentUri,
+                    imageUrl,
                     estateType,
                     estateDescription,
                     estatePrice,
@@ -181,6 +172,17 @@ class CreationFragment : Fragment() {
 
 
     }
+
+
+    private val takePicture =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            viewModel.saveImageFromCamera(bitmap)
+
+            viewModel.imageURL.observe(viewLifecycleOwner) {
+                loadImage(binding.createImage, it)
+                imageUrl = it
+            }
+        }
 
 //------- GET Estate Data for Creation
 
@@ -286,6 +288,14 @@ class CreationFragment : Fragment() {
             estateCreationOK = false
         }
         return createEstateCity
+    }
+
+    private fun getEstateAvailability(): Long? {
+        return if (binding.editEstateAvailability.isChecked) {
+            null
+        } else {
+            System.currentTimeMillis()
+        }
     }
 
 }

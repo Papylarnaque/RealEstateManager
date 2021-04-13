@@ -61,7 +61,7 @@ class DetailFragment : Fragment() {
                 //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
                 NavHostFragment.findNavController(this)
-                        .navigate(DetailFragmentDirections.actionDetailFragmentToCreationFragment(estate.startTimeMilli))
+                        .navigate(DetailFragmentDirections.actionDetailFragmentToCreationFragment(estate.startTime))
 
             }
 

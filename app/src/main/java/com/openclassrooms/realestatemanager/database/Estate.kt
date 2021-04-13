@@ -10,10 +10,10 @@ data class Estate(
 
         @PrimaryKey
         @ColumnInfo(name = "start_time_milli")
-        val startTimeMilli: Long = System.currentTimeMillis(),
+        val startTime: Long = System.currentTimeMillis(),
 
         @ColumnInfo(name = "end_time_milli")
-        val endTimeMilli: Long? = startTimeMilli,
+        val endTime: Long?,
 
         @ColumnInfo(name = "type")
         var estateType: String,
@@ -44,9 +44,6 @@ data class Estate(
 
         @ColumnInfo(name = "picture_url")
         val pictureUrl: String?,
-
-        @ColumnInfo(name = "availability")
-        val estateAvailability: Boolean = true,
 
         @ColumnInfo(name = "employee")
         val estateEmployee: String,
