@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
-
+// TODO() Implement Filter depending on PRICE & AVAILABILITY
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding

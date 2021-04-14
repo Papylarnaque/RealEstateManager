@@ -32,7 +32,12 @@ class EstateListAdapter(private val clickListener: EstateListener) :
         fun bind(item: Estate, clickListener: EstateListener) {
             binding.estate = item
             binding.clickListener = clickListener
-            if (item.endTime != null) binding.estateSoldTag.visibility = View.VISIBLE
+            // if SOLD
+            if (item.endTime != null) {
+                binding.estateSoldTag.visibility = View.VISIBLE
+                binding.itemEstateThirdLine.visibility = View.INVISIBLE
+            }
+
             binding.executePendingBindings()
         }
 

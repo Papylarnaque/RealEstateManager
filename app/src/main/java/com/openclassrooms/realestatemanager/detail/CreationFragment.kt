@@ -15,10 +15,13 @@ import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
 import com.openclassrooms.realestatemanager.list.loadImage
+import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
+
+val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 
 class CreationFragment : Fragment() {
 
@@ -31,6 +34,19 @@ class CreationFragment : Fragment() {
     private var estateCreationOK: Boolean = true
     private var errorMessage: String? = null
     private var imageUrl: String? = null
+    private val takePicture =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            viewModel.saveImageFromCamera(bitmap)
+            bindImageURL()
+        }
+
+    private val selectPicture =
+        registerForActivityResult(GetContentWithMimeTypes()) { uri ->
+            uri?.let {
+                viewModel.copyImageFromUri(uri)
+                bindImageURL()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
@@ -38,7 +54,6 @@ class CreationFragment : Fragment() {
             (activity as MainActivity).supportActionBar!!.title =
                 getString(R.string.edit_estate_titlebar)
         }
-
         super.onCreate(savedInstanceState)
     }
 
@@ -58,13 +73,10 @@ class CreationFragment : Fragment() {
         return binding.root
     }
 
-
     /**
      * View Bindings
      */
     private fun initBindings() {
-
-
         if (editMode) {
             /**
              * EDIT MODE SPECIFICS
@@ -98,13 +110,26 @@ class CreationFragment : Fragment() {
         }
 
 
-        binding.createImage.setOnClickListener {
+        binding.createTakePicture.setOnClickListener {
             // Open camera for image
             takePicture.launch(null)
+            // TODO() NavigateUp from Camera navigates back to the creationFragment
+            // TODO() Import image from gallery
+        }
+
+        binding.createPickGallery.setOnClickListener {
+            selectPicture.launch(IMAGE_MIME_TYPE)
         }
 
         binding.createEstate.setOnClickListener {
             createEstate()
+        }
+    }
+
+    private fun bindImageURL() {
+        viewModel.imageURL.observe(viewLifecycleOwner) {
+            loadImage(binding.createImage, it)
+            imageUrl = it
         }
     }
 
@@ -173,20 +198,10 @@ class CreationFragment : Fragment() {
 
     }
 
-
-    private val takePicture =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-            viewModel.saveImageFromCamera(bitmap)
-
-            viewModel.imageURL.observe(viewLifecycleOwner) {
-                loadImage(binding.createImage, it)
-                imageUrl = it
-            }
-        }
-
 //------- GET Estate Data for Creation
 
     private fun getEstateType(): String {
+        // TODO() Manage more Estate Types => Dropmenu ?
         return when (binding.radioGroup.checkedRadioButtonId) {
             R.id.flatButton -> {
                 resources.getString(R.string.create_estate_flat)

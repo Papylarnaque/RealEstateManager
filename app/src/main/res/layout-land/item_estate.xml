@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_estate_description"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
-            tools:text="475.000 €"
+            tools:text="475.000 $"
             tools:textColor="@color/green"
             tools:textSize="20sp"
             tools:textStyle="bold" />

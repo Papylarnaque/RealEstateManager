@@ -3,9 +3,7 @@ package com.openclassrooms.realestatemanager.detail
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.RadioGroup
 import androidx.activity.addCallback
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -37,7 +35,6 @@ class DetailFragment : Fragment() {
                         .navigate(R.id.action_detailFragment_to_listFragment)
             }
         }
-
         return binding.root
     }
 
@@ -61,8 +58,8 @@ class DetailFragment : Fragment() {
                 //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
                 NavHostFragment.findNavController(this)
-                        .navigate(DetailFragmentDirections.actionDetailFragmentToCreationFragment(estate.startTime))
-
+                        .navigate(DetailFragmentDirections
+                            .actionDetailFragmentToCreationFragment(estate.startTime))
             }
 
             android.R.id.home -> {
@@ -87,15 +84,12 @@ class DetailFragment : Fragment() {
 
     private fun bindEstate() {
         binding.estate = this.estate
-        binding.executePendingBindings()
         binding.detailEstateScrollview.visibility = View.VISIBLE
+        binding.executePendingBindings()
     }
 
-}
 
-@BindingAdapter("android:checkedButton")
-fun setCheckedChip(view: RadioGroup?, id: Int) {
-    if (id != view?.checkedRadioButtonId) {
-        view?.check(id)
-    }
+    // TODO() Click on picture should open it full screen
+
+
 }

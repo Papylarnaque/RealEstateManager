@@ -73,7 +73,7 @@ abstract class EstateDatabase : RoomDatabase() {
                     estatePrice = 450000,
                     estateEmployee = "Etienne",
                     estateCity = "Nantes",
-                    pictureUrl = "/data/user/0/com.openclassrooms.realestatemanager/files/images/camera-1618268945033.jpg",
+                    pictureUrl = "/data/data/com.openclassrooms.realestatemanager/files/images/camera-1618351774020.jpg",
                     estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
                     estateSurface = 250,
                     estateRooms = 5,
