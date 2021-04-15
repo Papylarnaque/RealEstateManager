@@ -148,8 +148,6 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
             withContext(Dispatchers.IO) {
                 try {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageStream)
-//                    imageStream.flush()
-//                    imageStream.close()
                 } catch (e: Exception) {
                     Log.e(javaClass.simpleName, "Error writing bitmap", e)
                 }

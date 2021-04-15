@@ -31,7 +31,6 @@ class CreationFragment : Fragment() {
     private lateinit var viewModel: CreationViewModel
     private val args: CreationFragmentArgs by navArgs()
     private var editMode = false
-    private var estateCreationOK: Boolean = true
     private var errorMessage: String? = null
     private var imageUrl: String? = null
     private val takePicture =
@@ -68,48 +67,51 @@ class CreationFragment : Fragment() {
         // Get the viewModel
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
 
+        if (editMode)
+            editModeBinding()
+
         initBindings()
 
         return binding.root
     }
 
     /**
-     * View Bindings
+     * EDIT MODE specific bindings
      */
-    private fun initBindings() {
-        if (editMode) {
-            /**
-             * EDIT MODE SPECIFICS
-             */
-            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
+    private fun editModeBinding() {
+        viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
 
-                if (it != null) {
-                    binding.estate = it
+            if (it != null) {
+                binding.estate = it
 
-                    // Return Estate Type for edition
-                    if (it.estateType == resources.getString(R.string.create_estate_flat))
-                        binding.flatButton.isChecked = true
-                    else
-                        binding.houseButton.isChecked = true
+                // Return Estate Type for edition
+                if (it.estateType == resources.getString(R.string.create_estate_flat))
+                    binding.flatButton.isChecked = true
+                else
+                    binding.houseButton.isChecked = true
 
 
-                    if (it.pictureUrl.isNullOrBlank())
-                        binding.createImage.setImageResource(R.drawable.ic_baseline_image_24)
-                    else {
-                        imageUrl = it.pictureUrl
-                        loadImage(binding.createImage, imageUrl)
-                    }
-
-                    if (it.endTime == null) {
-                        binding.editEstateAvailability.isChecked = true
-                    }
+                if (it.pictureUrl.isNullOrBlank())
+                    binding.createImage.setImageResource(R.drawable.ic_baseline_image_24)
+                else {
+                    imageUrl = it.pictureUrl
+                    loadImage(binding.createImage, imageUrl)
                 }
 
-                binding.editEstateAvailability.visibility = View.VISIBLE
-            })
-        }
+                if (it.endTime == null) {
+                    binding.editEstateAvailability.isChecked = true
+                }
+            }
 
+            binding.editEstateAvailability.visibility = View.VISIBLE
+        })
 
+    }
+
+    /**
+     * Global View Bindings
+     */
+    private fun initBindings() {
         binding.createTakePicture.setOnClickListener {
             // Open camera for image
             takePicture.launch(null)
@@ -149,7 +151,8 @@ class CreationFragment : Fragment() {
         val estateEmployee = getEstateEmployee()
         val endTimeMilli = getEstateAvailability()
 
-        if (!estateCreationOK) {
+
+        if (!errorMessage.isNullOrEmpty()) {
             errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
 
         } else if (editMode) {
@@ -211,7 +214,6 @@ class CreationFragment : Fragment() {
             }
             else -> {
                 errorMessage = getString(R.string.create_type_error_text)
-                estateCreationOK = false
                 ""
             }
         }
@@ -225,7 +227,6 @@ class CreationFragment : Fragment() {
                     R.string.create_description_error_text,
                     descriptionMin.toString()
                 )
-            estateCreationOK = false
         }
         return binding.createDescriptionEdit.text.toString()
     }
@@ -236,12 +237,10 @@ class CreationFragment : Fragment() {
             return when (it) {
                 null -> {
                     errorMessage = getString(R.string.create_price_missing_error_text)
-                    estateCreationOK = false
                     return 0
                 }
                 in 0..priceMin -> {
                     errorMessage = getString(R.string.create_price_toolow_error_text)
-                    estateCreationOK = false
                     it
                 }
                 else -> {
@@ -272,12 +271,11 @@ class CreationFragment : Fragment() {
     }
 
     private fun getEstateStreetNumber(): Int? {
-        return if (binding.createAddressStreetnumberEdit.text.toString().isBlank()) {
+        return if (binding.createAddressStreetnumberEdit.text.toString().isEmpty()) {
             null
         } else {
-            if (getEstateStreet().isBlank()) {
+            if (getEstateStreet().isEmpty()) {
                 errorMessage = getString(R.string.create_streetnumber_error_text)
-                estateCreationOK = false
             }
             binding.createAddressStreetnumberEdit.text.toString().toInt()
         }
@@ -297,10 +295,9 @@ class CreationFragment : Fragment() {
 
     private fun getEstateCity(): String {
         val createEstateCity = binding.createAddressCityEdit.text.toString()
-        if (createEstateCity.isBlank()) { // https://fr.wikipedia.org/wiki/Y_(Somme)
+        if (createEstateCity.isEmpty()) { // https://fr.wikipedia.org/wiki/Y_(Somme)
             // Smallest city name in France is 1 letter length
             errorMessage = getString(R.string.create_city_error_text)
-            estateCreationOK = false
         }
         return createEstateCity
     }
