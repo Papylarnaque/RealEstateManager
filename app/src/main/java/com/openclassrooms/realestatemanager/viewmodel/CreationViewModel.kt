@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.utils.Source
 import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -24,9 +25,7 @@ import java.io.FileOutputStream
 class CreationViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: EstateRepository
-    private val allEstates: LiveData<List<Estate>>
     private val imagesFolder: File by lazy { getImagesFolder(getApplication()) }
-
     private val context: Context
         get() = getApplication()
 
@@ -41,93 +40,14 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
         _imageURL.value = url
     }
 
-    init {
-        val estateDatabaseDao =
-            EstateDatabase.getDatabase(application, viewModelScope).estateDatabaseDao()
-        repository = EstateRepository(estateDatabaseDao)
-        allEstates = repository.allEstates
-    }
-
-    suspend fun createNewEstate(
-        estatePicture: String?,
-        estateType: String,
-        estateDescription: String,
-        estatePrice: Int,
-        estateSurface: Int?,
-        estateRooms: Int?,
-        estateStreet: String,
-        estateStreetNumber: Int?,
-        estatePostalCode: String?,
-        estateCity: String,
-        estateEmployee: String
-    ) {
-        // store data in a new estate to monitor the estateId
-        val estate = Estate(
-            pictureUrl = estatePicture,
-            estateType = estateType,
-            estateDescription = estateDescription,
-            estatePrice = estatePrice,
-            estateSurface = estateSurface,
-            estateRooms = estateRooms,
-            estateStreet = estateStreet,
-            estateStreetNumber = estateStreetNumber,
-            estateCityPostalCode = estatePostalCode,
-            estateCity = estateCity,
-            estateEmployee = estateEmployee,
-            // Availability to true by default => endTimeMilli == null
-            endTime = null
-        )
-
-        repository.insert(estate)
-        Log.i(
-            "CreationViewModel", "added a new estate of type ${estate.estateType}" +
-                    "with id ${estate.startTime}"
-        )
-    }
-
     fun getEstateWithId(estateKey: Long): LiveData<Estate> {
         return repository.getEstate(estateKey)
     }
 
-    suspend fun updateEstate(
-        estateStartTime: Long,
-        estatePicture: String?,
-        estateType: String,
-        estateDescription: String,
-        estatePrice: Int,
-        estateSurface: Int?,
-        estateRooms: Int?,
-        estateStreet: String,
-        estateStreetNumber: Int?,
-        estatePostalCode: String?,
-        estateCity: String,
-        estateEmployee: String,
-        endTimeMilli: Long?
-    ) {
-
-        // store data in a new estate to monitor the estateId
-        val estate = Estate(
-            startTime = estateStartTime,
-            pictureUrl = estatePicture,
-            estateType = estateType,
-            estateDescription = estateDescription,
-            estatePrice = estatePrice,
-            estateSurface = estateSurface,
-            estateRooms = estateRooms,
-            estateStreet = estateStreet,
-            estateStreetNumber = estateStreetNumber,
-            estateCityPostalCode = estatePostalCode,
-            estateCity = estateCity,
-            estateEmployee = estateEmployee,
-            endTime = endTimeMilli
-        )
-
-
-        repository.update(estate)
-        Log.i(
-            "CreationViewModel", "added a new estate of type ${estate.estateType}" +
-                    "with id ${estate.startTime} with price ${estate.estatePrice}"
-        )
+    init {
+        val estateDatabaseDao =
+            EstateDatabase.getDatabase(application, viewModelScope).estateDatabaseDao()
+        repository = EstateRepository(estateDatabaseDao)
     }
 
     private fun getImagesFolder(context: Context): File {
@@ -170,5 +90,40 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
+    fun saveEstate(editMode: Boolean, estate: Estate) {
+        if (editMode) {
+            GlobalScope.launch {
+                repository.update(estate)
+                Log.i(
+                    "CreationViewModel", "added a new estate of type ${estate.estateType}" +
+                            "with id ${estate.startTime} with price ${estate.estatePrice}"
+                )
+                onEstateUpdated(estate)
+            }
+        } else {
+            GlobalScope.launch {
+                repository.insert(estate)
+                Log.i(
+                    "CreationViewModel", "added a new estate of type ${estate.estateType}" +
+                            "with id ${estate.startTime}"
+                )
+                onEstateUpdated(null)
+            }
+        }
+    }
+
+
+    /**
+     * Navigation for the EstateListDetail fragment.
+     */
+    private val _navigateToEstateDetail = MutableLiveData<Estate?>()
+    val navigateToEstateDetail
+        get() = _navigateToEstateDetail
+
+    private fun onEstateUpdated(estate: Estate?) {
+        _navigateToEstateDetail.value = estate
+    }
+
 
 }

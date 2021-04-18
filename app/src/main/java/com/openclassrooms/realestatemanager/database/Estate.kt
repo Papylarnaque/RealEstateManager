@@ -28,7 +28,7 @@ data class Estate(
         val estateRooms: Int?,
 
         @ColumnInfo(name = "description")
-        val estateDescription: String = "",
+        var estateDescription: String = "",
 
         @ColumnInfo(name = "street")
         val estateStreet: String = "",

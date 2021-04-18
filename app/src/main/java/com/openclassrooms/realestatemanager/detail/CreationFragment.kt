@@ -13,12 +13,11 @@ import androidx.navigation.fragment.navArgs
 import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
 import com.openclassrooms.realestatemanager.list.loadImage
 import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
@@ -71,7 +70,6 @@ class CreationFragment : Fragment() {
             editModeBinding()
 
         initBindings()
-
         return binding.root
     }
 
@@ -124,9 +122,32 @@ class CreationFragment : Fragment() {
         }
 
         binding.createEstate.setOnClickListener {
-            createEstate()
+            val estate = shareEstate()
+            if (!errorMessage.isNullOrEmpty()) {
+                errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
+            } else {
+                viewModel.saveEstate(editMode, estate)
+            }
+
+            navigateAfterSaveClick()
         }
     }
+
+    private fun navigateAfterSaveClick() {
+        // When an item is clicked.
+        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
+            estate?.let {
+                // If SINGLE layout mode
+                NavHostFragment.findNavController(this)
+                    .navigate(
+                        CreationFragmentDirections
+                            .actionCreationFragmentToDetailFragment(args.estateKey)
+                    )
+            } ?: NavHostFragment.findNavController(this)
+                .navigate(R.id.action_creationFragment_to_listFragment)
+        })
+    }
+
 
     private fun bindImageURL() {
         viewModel.imageURL.observe(viewLifecycleOwner) {
@@ -134,6 +155,28 @@ class CreationFragment : Fragment() {
             imageUrl = it
         }
     }
+
+
+    /**
+     * Handle Estate data
+     */
+    private fun shareEstate(): Estate {
+        return Estate(
+            estateCity = getEstateCity(),
+            estateCityPostalCode = getEstatePostalCode(),
+            estateStreetNumber = getEstateStreetNumber(),
+            estateStreet = getEstateStreet(),
+            estateRooms = getEstateRooms(),
+            estateSurface = getEstateSurface(),
+            estatePrice = getEstatePrice(),
+            estateDescription = getEstateDescription(),
+            estateType = getEstateType(),
+            estateEmployee = getEstateEmployee(),
+            endTime = getEstateAvailability(),
+            pictureUrl = imageUrl
+        )
+    }
+
 
     /**
      * Handle creation Estate response
@@ -150,56 +193,8 @@ class CreationFragment : Fragment() {
         val estateType = getEstateType()
         val estateEmployee = getEstateEmployee()
         val endTimeMilli = getEstateAvailability()
-
-
-        if (!errorMessage.isNullOrEmpty()) {
-            errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
-
-        } else if (editMode) {
-            GlobalScope.launch {
-                viewModel.updateEstate(
-                    args.estateKey,
-                    imageUrl,
-                    estateType,
-                    estateDescription,
-                    estatePrice,
-                    estateSurface,
-                    estateRooms,
-                    estateStreet,
-                    estateStreetNumber,
-                    estatePostalCode,
-                    estateCity,
-                    estateEmployee,
-                    endTimeMilli
-                )
-            }
-            NavHostFragment.findNavController(this)
-                .navigate(
-                    CreationFragmentDirections
-                        .actionCreationFragmentToDetailFragment(args.estateKey)
-                )
-        } else {
-            GlobalScope.launch {
-                viewModel.createNewEstate(
-                    imageUrl,
-                    estateType,
-                    estateDescription,
-                    estatePrice,
-                    estateSurface,
-                    estateRooms,
-                    estateStreet,
-                    estateStreetNumber,
-                    estatePostalCode,
-                    estateCity,
-                    estateEmployee
-                )
-            }
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_creationFragment_to_listFragment)
-        }
-
-
     }
+
 
 //------- GET Estate Data for Creation
 
