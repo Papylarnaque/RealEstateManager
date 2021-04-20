@@ -10,15 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.Estate
+import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
-import com.openclassrooms.realestatemanager.list.loadImage
 import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import kotlin.math.abs
+
 
 val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 
@@ -32,17 +34,16 @@ class CreationFragment : Fragment() {
     private var editMode = false
     private var errorMessage: String? = null
     private var imageUrl: String? = null
+    private lateinit var listPicture: List<Picture>
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             viewModel.saveImageFromCamera(bitmap)
-            bindImageURL()
         }
 
     private val selectPicture =
         registerForActivityResult(GetContentWithMimeTypes()) { uri ->
             uri?.let {
-                viewModel.copyImageFromUri(uri)
-                bindImageURL()
+                viewModel.copyImageFromUriToAppFolder(uri)
             }
         }
 
@@ -69,38 +70,41 @@ class CreationFragment : Fragment() {
         if (editMode)
             editModeBinding()
 
+        val pictureListAdapter = PictureListAdapter(PictureListener { picture ->
+            // TODO() viewModel.onPictureClicked(picture)
+        })
+        binding.createRecyclerviewPictures.adapter = pictureListAdapter
+        binding.createRecyclerviewPictures.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+
+        if (editMode) {
+            viewModel.getEstatePictures(args.estateKey).observe(viewLifecycleOwner, {
+                it?.let {
+                    pictureListAdapter.submitList(it as MutableList<Picture>)
+                }
+            })
+        }
+
         initBindings()
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navigateAfterSaveClick()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+
+    //------------------- MANAGE VIEW ----------------------//
 
     /**
      * EDIT MODE specific bindings
      */
     private fun editModeBinding() {
         viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
-
             if (it != null) {
                 binding.estate = it
-
-                // Return Estate Type for edition
-                if (it.estateType == resources.getString(R.string.create_estate_flat))
-                    binding.flatButton.isChecked = true
-                else
-                    binding.houseButton.isChecked = true
-
-
-                if (it.pictureUrl.isNullOrBlank())
-                    binding.createImage.setImageResource(R.drawable.ic_baseline_image_24)
-                else {
-                    imageUrl = it.pictureUrl
-                    loadImage(binding.createImage, imageUrl)
-                }
-
-                if (it.endTime == null) {
-                    binding.editEstateAvailability.isChecked = true
-                }
             }
-
             binding.editEstateAvailability.visibility = View.VISIBLE
         })
 
@@ -125,43 +129,52 @@ class CreationFragment : Fragment() {
             val estate = shareEstate()
             if (!errorMessage.isNullOrEmpty()) {
                 errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
+                errorMessage = null
             } else {
                 viewModel.saveEstate(editMode, estate)
             }
-
-            navigateAfterSaveClick()
         }
     }
+
+
+    //-------------------- NAVIGATION ----------------------//
 
     private fun navigateAfterSaveClick() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                // If SINGLE layout mode
-                NavHostFragment.findNavController(this)
-                    .navigate(
-                        CreationFragmentDirections
-                            .actionCreationFragmentToDetailFragment(args.estateKey)
-                    )
+                NavHostFragment.findNavController(this).navigateUp()
             } ?: NavHostFragment.findNavController(this)
                 .navigate(R.id.action_creationFragment_to_listFragment)
+
         })
     }
 
 
-    private fun bindImageURL() {
-        viewModel.imageURL.observe(viewLifecycleOwner) {
-            loadImage(binding.createImage, it)
-            imageUrl = it
-        }
-    }
-
-
+    //----------------- MANAGE ESTATE ---------------------//
     /**
      * Handle Estate data
      */
     private fun shareEstate(): Estate {
-        return Estate(
+        if (editMode) {
+            return Estate(
+                startTime = args.estateKey,
+                estateCity = getEstateCity(),
+                estateCityPostalCode = getEstatePostalCode(),
+                estateStreetNumber = getEstateStreetNumber(),
+                estateStreet = getEstateStreet(),
+                estateRooms = getEstateRooms(),
+                estateSurface = getEstateSurface(),
+                estatePrice = getEstatePrice(),
+                estateDescription = getEstateDescription(),
+//            estateType = getEstateType(),
+                estateType = "House",
+//                estateEmployee = getEstateEmployee(),
+                employeeId = 1,
+                endTime = getEstateAvailability(),
+                estatePois = "Test",
+            )
+        } else return Estate(
             estateCity = getEstateCity(),
             estateCityPostalCode = getEstatePostalCode(),
             estateStreetNumber = getEstateStreetNumber(),
@@ -170,49 +183,33 @@ class CreationFragment : Fragment() {
             estateSurface = getEstateSurface(),
             estatePrice = getEstatePrice(),
             estateDescription = getEstateDescription(),
-            estateType = getEstateType(),
-            estateEmployee = getEstateEmployee(),
+//            estateType = getEstateType(),
+            estateType = "House",
+//                estateEmployee = getEstateEmployee(),
+            employeeId = 1,
             endTime = getEstateAvailability(),
-            pictureUrl = imageUrl
+            estatePois = "Test"
         )
-    }
-
-
-    /**
-     * Handle creation Estate response
-     */
-    private fun createEstate() {
-        val estateCity = getEstateCity()
-        val estatePostalCode = getEstatePostalCode()
-        val estateStreetNumber = getEstateStreetNumber()
-        val estateStreet = getEstateStreet()
-        val estateRooms = getEstateRooms()
-        val estateSurface = getEstateSurface()
-        val estatePrice = getEstatePrice()
-        val estateDescription = getEstateDescription()
-        val estateType = getEstateType()
-        val estateEmployee = getEstateEmployee()
-        val endTimeMilli = getEstateAvailability()
     }
 
 
 //------- GET Estate Data for Creation
 
-    private fun getEstateType(): String {
-        // TODO() Manage more Estate Types => Dropmenu ?
-        return when (binding.radioGroup.checkedRadioButtonId) {
-            R.id.flatButton -> {
-                resources.getString(R.string.create_estate_flat)
-            }
-            R.id.houseButton -> {
-                resources.getString(R.string.create_estate_house)
-            }
-            else -> {
-                errorMessage = getString(R.string.create_type_error_text)
-                ""
-            }
-        }
-    }
+//    private fun getEstateType(): String {
+//        // TODO() Manage more Estate Types => Dropmenu ?
+//        return when (binding.radioGroup.checkedRadioButtonId) {
+//            R.id.flatButton -> {
+//                resources.getString(R.string.create_estate_flat)
+//            }
+//            R.id.houseButton -> {
+//                resources.getString(R.string.create_estate_house)
+//            }
+//            else -> {
+//                errorMessage = getString(R.string.create_type_error_text)
+//                ""
+//            }
+//        }
+//    }
 
     private fun getEstateDescription(): String {
         val descriptionMin = resources.getInteger(R.integer.create_description_minimum)
@@ -282,10 +279,6 @@ class CreationFragment : Fragment() {
         } else {
             binding.createAddressPostalcodeEdit.text.toString()
         }
-    }
-
-    private fun getEstateEmployee(): String {
-        return binding.createEmployeeEdit.text.toString()
     }
 
     private fun getEstateCity(): String {

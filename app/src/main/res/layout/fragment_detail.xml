@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="estate"
-            type="com.openclassrooms.realestatemanager.database.Estate" />
+            type="com.openclassrooms.realestatemanager.database.model.Estate" />
     </data>
 
     <ScrollView
@@ -19,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp">
+            android:paddingStart="@dimen/margin_small"
+            android:paddingEnd="@dimen/margin_small">
 
             <!--    TITLE    -->
 
@@ -28,9 +30,9 @@
                 android:id="@+id/detail_title_type_text"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingStart="25dp"
-                android:paddingEnd="25dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:paddingStart="@dimen/margin_normal"
+                android:paddingEnd="@dimen/margin_normal"
                 android:text="@{@string/item_estate_first_line_text(estate.estateType.toString())}"
                 android:textAlignment="textEnd"
                 android:textSize="15sp"
@@ -43,8 +45,8 @@
                 android:id="@+id/detail_title_surface_text"
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="25dp"
-                android:paddingEnd="25dp"
+                android:paddingStart="@dimen/margin_normal"
+                android:paddingEnd="@dimen/margin_normal"
                 android:text='@{estate.estateSurface==null ? "" : @string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}'
                 app:layout_constraintBottom_toBottomOf="@id/detail_title_type_text"
                 app:layout_constraintStart_toEndOf="@+id/detail_title_type_text"
@@ -53,59 +55,32 @@
 
             <!--    PICTURES    -->
 
-            <!--            <HorizontalScrollView-->
-            <!--                android:id="@+id/horizontalScrollView"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/detail_estate_picture_height"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/detail_title_type_text">-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:orientation="horizontal">-->
-
-            <!--                    <androidx.recyclerview.widget.RecyclerView-->
-            <!--                        android:id="@+id/recyclerview_estate_pictures"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-
-            <!--                        tools:listitem="@layout/item_estate_pictures" />-->
-
-            <!--                </LinearLayout>-->
-            <!--            </HorizontalScrollView>-->
-
-            <ImageView
-                android:id="@+id/horizontalScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:maxHeight="@dimen/detail_estate_picture_height"
-                android:src="@drawable/ic_baseline_image_24"
-                app:layout_constraintEnd_toEndOf="parent"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detailRecyclerviewPictures"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_title_type_text"
-                app:pictureUrl="@{estate.pictureUrl}" />
+                tools:listitem="@layout/item_estate_pictures" />
 
             <TextView
                 android:id="@+id/detail_description_title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/detail_description_title_text"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+                app:layout_constraintTop_toBottomOf="@+id/detailRecyclerviewPictures"
                 tools:text="Description:" />
 
             <TextView
                 android:id="@+id/detail_description_content_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/margin_small"
                 android:paddingStart="25dp"
                 android:paddingEnd="25dp"
                 android:text="@{estate.estateDescription}"
@@ -118,10 +93,10 @@
 
             <ImageView
                 android:id="@+id/detail_price_image"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="@dimen/detail_content_image"
+                android:layout_height="@dimen/detail_content_image"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_money_24"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +118,7 @@
                 android:id="@+id/detail_price_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{estate.estatePrice== null ? "" : @string/detail_estate_price_text(Integer.toString(estate.estatePrice)) }'
                 app:layout_constraintStart_toEndOf="@id/detail_price_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_price_title"
@@ -153,9 +128,9 @@
 
             <ImageView
                 android:id="@+id/detail_surface_image"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="@dimen/detail_content_image"
+                android:layout_height="@dimen/detail_content_image"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_surface_24"
                 app:layout_constraintStart_toStartOf="@id/detail_price_image"
@@ -166,7 +141,7 @@
                 android:id="@+id/detail_surface_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/detail_surface_title"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/detail_surface_image"
@@ -177,7 +152,7 @@
                 android:id="@+id/detail_surface_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{estate.estateSurface==null ? "" : @string/detail_estate_title_surface_text(Integer.toString(estate.estateSurface))}'
                 app:layout_constraintStart_toEndOf="@id/detail_surface_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_surface_title"
@@ -187,9 +162,9 @@
 
             <ImageView
                 android:id="@+id/detail_rooms_image"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="@dimen/detail_content_image"
+                android:layout_height="@dimen/detail_content_image"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_rooms_image_description"
                 android:src="@drawable/ic_baseline_rooms_24"
                 app:layout_constraintStart_toStartOf="@id/detail_price_image"
@@ -200,7 +175,7 @@
                 android:id="@+id/detail_rooms_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text="@{@string/detail_estate_rooms_text(Integer.toString(estate.estateRooms))}"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/detail_rooms_image"
@@ -211,9 +186,9 @@
 
             <ImageView
                 android:id="@+id/detail_address_image"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="25dp"
+                android:layout_width="@dimen/detail_content_image"
+                android:layout_height="@dimen/detail_content_image"
+                android:layout_marginTop="@dimen/margin_large"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_address_24"
                 app:layout_constraintStart_toStartOf="@id/detail_price_image"
@@ -224,7 +199,7 @@
                 android:id="@+id/detail_address_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/detail_address_title"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/detail_address_image"
@@ -237,7 +212,7 @@
                 android:id="@+id/detail_address_streetnumber_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{estate.estateStreetNumber==null ? "" : @string/detail_estate_address_streetnumber(estate.estateStreetNumber)}'
                 app:layout_constraintStart_toEndOf="@id/detail_address_image"
                 app:layout_constraintTop_toBottomOf="@id/detail_address_title"
@@ -270,8 +245,17 @@
                 app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
                 tools:text="Nantes" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/estate_sold_tag"
+                android:layout_width="@dimen/item_estate_height"
+                android:layout_height="@dimen/item_estate_height"
+                android:contentDescription="@string/sold_tag_description"
+                android:src="@drawable/sold"
+                android:visibility="@{estate.endTime!=null? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </layout>

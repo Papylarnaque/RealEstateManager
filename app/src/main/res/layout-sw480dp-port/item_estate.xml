@@ -8,7 +8,7 @@
 
         <variable
             name="estate"
-            type="com.openclassrooms.realestatemanager.database.Estate" />
+            type="com.openclassrooms.realestatemanager.database.model.Estate" />
 
         <variable
             name="clickListener"
@@ -36,7 +36,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:pictureUrl="@{estate.pictureUrl}"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView

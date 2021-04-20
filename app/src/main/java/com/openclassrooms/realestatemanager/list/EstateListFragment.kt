@@ -10,7 +10,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.Estate
+import com.openclassrooms.realestatemanager.database.model.EstateAllPictures
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
@@ -40,10 +40,9 @@ class EstateListFragment : Fragment() {
         binding.recyclerviewEstateList.adapter = estateListAdapter
         binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
 
-        // Observe data modification in the VM
-        viewModel.allEstates.observe(viewLifecycleOwner, {
+        viewModel.allEstatesWithPictures.observe(viewLifecycleOwner, {
             it?.let {
-                estateListAdapter.submitList(it as MutableList<Estate>)
+                estateListAdapter.submitList(it as MutableList<EstateAllPictures>)
             }
         })
 

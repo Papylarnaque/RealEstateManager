@@ -9,8 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.Estate
+import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
@@ -20,23 +21,34 @@ class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
     private lateinit var estate: Estate
+    private val pictureListAdapter = PictureListAdapter(PictureListener { picture ->
+        // TODO() viewModel.onPictureClicked(picture)
+    })
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailBinding.inflate(layoutInflater)
+
+        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
+        binding.detailRecyclerviewPictures.layoutManager = LinearLayoutManager(context)
+
+        // TODO() Put pictures in recyclerview
+
+        getEstate()
 
         // override back navigation from detail fragment
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
                 NavHostFragment.findNavController(requireParentFragment())
-                        .navigate(R.id.action_detailFragment_to_listFragment)
+                    .navigate(R.id.action_detailFragment_to_listFragment)
             }
         }
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -58,8 +70,10 @@ class DetailFragment : Fragment() {
                 //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
                 NavHostFragment.findNavController(this)
-                        .navigate(DetailFragmentDirections
-                            .actionDetailFragmentToCreationFragment(estate.startTime))
+                    .navigate(
+                        DetailFragmentDirections
+                            .actionDetailFragmentToCreationFragment(estate.startTime)
+                    )
             }
 
             android.R.id.home -> {

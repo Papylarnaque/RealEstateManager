@@ -14,4 +14,6 @@
     <dimen name="margin_small">8dp</dimen>
 
     <dimen name="item_estate_price_margin_end">164dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="detail_content_image">24dp</dimen>
 </resources>

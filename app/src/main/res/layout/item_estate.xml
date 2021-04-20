@@ -8,7 +8,7 @@
 
         <variable
             name="estate"
-            type="com.openclassrooms.realestatemanager.database.Estate" />
+            type="com.openclassrooms.realestatemanager.database.model.Estate" />
 
         <variable
             name="clickListener"
@@ -35,7 +35,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:pictureUrl="@{estate.pictureUrl}"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
@@ -89,11 +88,11 @@
             android:id="@+id/estate_sold_tag"
             android:layout_width="@dimen/item_estate_height"
             android:layout_height="@dimen/item_estate_height"
+            android:contentDescription="@string/sold_tag_description"
             android:src="@drawable/sold"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/sold_tag_description" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

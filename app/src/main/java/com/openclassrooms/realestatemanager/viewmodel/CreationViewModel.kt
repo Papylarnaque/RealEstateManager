@@ -9,9 +9,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.openclassrooms.realestatemanager.database.Estate
 import com.openclassrooms.realestatemanager.database.EstateDatabase
+import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.repository.EstateRepository
+import com.openclassrooms.realestatemanager.repository.PictureRepository
 import com.openclassrooms.realestatemanager.utils.Source
 import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
@@ -24,31 +26,69 @@ import java.io.FileOutputStream
 
 class CreationViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: EstateRepository
+    private val estateRepository: EstateRepository
+    private val pictureRepository: PictureRepository
     private val imagesFolder: File by lazy { getImagesFolder(getApplication()) }
     private val context: Context
         get() = getApplication()
 
-    /**
-     * Share ImageURL with the Creationfragment
-     */
-    private val _imageURL = MutableLiveData<String>()
-    val imageURL
-        get() = _imageURL
-
-    private fun sharePictureURI(url: String) {
-        _imageURL.value = url
-    }
-
-    fun getEstateWithId(estateKey: Long): LiveData<Estate> {
-        return repository.getEstate(estateKey)
-    }
+    // TODO() Manage saving pictures
 
     init {
-        val estateDatabaseDao =
-            EstateDatabase.getDatabase(application, viewModelScope).estateDatabaseDao()
-        repository = EstateRepository(estateDatabaseDao)
+        with(EstateDatabase.getDatabase(application, viewModelScope)){
+            val estateDao = this.estateDao()
+            estateRepository = EstateRepository(estateDao)
+
+            val pictureDao = this.pictureDao()
+            pictureRepository = PictureRepository(pictureDao)
+        }
     }
+
+    //--------------- CREATION & EDITION ------------------//
+
+    fun saveEstate(editMode: Boolean, estate: Estate) {
+        if (editMode) {
+            GlobalScope.launch {
+                estateRepository.update(estate)
+                Log.i(
+                    "CreationViewModel", "editMode $editMode added a new estate of type ${estate.estateType}" +
+                            "with id ${estate.startTime} with price ${estate.estatePrice}"
+                )
+            }
+        } else {
+            GlobalScope.launch {
+                estateRepository.insert(estate)
+                Log.i(
+                    "CreationViewModel ", "editMode $editMode added a new estate of type ${estate.estateType}" +
+                            "with id ${estate.startTime}, $editMode"
+                )
+            }
+        }
+        savePictures()
+        onEstateUpdated(estate)
+    }
+
+
+    private fun savePictures() {
+        TODO("Not yet implemented")
+    }
+
+
+    //--------------- EDIT MODE FUNCTIONS ------------------//
+
+    fun getEstateWithId(estateKey: Long): LiveData<Estate> {
+        return estateRepository.getEstate(estateKey)
+    }
+
+    fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
+        return pictureRepository.getEstatePictures(estateKey)
+    }
+
+    //------------------------------------------------------//
+
+
+
+    //----------------- MANAGE PICTURES --------------------//
 
     private fun getImagesFolder(context: Context): File {
         return File(context.filesDir, "images/").also {
@@ -77,11 +117,9 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
         sharePictureURI(imageFile.absolutePath)
     }
 
-
-    fun copyImageFromUri(uri: Uri) {
+    fun copyImageFromUriToAppFolder(uri: Uri) {
         val imageFile = File(imagesFolder, generateFilename(Source.PICKER))
         val imageStream = FileOutputStream(imageFile)
-        sharePictureURI(imageFile.absolutePath)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 context.contentResolver.openInputStream(uri)?.let {
@@ -91,37 +129,29 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun saveEstate(editMode: Boolean, estate: Estate) {
-        if (editMode) {
-            GlobalScope.launch {
-                repository.update(estate)
-                Log.i(
-                    "CreationViewModel", "added a new estate of type ${estate.estateType}" +
-                            "with id ${estate.startTime} with price ${estate.estatePrice}"
-                )
-                onEstateUpdated(estate)
-            }
-        } else {
-            GlobalScope.launch {
-                repository.insert(estate)
-                Log.i(
-                    "CreationViewModel", "added a new estate of type ${estate.estateType}" +
-                            "with id ${estate.startTime}"
-                )
-                onEstateUpdated(null)
-            }
-        }
+
+    //------------------ NOTIFICATIONS ---------------------//
+
+    /**
+     * Share ImageURL with the Creationfragment
+     */
+    private val _imageURL = MutableLiveData<String>()
+    val imageURL
+        get() = _imageURL
+
+    private fun sharePictureURI(url: String) {
+        _imageURL.value = url
     }
 
 
     /**
-     * Navigation for the EstateListDetail fragment.
+     * Navigation notification
      */
-    private val _navigateToEstateDetail = MutableLiveData<Estate?>()
+    private val _navigateToEstateDetail = MutableLiveData<Estate>()
     val navigateToEstateDetail
         get() = _navigateToEstateDetail
 
-    private fun onEstateUpdated(estate: Estate?) {
+    private fun onEstateUpdated(estate: Estate) {
         _navigateToEstateDetail.value = estate
     }
 

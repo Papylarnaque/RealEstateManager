@@ -83,26 +83,6 @@ dependencies {
     // DataBinding
     kapt "com.android.databinding:compiler:$dataBindingCompilerVersion"
 
-    // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:26.6.0')
-
-    // Declare the dependency for the Cloud Firestore library
-    implementation 'com.google.firebase:firebase-firestore-ktx'
-
-    // Retrofit dependencies
-    implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
-//    implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
-
-    //OkHttp
-    implementation ("com.squareup.okhttp3:okhttp:3.12.12"){
-        version {
-            require '3.12.12.RELEASE'
-            reject '4.13.1.RELEASE'
-        }
-//        force = true //API 19 support
-    }
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.12'
-
     // ------------ TESTS -------------- //
 
     // Core library
@@ -132,10 +112,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
 
     // Mockito for unit tests
-    testImplementation 'org.mockito:mockito-core:2.23.0'
+    testImplementation 'org.mockito:mockito-core:3.7.7'
 
     // Mockito for Android tests
-    testImplementation 'org.mockito:mockito-android:2.7.22'
+    testImplementation 'org.mockito:mockito-android:2.28.2'
 
     // Room Test helpers
     testImplementation "androidx.room:room-testing:$room_version"

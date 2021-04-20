@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.openclassrooms.realestatemanager.database.Estate
+import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.EstateDatabaseDao
 import kotlinx.coroutines.runBlocking

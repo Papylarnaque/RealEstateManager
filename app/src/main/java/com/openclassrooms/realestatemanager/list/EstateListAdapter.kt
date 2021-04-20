@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.openclassrooms.realestatemanager.database.Estate
+import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.EstateAllPictures
 import com.openclassrooms.realestatemanager.databinding.ItemEstateBinding
 
 
 class EstateListAdapter(private val clickListener: EstateListener) :
-    ListAdapter<Estate, EstateListAdapter.ViewHolder>(EstateDiffCallback()) {
+    ListAdapter<EstateAllPictures, EstateListAdapter.ViewHolder>(EstateDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)
@@ -29,11 +30,13 @@ class EstateListAdapter(private val clickListener: EstateListener) :
     class ViewHolder private constructor(val binding: ItemEstateBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Estate, clickListener: EstateListener) {
-            binding.estate = item
+        fun bind(item: EstateAllPictures, clickListener: EstateListener) {
+            binding.estate = item.estate
+            if (!item.pictures?.isEmpty()!!){
+            loadImage(binding.itemEstatePicture, item.pictures!![0].url)}
             binding.clickListener = clickListener
             // if SOLD
-            if (item.endTime != null) {
+            if (item.estate?.endTime != null) {
                 binding.estateSoldTag.visibility = View.VISIBLE
                 binding.itemEstateThirdLine.visibility = View.INVISIBLE
             }
@@ -51,13 +54,13 @@ class EstateListAdapter(private val clickListener: EstateListener) :
     }
 }
 
-class EstateDiffCallback : DiffUtil.ItemCallback<Estate>() {
-    override fun areItemsTheSame(oldItem: Estate, newItem: Estate): Boolean {
-        return oldItem.startTime == newItem.startTime
+class EstateDiffCallback : DiffUtil.ItemCallback<EstateAllPictures>() {
+    override fun areItemsTheSame(oldItem: EstateAllPictures, newItem: EstateAllPictures): Boolean {
+        return oldItem.estate?.startTime == newItem.estate?.startTime
     }
 
-    override fun areContentsTheSame(oldItem: Estate, newItem: Estate): Boolean {
-        return oldItem == newItem
+    override fun areContentsTheSame(oldItem: EstateAllPictures, newItem: EstateAllPictures): Boolean {
+        return oldItem.estate == newItem.estate && oldItem.pictures == newItem.pictures
     }
 }
 

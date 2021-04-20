@@ -1,0 +1,2 @@
+Insert into picture_table values (2, "/data/data/com.openclassrooms.realestatemanager/files/images/camera-1618351774019.jpg", 1618858284071, "Photo2", 2)
+Insert into picture_table values (3, "/data/data/com.openclassrooms.realestatemanager/files/images/camera-1618351774020.jpg", 1618858284071, "Photo3", 3)

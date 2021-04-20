@@ -4,12 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="estate"
-            type="com.openclassrooms.realestatemanager.database.Estate" />
+            name="clickListener"
+            type="com.openclassrooms.realestatemanager.detail.PictureListener" />
+
+        <variable
+            name="picture"
+            type="com.openclassrooms.realestatemanager.database.model.Picture" />
     </data>
 
-    <merge>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_border"
+        android:onClick="@{() -> clickListener.onClick(picture)}"
+        app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
+        app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">
 
         <ImageView
             android:id="@+id/item_estate_picture"
@@ -21,7 +32,19 @@
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:pictureUrl="@{estate.pictureUrl}"
+            app:pictureUrl="@{picture.url}"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
-    </merge>
+
+        <ImageView
+            android:id="@+id/item_estate_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@drawable/layout_circle"
+            android:contentDescription="@string/item_estate_picture_description"
+            android:src="@drawable/ic_baseline_delete_forever_24"
+            app:layout_constraintBottom_toBottomOf="@id/item_estate_picture"
+            app:layout_constraintEnd_toEndOf="@id/item_estate_picture" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

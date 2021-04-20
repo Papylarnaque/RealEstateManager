@@ -5,9 +5,14 @@
 
 
     <data>
+
         <variable
             name="estate"
-            type="com.openclassrooms.realestatemanager.database.Estate" />
+            type="com.openclassrooms.realestatemanager.database.model.Estate" />
+
+        <variable
+            name="employee"
+            type="com.openclassrooms.realestatemanager.database.model.Employee" />
 
     </data>
 
@@ -31,18 +36,22 @@
                 app:layout_constraintBottom_toBottomOf="@+id/create_type_text"
                 app:layout_constraintTop_toBottomOf="@+id/create_type_text">
 
-                <ImageView
-                    android:id="@+id/createImage"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/create_guideline_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="@string/item_estate_picture_description"
-                    android:maxHeight="@dimen/detail_estate_picture_height"
-                    android:src="@drawable/ic_baseline_image_24"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/createRecyclerviewPictures"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:pictureUrl="@{estate.pictureUrl}" />
+                    tools:listitem="@layout/item_estate_pictures" />
 
                 <ImageView
                     android:id="@+id/createTakePicture"
@@ -53,9 +62,9 @@
                     android:contentDescription="@string/item_estate_picture_description"
                     android:maxHeight="@dimen/detail_estate_picture_height"
                     android:src="@drawable/ic_baseline_photo_camera_24"
-                    app:layout_constraintEnd_toEndOf="@id/createImage"
+                    app:layout_constraintEnd_toEndOf="@id/create_guideline_vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/createImage" />
+                    app:layout_constraintTop_toBottomOf="@id/createRecyclerviewPictures" />
 
                 <ImageView
                     android:id="@+id/createPickGallery"
@@ -67,51 +76,26 @@
                     android:maxHeight="@dimen/detail_estate_picture_height"
                     android:src="@drawable/ic_baseline_add_photo_gallery_24"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/createImage"
-                    app:layout_constraintTop_toBottomOf="@id/createImage" />
+                    app:layout_constraintStart_toStartOf="@id/create_guideline_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/createRecyclerviewPictures" />
 
                 <!--    TYPE    -->
-                <TextView
-                    android:id="@+id/create_type_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/create_type_title_text"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture"
-                    tools:text="Type: "
-                    tools:textSize="15sp"
-                    tools:textStyle="bold" />
-
-                <RadioGroup
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/radioGroup"
-                    android:layout_width="0dp"
+                    style="@style/Widget.AppCompat.Spinner.DropDown"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/create_type_text"
-                    app:layout_constraintTop_toTopOf="@+id/create_type_text">
+                    android:hint="Type"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture">
 
-                    <RadioButton
-                        android:id="@+id/houseButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="20dp"
-                        android:text="@string/create_estate_house" />
+                    <!--                    <AutoCompleteTextView-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:inputType="none"-->
+                    <!--                        />-->
 
-                    <RadioButton
-                        android:id="@+id/flatButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="20dp"
-                        android:text="@string/create_estate_flat" />
-
-                </RadioGroup>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!--    DESCRIPTION    -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -185,7 +169,6 @@
                         android:drawableStart="@drawable/ic_baseline_person_24"
                         android:drawablePadding="10dp"
                         android:inputType="text"
-                        android:text="@{estate.estateEmployee}"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -328,6 +311,14 @@
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <MultiAutoCompleteTextView
+                    android:id="@+id/poi_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:label="@id/poi_text"
+                    app:layout_constraintTop_toBottomOf="@id/create_address_postalcode_textLayout" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/edit_estate_availability"
                     android:layout_width="wrap_content"
@@ -338,7 +329,7 @@
                     android:text="@string/edit_estate_availability"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@id/create_address_postalcode_textLayout"
-                    app:layout_constraintTop_toBottomOf="@id/create_address_postalcode_textLayout"
+                    app:layout_constraintTop_toBottomOf="@id/poi_text"
                     app:switchPadding="20dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,19 @@
-package com.openclassrooms.realestatemanager.database
+package com.openclassrooms.realestatemanager.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "estate_table")
+@Entity(tableName = "estate_table",
+        foreignKeys = [
+        androidx.room.ForeignKey(
+                entity = Employee::class,
+                parentColumns = ["employee_id"],
+                childColumns = ["employee_id"],
+                onDelete = androidx.room.ForeignKey.NO_ACTION
+        )])
+
 data class Estate(
 
         @PrimaryKey
@@ -42,12 +50,10 @@ data class Estate(
         @ColumnInfo(name = "postal_code")
         val estateCityPostalCode: String?,
 
-        @ColumnInfo(name = "picture_url")
-        val pictureUrl: String?,
+        @ColumnInfo(name = "employee_id")
+        val employeeId: Long,
 
-        @ColumnInfo(name = "employee")
-        val estateEmployee: String,
-
-
+        @ColumnInfo(name = "pois")
+        val estatePois: String,
         )
 

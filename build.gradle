@@ -7,9 +7,9 @@ buildscript {
         room_version = '2.2.5'
         coroutine_version = '1.4.2'
         gradleVersion = '4.1.3'
-        navigationVersion = '2.3.4'
+        navigationVersion = '2.3.5'
         version_retrofit = '2.9.0'
-        glide_version = '4.10.0'
+        glide_version = '4.11.0'
         dataBindingCompilerVersion = gradleVersion // Always need to be the same.
     }
     repositories {
