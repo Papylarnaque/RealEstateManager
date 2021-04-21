@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.database.model.Picture
-import com.openclassrooms.realestatemanager.databinding.ItemEstatePicturesBinding
+import com.openclassrooms.realestatemanager.databinding.ItemDetailEstatePicturesBinding
 
-class PictureListAdapter(private val clickListener: PictureListener) :
-    ListAdapter<Picture, PictureListAdapter.ViewHolder>(PictureDiffCallback()) {
+class DetailPictureListAdapter(private val clickListener: PictureListener) :
+    ListAdapter<Picture, DetailPictureListAdapter.ViewHolder>(PictureDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)
@@ -19,7 +19,7 @@ class PictureListAdapter(private val clickListener: PictureListener) :
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ItemEstatePicturesBinding) :
+    class ViewHolder private constructor(val binding: ItemDetailEstatePicturesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Picture, clickListener: PictureListener) {
@@ -31,7 +31,7 @@ class PictureListAdapter(private val clickListener: PictureListener) :
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemEstatePicturesBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemDetailEstatePicturesBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

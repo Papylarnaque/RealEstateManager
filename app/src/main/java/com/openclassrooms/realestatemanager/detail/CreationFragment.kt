@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
@@ -44,6 +44,8 @@ class CreationFragment : Fragment() {
         registerForActivityResult(GetContentWithMimeTypes()) { uri ->
             uri?.let {
                 viewModel.copyImageFromUriToAppFolder(uri)
+                listPicture[listPicture.size].url
+
             }
         }
 
@@ -70,12 +72,12 @@ class CreationFragment : Fragment() {
         if (editMode)
             editModeBinding()
 
-        val pictureListAdapter = PictureListAdapter(PictureListener { picture ->
+        val pictureListAdapter = CreatePictureListAdapter(PictureListener { picture ->
             // TODO() viewModel.onPictureClicked(picture)
         })
         binding.createRecyclerviewPictures.adapter = pictureListAdapter
-        binding.createRecyclerviewPictures.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+        val mLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.createRecyclerviewPictures.layoutManager = mLayoutManager
 
         if (editMode) {
             viewModel.getEstatePictures(args.estateKey).observe(viewLifecycleOwner, {

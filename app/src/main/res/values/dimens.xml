@@ -16,4 +16,8 @@
     <dimen name="item_estate_price_margin_end">164dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="detail_content_image">24dp</dimen>
+    <dimen name="create_estate_picture_width">100dp</dimen>
+    <dimen name="create_estate_picture_height">100dp</dimen>
+    <dimen name="create_estate_picture_remove_width">20dp</dimen>
+    <dimen name="create_estate_picture_remove_height">20dp</dimen>
 </resources>

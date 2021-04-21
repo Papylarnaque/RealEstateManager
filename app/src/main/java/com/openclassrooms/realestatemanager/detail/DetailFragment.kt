@@ -10,8 +10,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
@@ -21,7 +23,8 @@ class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
     private lateinit var estate: Estate
-    private val pictureListAdapter = PictureListAdapter(PictureListener { picture ->
+    private var estateKey: Long = 0
+    private val pictureListAdapter = DetailPictureListAdapter(PictureListener { picture ->
         // TODO() viewModel.onPictureClicked(picture)
     })
 
@@ -33,11 +36,21 @@ class DetailFragment : Fragment() {
         binding = FragmentDetailBinding.inflate(layoutInflater)
 
         binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        binding.detailRecyclerviewPictures.layoutManager = LinearLayoutManager(context)
+        val mLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
 
         // TODO() Put pictures in recyclerview
 
         getEstate()
+
+        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
+        binding.detailRecyclerviewPictures.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+
+        viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner,{
+            pictureListAdapter.submitList(it as MutableList<Picture>)
+        })
+
 
         // override back navigation from detail fragment
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -86,13 +99,15 @@ class DetailFragment : Fragment() {
 
     private fun getEstate() {
         if (viewModel.navigateToEstateDetail.value != null) {
-            this.estate = viewModel.navigateToEstateDetail.value!!
+            estate = viewModel.navigateToEstateDetail.value!!
             bindEstate()
+            estateKey = estate.startTime
         } else {
-            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { estate ->
-                this.estate = estate
+            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { it ->
+                estate = it
                 bindEstate()
             })
+            estateKey = args.estateKey
         }
     }
 
