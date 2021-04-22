@@ -80,22 +80,14 @@
                     app:layout_constraintTop_toBottomOf="@id/createRecyclerviewPictures" />
 
                 <!--    TYPE    -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/radioGroup"
-                    style="@style/Widget.AppCompat.Spinner.DropDown"
+                <Spinner
+                    android:id="@+id/createEstateTypeSpinner"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Type"
+                    android:layout_marginStart="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture">
-
-                    <!--                    <AutoCompleteTextView-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:inputType="none"-->
-                    <!--                        />-->
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture"/>
 
                 <!--    DESCRIPTION    -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -106,7 +98,7 @@
                     android:layout_marginTop="20dp"
                     android:hint="@string/create_description_text"
                     app:counterEnabled="true"
-                    app:layout_constraintTop_toBottomOf="@id/radioGroup">
+                    app:layout_constraintTop_toBottomOf="@id/createEstateTypeSpinner">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_description_edit"

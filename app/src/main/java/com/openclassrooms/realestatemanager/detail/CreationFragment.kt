@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -21,7 +23,6 @@ import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import kotlin.math.abs
 
-
 val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 
 class CreationFragment : Fragment() {
@@ -31,15 +32,17 @@ class CreationFragment : Fragment() {
     private lateinit var binding: FragmentCreationBinding
     private lateinit var viewModel: CreationViewModel
     private val args: CreationFragmentArgs by navArgs()
+    private lateinit var spinnerTypes: List<String>
     private var editMode = false
+    private lateinit var estate: Estate
     private var errorMessage: String? = null
     private var imageUrl: String? = null
-    private lateinit var listPicture: List<Picture>
+    private lateinit var spinner: Spinner
+    private var listPicture: List<Picture> = ArrayList()
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             viewModel.saveImageFromCamera(bitmap)
         }
-
     private val selectPicture =
         registerForActivityResult(GetContentWithMimeTypes()) { uri ->
             uri?.let {
@@ -48,6 +51,7 @@ class CreationFragment : Fragment() {
 
             }
         }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
@@ -62,32 +66,34 @@ class CreationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //  Inflate view and obtain an instance of the binding class
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_creation, container, false
-        )
+        binding = FragmentCreationBinding.inflate(layoutInflater)
         // Get the viewModel
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
 
-        if (editMode)
-            editModeBinding()
 
         val pictureListAdapter = CreatePictureListAdapter(PictureListener { picture ->
             // TODO() viewModel.onPictureClicked(picture)
         })
         binding.createRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
+        val mLayoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
         binding.createRecyclerviewPictures.layoutManager = mLayoutManager
 
+        initBindings()
         if (editMode) {
             viewModel.getEstatePictures(args.estateKey).observe(viewLifecycleOwner, {
                 it?.let {
                     pictureListAdapter.submitList(it as MutableList<Picture>)
                 }
             })
+            editModeBinding()
+        } else {
+            setTypeSpinner()
         }
 
-        initBindings()
+
+
+
         return binding.root
     }
 
@@ -96,7 +102,6 @@ class CreationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-
     //------------------- MANAGE VIEW ----------------------//
 
     /**
@@ -104,12 +109,13 @@ class CreationFragment : Fragment() {
      */
     private fun editModeBinding() {
         viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
+            estate = it
             if (it != null) {
                 binding.estate = it
             }
+            setTypeSpinner()
             binding.editEstateAvailability.visibility = View.VISIBLE
         })
-
     }
 
     /**
@@ -138,7 +144,6 @@ class CreationFragment : Fragment() {
         }
     }
 
-
     //-------------------- NAVIGATION ----------------------//
 
     private fun navigateAfterSaveClick() {
@@ -151,7 +156,6 @@ class CreationFragment : Fragment() {
 
         })
     }
-
 
     //----------------- MANAGE ESTATE ---------------------//
     /**
@@ -169,8 +173,7 @@ class CreationFragment : Fragment() {
                 estateSurface = getEstateSurface(),
                 estatePrice = getEstatePrice(),
                 estateDescription = getEstateDescription(),
-//            estateType = getEstateType(),
-                estateType = "House",
+                estateType = spinner.selectedItem.toString(),
 //                estateEmployee = getEstateEmployee(),
                 employeeId = 1,
                 endTime = getEstateAvailability(),
@@ -185,8 +188,7 @@ class CreationFragment : Fragment() {
             estateSurface = getEstateSurface(),
             estatePrice = getEstatePrice(),
             estateDescription = getEstateDescription(),
-//            estateType = getEstateType(),
-            estateType = "House",
+            estateType = spinner.selectedItem.toString(),
 //                estateEmployee = getEstateEmployee(),
             employeeId = 1,
             endTime = getEstateAvailability(),
@@ -195,23 +197,47 @@ class CreationFragment : Fragment() {
     }
 
 
-//------- GET Estate Data for Creation
+    //------- GET Estate Data for Creation ----------------//
 
-//    private fun getEstateType(): String {
-//        // TODO() Manage more Estate Types => Dropmenu ?
-//        return when (binding.radioGroup.checkedRadioButtonId) {
-//            R.id.flatButton -> {
-//                resources.getString(R.string.create_estate_flat)
-//            }
-//            R.id.houseButton -> {
-//                resources.getString(R.string.create_estate_house)
-//            }
-//            else -> {
-//                errorMessage = getString(R.string.create_type_error_text)
-//                ""
-//            }
-//        }
-//    }
+    private fun setTypeSpinner() {
+        spinner = binding.createEstateTypeSpinner
+
+
+        viewModel.allTypes().observe(viewLifecycleOwner, { typeList ->
+            spinnerTypes = typeList.map { it.typeName }
+
+            val arrayAdapter = ArrayAdapter(
+                requireContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                spinnerTypes
+            )
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = arrayAdapter
+
+
+            for (i in 0 until spinner.count) {
+                val s = spinnerTypes[i]
+                if (s == estate.estateType) {
+                    spinner.setSelection(i)
+                }
+            }
+
+            spinner.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View, position: Int, id: Long
+                ) {
+                    // do nothing on selected item
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    errorMessage = getString(R.string.create_type_error_text)
+                }
+            }
+        })
+
+    }
 
     private fun getEstateDescription(): String {
         val descriptionMin = resources.getInteger(R.integer.create_description_minimum)

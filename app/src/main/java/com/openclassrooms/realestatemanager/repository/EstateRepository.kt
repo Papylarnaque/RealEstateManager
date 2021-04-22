@@ -28,4 +28,8 @@ class EstateRepository (private val estateDao: EstateDao) {
         return estateDao.getAllEstateWithPictures()
     }
 
+
+
+
+
 }

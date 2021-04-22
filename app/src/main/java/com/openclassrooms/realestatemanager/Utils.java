@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
+import androidx.room.Ignore;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +54,7 @@ public class Utils {
      * @param context from which the method is called
      * @return a Boolean stating the status of the internet availability
      */
+    @SuppressWarnings("deprecated")
     public static Boolean isInternetAvailable(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

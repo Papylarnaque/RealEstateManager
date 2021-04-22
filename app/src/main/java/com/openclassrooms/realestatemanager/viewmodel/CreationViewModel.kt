@@ -12,8 +12,10 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.model.Picture
+import com.openclassrooms.realestatemanager.database.model.Type
 import com.openclassrooms.realestatemanager.repository.EstateRepository
 import com.openclassrooms.realestatemanager.repository.PictureRepository
+import com.openclassrooms.realestatemanager.repository.TypeRepository
 import com.openclassrooms.realestatemanager.utils.Source
 import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
@@ -28,6 +30,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     private val estateRepository: EstateRepository
     private val pictureRepository: PictureRepository
+    private val typeRepository: TypeRepository
     private val imagesFolder: File by lazy { getImagesFolder(getApplication()) }
     private val context: Context
         get() = getApplication()
@@ -35,12 +38,15 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     // TODO() Manage saving pictures
 
     init {
-        with(EstateDatabase.getDatabase(application, viewModelScope)){
+        with(EstateDatabase.getDatabase(application, viewModelScope)) {
             val estateDao = this.estateDao()
             estateRepository = EstateRepository(estateDao)
 
             val pictureDao = this.pictureDao()
             pictureRepository = PictureRepository(pictureDao)
+
+            val typeDao = this.typeDao()
+            typeRepository = TypeRepository(typeDao)
         }
     }
 
@@ -51,20 +57,20 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
             GlobalScope.launch {
                 estateRepository.update(estate)
                 Log.i(
-                    "CreationViewModel", "editMode $editMode added a new estate of type ${estate.estateType}" +
-                            "with id ${estate.startTime} with price ${estate.estatePrice}"
+                    "CreationViewModel",
+                    "updated an existing estate with id ${estate.startTime}"
                 )
             }
         } else {
             GlobalScope.launch {
                 estateRepository.insert(estate)
                 Log.i(
-                    "CreationViewModel ", "editMode $editMode added a new estate of type ${estate.estateType}" +
-                            "with id ${estate.startTime}, $editMode"
+                    "CreationViewModel ",
+                    "added a new estate with id ${estate.startTime}"
                 )
             }
         }
-        savePictures()
+//        savePictures()
         onEstateUpdated(estate)
     }
 
@@ -86,6 +92,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     //------------------------------------------------------//
 
+    fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
 
 
     //----------------- MANAGE PICTURES --------------------//
