@@ -40,7 +40,7 @@ class DetailPictureListAdapter(private val clickListener: PictureListener) :
 
 class PictureDiffCallback : DiffUtil.ItemCallback<Picture>() {
     override fun areItemsTheSame(oldItem: Picture, newItem: Picture): Boolean {
-        return oldItem.pictureId == newItem.pictureId
+        return oldItem.url == newItem.url
     }
 
     override fun areContentsTheSame(oldItem: Picture, newItem: Picture): Boolean {
@@ -50,5 +50,6 @@ class PictureDiffCallback : DiffUtil.ItemCallback<Picture>() {
 
 
 class PictureListener(val clickListener: (picture: Picture) -> Unit) {
-    fun onClick(picture: Picture) = clickListener(picture)
+    fun onClick(picture: Picture)
+    = clickListener(picture)
 }

@@ -28,33 +28,46 @@ val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 class CreationFragment : Fragment() {
 
     // TODO Keep typed data while rotating device
-
-    private lateinit var binding: FragmentCreationBinding
-    private lateinit var viewModel: CreationViewModel
+    private val pictureListAdapter = CreatePictureListAdapter(PictureListener { picture ->
+        // TODO() Handle picture click for rename / delete picture
+    })
     private val args: CreationFragmentArgs by navArgs()
-    private lateinit var spinnerTypes: List<String>
-    private var editMode = false
-    private lateinit var estate: Estate
     private var errorMessage: String? = null
     private var imageUrl: String? = null
+    private var editMode = false
+    private var estateKey = System.currentTimeMillis()
+
+    // Late init var
+    private lateinit var binding: FragmentCreationBinding
+    private lateinit var viewModel: CreationViewModel
+    private lateinit var spinnerTypes: List<String>
+    private lateinit var estate: Estate
     private lateinit var spinner: Spinner
-    private var listPicture: List<Picture> = ArrayList()
+    private var listPicture: MutableList<Picture> = ArrayList()
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             viewModel.saveImageFromCamera(bitmap)
         }
-    private val selectPicture =
-        registerForActivityResult(GetContentWithMimeTypes()) { uri ->
-            uri?.let {
-                viewModel.copyImageFromUriToAppFolder(uri)
-                listPicture[listPicture.size].url
-
-            }
+    private val selectPicture = registerForActivityResult(GetContentWithMimeTypes()) { uri ->
+        uri?.let {
+            // TODO() call this as new instance each time gallery is clicked ?
+            viewModel.copyImageFromUriToAppFolder(uri)
+            listPicture.add(
+                Picture(
+                    url = uri.toString(),
+                    displayName = "New Picture",
+                    estateId = estateKey,
+                    orderNumber = listPicture.size + 1
+                )
+            )
+            notifyPicturesChanged(listPicture)
         }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
+            estateKey = args.estateKey
             editMode = true
             (activity as MainActivity).supportActionBar!!.title =
                 getString(R.string.edit_estate_titlebar)
@@ -67,32 +80,14 @@ class CreationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreationBinding.inflate(layoutInflater)
-        // Get the viewModel
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
 
-
-        val pictureListAdapter = CreatePictureListAdapter(PictureListener { picture ->
-            // TODO() viewModel.onPictureClicked(picture)
-        })
         binding.createRecyclerviewPictures.adapter = pictureListAdapter
         val mLayoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         binding.createRecyclerviewPictures.layoutManager = mLayoutManager
 
         initBindings()
-        if (editMode) {
-            viewModel.getEstatePictures(args.estateKey).observe(viewLifecycleOwner, {
-                it?.let {
-                    pictureListAdapter.submitList(it as MutableList<Picture>)
-                }
-            })
-            editModeBinding()
-        } else {
-            setTypeSpinner()
-        }
-
-
-
 
         return binding.root
     }
@@ -139,9 +134,23 @@ class CreationFragment : Fragment() {
                 errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
                 errorMessage = null
             } else {
-                viewModel.saveEstate(editMode, estate)
+                viewModel.saveEstate(editMode, estate, listPicture)
             }
         }
+
+        if (editMode) {
+            viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner, {
+                it?.let {
+                    listPicture = it.toMutableList()
+                    notifyPicturesChanged(it)
+                }
+            })
+            editModeBinding()
+        } else {
+            setTypeSpinner()
+        }
+
+
     }
 
     //-------------------- NAVIGATION ----------------------//
@@ -173,13 +182,14 @@ class CreationFragment : Fragment() {
                 estateSurface = getEstateSurface(),
                 estatePrice = getEstatePrice(),
                 estateDescription = getEstateDescription(),
-                estateType = spinner.selectedItem.toString(),
+                estateType = getEstateType(),
 //                estateEmployee = getEstateEmployee(),
                 employeeId = 1,
                 endTime = getEstateAvailability(),
                 estatePois = "Test",
             )
         } else return Estate(
+            startTime = estateKey,
             estateCity = getEstateCity(),
             estateCityPostalCode = getEstatePostalCode(),
             estateStreetNumber = getEstateStreetNumber(),
@@ -188,7 +198,7 @@ class CreationFragment : Fragment() {
             estateSurface = getEstateSurface(),
             estatePrice = getEstatePrice(),
             estateDescription = getEstateDescription(),
-            estateType = spinner.selectedItem.toString(),
+            estateType = getEstateType(),
 //                estateEmployee = getEstateEmployee(),
             employeeId = 1,
             endTime = getEstateAvailability(),
@@ -196,12 +206,24 @@ class CreationFragment : Fragment() {
         )
     }
 
+    private fun getEstateType(): String {
+        return if (spinner.selectedItemId == Spinner.INVALID_ROW_ID) {
+            errorMessage = getString(R.string.create_type_error_text)
+            ""
+        } else {
+            spinner.selectedItem.toString()
+        }
+    }
 
-    //------- GET Estate Data for Creation ----------------//
+
+    //----------- Estate Data for Creation ----------------//
+
+    private fun notifyPicturesChanged(it: List<Picture>) {
+        pictureListAdapter.submitList(it as MutableList<Picture>)
+    }
 
     private fun setTypeSpinner() {
         spinner = binding.createEstateTypeSpinner
-
 
         viewModel.allTypes().observe(viewLifecycleOwner, { typeList ->
             spinnerTypes = typeList.map { it.typeName }
@@ -215,10 +237,12 @@ class CreationFragment : Fragment() {
             spinner.adapter = arrayAdapter
 
 
-            for (i in 0 until spinner.count) {
-                val s = spinnerTypes[i]
-                if (s == estate.estateType) {
-                    spinner.setSelection(i)
+            if (editMode) {
+                for (i in 0 until spinner.count) {
+                    val s = spinnerTypes[i]
+                    if (s == estate.estateType) {
+                        spinner.setSelection(i)
+                    }
                 }
             }
 
@@ -325,5 +349,6 @@ class CreationFragment : Fragment() {
             System.currentTimeMillis()
         }
     }
+
 
 }

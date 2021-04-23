@@ -17,7 +17,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/layout_border"
         android:onClick="@{() -> clickListener.onClick(picture)}"
         app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
         app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">

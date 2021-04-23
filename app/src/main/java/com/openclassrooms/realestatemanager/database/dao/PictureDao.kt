@@ -1,16 +1,13 @@
 package com.openclassrooms.realestatemanager.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.openclassrooms.realestatemanager.database.model.Picture
 
 @Dao
 interface PictureDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(picture: Picture)
 
     /**
@@ -35,7 +32,6 @@ interface PictureDao {
      */
     @Query("SELECT * FROM picture_table ORDER BY order_number")
     fun getAllPictures(): LiveData<List<Picture>>
-
 
     @Query("DELETE FROM poi_table")
     fun deleteAll()

@@ -25,8 +25,6 @@ class EstateListViewModel(application: Application) : AndroidViewModel(applicati
     val allEstatesWithPictures: LiveData<List<EstateAllPictures>> = estateRepository.allEstatesWithPictures
     val allPictures: LiveData<List<Picture>> = pictureRepository.allPictures
 
-
-
     fun getEstateWithId(estateKey: Long): LiveData<Estate> {
         return estateRepository.getEstate(estateKey)
     }

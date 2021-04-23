@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.Estate
@@ -36,21 +35,13 @@ class DetailFragment : Fragment() {
         binding = FragmentDetailBinding.inflate(layoutInflater)
 
         binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        val mLayoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
 
         // TODO() Put pictures in recyclerview
 
         getEstate()
-
-        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        binding.detailRecyclerviewPictures.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
-
-        viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner,{
-            pictureListAdapter.submitList(it as MutableList<Picture>)
-        })
-
 
         // override back navigation from detail fragment
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -109,6 +100,22 @@ class DetailFragment : Fragment() {
             })
             estateKey = args.estateKey
         }
+
+        viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner, {
+            it?.let {
+                pictureListAdapter.submitList(it as MutableList<Picture>)
+            }
+        })
+
+//        viewModel.allPictures.observe(viewLifecycleOwner, {
+//            it?.let {
+//                val pictureList = ArrayList<Picture>()
+//                for (picture in it){
+//                    if (picture.estateId==estateKey) pictureList.add(picture)
+//                }
+//                pictureListAdapter.submitList(pictureList as MutableList<Picture>)
+//            }
+//        })
     }
 
     private fun bindEstate() {

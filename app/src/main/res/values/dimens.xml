@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  GLOBAL  -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!--  ESTATE LIST  -->
     <dimen name="estate_picture_width">100dp</dimen>
     <dimen name="estate_picture_height">60dp</dimen>
 
     <dimen name="estate_picture_height_tablet">100dp</dimen>
     <dimen name="estate_picture_width_tablet">150dp</dimen>
 
+    <!--  DETAIL  -->
     <dimen name="detail_estate_picture_width">200dp</dimen>
     <dimen name="detail_estate_picture_height">200dp</dimen>
-    <dimen name="item_estate_height">75dp</dimen>
+    <dimen name="detail_content_image">24dp</dimen>
 
-    <dimen name="margin_normal">16dp</dimen>
-    <dimen name="margin_small">8dp</dimen>
 
     <dimen name="item_estate_price_margin_end">164dp</dimen>
-    <dimen name="margin_large">24dp</dimen>
-    <dimen name="detail_content_image">24dp</dimen>
-    <dimen name="create_estate_picture_width">100dp</dimen>
-    <dimen name="create_estate_picture_height">100dp</dimen>
-    <dimen name="create_estate_picture_remove_width">20dp</dimen>
-    <dimen name="create_estate_picture_remove_height">20dp</dimen>
+    <dimen name="item_estate_height">75dp</dimen>
+
+    <!--  CREATE  -->
+    <dimen name="create_estate_picture_width">200dp</dimen>
+    <dimen name="create_estate_picture_height">200dp</dimen>
+    <dimen name="create_estate_picture_remove_width">32dp</dimen>
+    <dimen name="create_estate_picture_remove_height">32dp</dimen>
 </resources>
