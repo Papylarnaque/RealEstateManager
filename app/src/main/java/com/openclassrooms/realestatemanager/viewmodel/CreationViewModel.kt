@@ -5,14 +5,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.EstateDatabase.Companion.getDatabase
-import com.openclassrooms.realestatemanager.database.model.Estate
-import com.openclassrooms.realestatemanager.database.model.Picture
-import com.openclassrooms.realestatemanager.database.model.Type
+import com.openclassrooms.realestatemanager.database.model.*
+import com.openclassrooms.realestatemanager.repository.EmployeeRepository
 import com.openclassrooms.realestatemanager.repository.EstateRepository
 import com.openclassrooms.realestatemanager.repository.PictureRepository
 import com.openclassrooms.realestatemanager.repository.TypeRepository
@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
+
 class CreationViewModel(application: Application) : AndroidViewModel(application) {
 
     private val estateDao = getDatabase(application, viewModelScope).estateDao()
@@ -37,7 +38,9 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     private val typeDao = getDatabase(application, viewModelScope).typeDao()
     private val typeRepository: TypeRepository = TypeRepository(typeDao)
 
-    private val allPictures = pictureRepository.allPictures
+    private val employeeDao = getDatabase(application, viewModelScope).employeeDao()
+    private val employeeRepository: EmployeeRepository = EmployeeRepository(employeeDao)
+
     private val imagesFolder: File by lazy { getImagesFolder(getApplication()) }
     private val context: Context
         get() = getApplication()
@@ -70,92 +73,90 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
 
     private fun savePictures(listPicture: List<Picture>) {
-        for (picture in listPicture)
-                viewModelScope.launch { pictureRepository.insert(picture) }
+        for (picture in listPicture) {
+            if (!picture.url.contains(imagesFolder.path, true))
+                picture.url = copyImageFromUriToAppFolder(picture.url.toUri())
+            viewModelScope.launch { pictureRepository.insert(picture) }
+        }
     }
 
 
 //--------------- EDIT MODE FUNCTIONS ------------------//
 
-fun getEstateWithId(estateKey: Long): LiveData<Estate> {
-    return estateRepository.getEstate(estateKey)
-}
+    fun getEstateWithId(estateKey: Long): LiveData<DetailedEstate> {
+        return estateRepository.getEstate(estateKey)
+    }
 
-fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
-    return pictureRepository.getEstatePictures(estateKey)
-}
+    fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
+        return pictureRepository.getEstatePictures(estateKey)
+    }
 
 //------------------------------------------------------//
 
-fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
+    fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
+    fun allEmployees(): LiveData<List<Employee>> = employeeRepository.allEmployees
 
 
 //----------------- MANAGE PICTURES --------------------//
 
-private fun getImagesFolder(context: Context): File {
-    return File(context.filesDir, "images/").also {
-        if (!it.exists()) {
-            it.mkdir()
-        }
-    }
-}
-
-fun saveImageFromCamera(bitmap: Bitmap) {
-    val imageFile = File(imagesFolder, generateFilename(Source.CAMERA))
-    val imageStream = FileOutputStream(imageFile)
-
-    Log.i("TakePicture", "$imageFile")
-
-    viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            try {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageStream)
-            } catch (e: Exception) {
-                Log.e(javaClass.simpleName, "Error writing bitmap", e)
+    private fun getImagesFolder(context: Context): File {
+        return File(context.filesDir, "images/").also {
+            if (!it.exists()) {
+                it.mkdir()
             }
         }
     }
 
-    sharePictureURI(imageFile.absolutePath)
-}
+    fun saveImageFromCamera(bitmap: Bitmap): String {
+        val imageFile = File(imagesFolder, generateFilename(Source.CAMERA))
+        val imageStream = FileOutputStream(imageFile)
 
-fun copyImageFromUriToAppFolder(uri: Uri) {
-    val imageFile = File(imagesFolder, generateFilename(Source.PICKER))
-    val imageStream = FileOutputStream(imageFile)
-    viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            context.contentResolver.openInputStream(uri)?.let {
-                copyImageFromStream(it, imageStream)
+        Log.i("TakePicture", "$imageFile")
+
+        compressPicture(bitmap, imageStream)
+
+
+//        sharePictureURI(imageFile.path)
+        return imageFile.path
+    }
+
+    private fun compressPicture(bitmap: Bitmap, imageStream: FileOutputStream) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageStream)
+                } catch (e: Exception) {
+                    Log.e(javaClass.simpleName, "Error writing bitmap", e)
+                }
             }
         }
     }
-}
+
+    private fun copyImageFromUriToAppFolder(uri: Uri): String {
+        val imageFile = File(imagesFolder, generateFilename(Source.PICKER))
+        val imageStream = FileOutputStream(imageFile)
+
+        context.contentResolver.openInputStream(uri)?.let {
+            // TODO() compress picture copied to app folder ?
+//            compressPicture(BitmapFactory.decodeStream(it), imageStream)
+            copyImageFromStream(it, imageStream)
+        }
+        return imageFile.toString()
+    }
 
 
 //------------------ NOTIFICATIONS ---------------------//
 
-/**
- * Share ImageURL with the Creationfragment
- */
-private val _imageURL = MutableLiveData<String>()
-val imageURL
-    get() = _imageURL
+    /**
+     * Navigation notification
+     */
+    private val _navigateToEstateDetail = MutableLiveData<Estate>()
+    val navigateToEstateDetail
+        get() = _navigateToEstateDetail
 
-private fun sharePictureURI(url: String) {
-    _imageURL.value = url
-}
-
-
-/**
- * Navigation notification
- */
-private val _navigateToEstateDetail = MutableLiveData<Estate>()
-val navigateToEstateDetail
-    get() = _navigateToEstateDetail
-
-private fun onEstateUpdated(estate: Estate) {
-    _navigateToEstateDetail.value = estate
-}
+    private fun onEstateUpdated(estate: Estate) {
+        _navigateToEstateDetail.value = estate
+    }
 
 
 }

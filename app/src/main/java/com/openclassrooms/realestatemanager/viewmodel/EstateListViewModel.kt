@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.EstateDatabase
+import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Estate
-import com.openclassrooms.realestatemanager.database.model.EstateAllPictures
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.repository.EstateRepository
 import com.openclassrooms.realestatemanager.repository.PictureRepository
@@ -22,10 +22,10 @@ class EstateListViewModel(application: Application) : AndroidViewModel(applicati
     private val pictureRepository: PictureRepository = PictureRepository(pictureDao)
 
     val allEstates: LiveData<List<Estate>> = estateRepository.allEstates
-    val allEstatesWithPictures: LiveData<List<EstateAllPictures>> = estateRepository.allEstatesWithPictures
+    val allDetailedEstates: LiveData<List<DetailedEstate>> = estateRepository.allDetailedEstates
     val allPictures: LiveData<List<Picture>> = pictureRepository.allPictures
 
-    fun getEstateWithId(estateKey: Long): LiveData<Estate> {
+    fun getEstateWithId(estateKey: Long): LiveData<DetailedEstate> {
         return estateRepository.getEstate(estateKey)
     }
 
@@ -33,19 +33,14 @@ class EstateListViewModel(application: Application) : AndroidViewModel(applicati
         return pictureRepository.getEstatePictures(estateKey)
     }
 
-    fun getAllEstateWithPictures(): LiveData<List<EstateAllPictures>> {
-        return estateRepository.getAllEstateWithPictures()
-    }
-
-
     /**
      * Navigation for the EstateListDetail fragment.
      */
-    private val _navigateToEstateDetail = MutableLiveData<Estate>()
+    private val _navigateToEstateDetail = MutableLiveData<DetailedEstate>()
     val navigateToEstateDetail
         get() = _navigateToEstateDetail
 
-    fun onEstateClicked(estate: Estate) {
+    fun onEstateClicked(estate: DetailedEstate) {
         _navigateToEstateDetail.value = estate
     }
 

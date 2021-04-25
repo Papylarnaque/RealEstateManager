@@ -16,8 +16,6 @@
 
 package com.openclassrooms.realestatemanager.utils
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
@@ -32,8 +30,8 @@ enum class Source {
 
 fun generateFilename(source: Source) = "$source-${System.currentTimeMillis()}.jpg"
 
-suspend fun copyImageFromStream(input: InputStream, outputStream: OutputStream) {
-    withContext(Dispatchers.IO) {
+fun copyImageFromStream(input: InputStream, outputStream: OutputStream) {
+//    withContext(Dispatchers.IO) {
         input.copyTo(outputStream)
-    }
+//    }
 }

@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.ItemCreateEstatePicturesBinding
 
-class CreatePictureListAdapter(private val clickListener: PictureListener) :
+class CreatePictureListAdapter(private val clickListenerCreate: CreatePictureListener) :
     ListAdapter<Picture, CreatePictureListAdapter.ViewHolder>(PictureDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, clickListenerCreate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,9 +21,9 @@ class CreatePictureListAdapter(private val clickListener: PictureListener) :
     class ViewHolder private constructor(val binding: ItemCreateEstatePicturesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Picture, clickListener: PictureListener) {
+        fun bind(item: Picture, clickListenerCreate: CreatePictureListener) {
             binding.picture = item
-            binding.clickListener = clickListener
+            binding.clickListener = clickListenerCreate
             binding.executePendingBindings()
         }
 
@@ -35,4 +35,12 @@ class CreatePictureListAdapter(private val clickListener: PictureListener) :
             }
         }
     }
+}
+
+class CreatePictureListener(val clickListener: (picture: Picture) -> Unit) {
+    fun onClick(picture: Picture)
+            = clickListener(picture)
+
+    fun delete(picture: Picture)
+            = clickListener(picture)
 }

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.ItemDetailEstatePicturesBinding
 
-class DetailPictureListAdapter(private val clickListener: PictureListener) :
+class DetailPictureListAdapter(private val clickListener: DetailPictureListener) :
     ListAdapter<Picture, DetailPictureListAdapter.ViewHolder>(PictureDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -22,7 +22,7 @@ class DetailPictureListAdapter(private val clickListener: PictureListener) :
     class ViewHolder private constructor(val binding: ItemDetailEstatePicturesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Picture, clickListener: PictureListener) {
+        fun bind(item: Picture, clickListener: DetailPictureListener) {
             binding.picture = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -49,7 +49,7 @@ class PictureDiffCallback : DiffUtil.ItemCallback<Picture>() {
 }
 
 
-class PictureListener(val clickListener: (picture: Picture) -> Unit) {
+class DetailPictureListener(val clickListener: (picture: Picture) -> Unit) {
     fun onClick(picture: Picture)
     = clickListener(picture)
 }

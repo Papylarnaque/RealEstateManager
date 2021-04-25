@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
@@ -21,9 +21,9 @@ class DetailFragment : Fragment() {
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
-    private lateinit var estate: Estate
+    private lateinit var detailedEstate: DetailedEstate
     private var estateKey: Long = 0
-    private val pictureListAdapter = DetailPictureListAdapter(PictureListener { picture ->
+    private val pictureListAdapter = DetailPictureListAdapter(DetailPictureListener{ picture ->
         // TODO() viewModel.onPictureClicked(picture)
     })
 
@@ -38,8 +38,6 @@ class DetailFragment : Fragment() {
         val mLayoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
-
-        // TODO() Put pictures in recyclerview
 
         getEstate()
 
@@ -56,7 +54,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        getEstate()
+//        getEstate()
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -76,7 +74,7 @@ class DetailFragment : Fragment() {
                 NavHostFragment.findNavController(this)
                     .navigate(
                         DetailFragmentDirections
-                            .actionDetailFragmentToCreationFragment(estate.startTime)
+                            .actionDetailFragmentToCreationFragment(detailedEstate.estate!!.startTime)
                     )
             }
 
@@ -90,37 +88,22 @@ class DetailFragment : Fragment() {
 
     private fun getEstate() {
         if (viewModel.navigateToEstateDetail.value != null) {
-            estate = viewModel.navigateToEstateDetail.value!!
+            detailedEstate = viewModel.navigateToEstateDetail.value!!
             bindEstate()
-            estateKey = estate.startTime
+            estateKey = detailedEstate.estate!!.startTime
         } else {
             viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { it ->
-                estate = it
+                detailedEstate = it
                 bindEstate()
             })
             estateKey = args.estateKey
         }
-
-        viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner, {
-            it?.let {
-                pictureListAdapter.submitList(it as MutableList<Picture>)
-            }
-        })
-
-//        viewModel.allPictures.observe(viewLifecycleOwner, {
-//            it?.let {
-//                val pictureList = ArrayList<Picture>()
-//                for (picture in it){
-//                    if (picture.estateId==estateKey) pictureList.add(picture)
-//                }
-//                pictureListAdapter.submitList(pictureList as MutableList<Picture>)
-//            }
-//        })
     }
 
     private fun bindEstate() {
-        binding.estate = this.estate
+        binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
+        pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
         binding.executePendingBindings()
     }
 

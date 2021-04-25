@@ -23,8 +23,8 @@ data class Estate(
         @ColumnInfo(name = "end_time_milli")
         val endTime: Long?,
 
-        @ColumnInfo(name = "type")
-        var estateType: String,
+        @ColumnInfo(name = "type_id")
+        var estateTypeId: Int,
 
         @ColumnInfo(name = "price")
         val estatePrice: Int?,
@@ -51,9 +51,9 @@ data class Estate(
         val estateCityPostalCode: String?,
 
         @ColumnInfo(name = "employee_id")
-        val employeeId: Long,
+        val employeeId: Int,
 
-        @ColumnInfo(name = "pois")
-        val estatePois: String,
+        @ColumnInfo(name = "poi_id")
+        val estatePois: Int,
         )
 

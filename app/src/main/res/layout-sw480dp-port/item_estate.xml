@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="estate"
-            type="com.openclassrooms.realestatemanager.database.model.Estate" />
+            name="it"
+            type="com.openclassrooms.realestatemanager.database.model.DetailedEstate" />
 
         <variable
             name="clickListener"
@@ -23,7 +23,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:background="@drawable/layout_border"
-        android:onClick="@{() -> clickListener.onClick(estate)}"
+        android:onClick="@{() -> clickListener.onClick(it)}"
         app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
         app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">
 
@@ -42,12 +42,10 @@
             android:id="@+id/item_estate_first_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="1dp"
-            android:text="@{@string/item_estate_first_line_text(estate.estateType.toString())}"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:text="@{@string/item_estate_first_line_text(it.type)}"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
             app:layout_constraintStart_toEndOf="@+id/item_estate_picture"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Flat"
@@ -58,13 +56,12 @@
             android:id="@+id/item_estate_second_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@{estate.estateCity.toString()}"
+            android:layout_marginStart="@dimen/margin_small"
+            android:text="@{it.estate.estateCity.toString()}"
             android:textSize="15sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="@+id/item_estate_first_line"
-            app:layout_constraintStart_toEndOf="@+id/item_estate_first_line"
-            app:layout_constraintTop_toTopOf="@+id/item_estate_first_line"
+            app:layout_constraintTop_toBottomOf="@+id/item_estate_first_line"
+            app:layout_constraintStart_toStartOf="@+id/item_estate_first_line"
             tools:text="Nantes"
             tools:textSize="15sp"
             tools:textStyle="italic" />
@@ -76,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="344dp"
-            android:text="@{@string/detail_estate_price_text(Integer.toString(estate.estatePrice))}"
+            android:text="@{@string/detail_estate_price_text(Integer.toString(it.estate.estatePrice))}"
             android:textColor="@color/green"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -94,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
             android:maxLines="3"
-            android:text="@{estate.estateDescription.toString()}"
+            android:text="@{it.estate.estateDescription.toString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/lorem_ipsum" />

@@ -9,11 +9,13 @@ data class Employee(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "employee_id")
-    val employeeId: Long,
+    val employeeId: Int,
 
     @ColumnInfo(name = "first_name")
     var employeeFirstName: String,
 
     @ColumnInfo(name = "last_name")
     var employeeLastName: String,
+
+    var employeeFullName: String = "$employeeFirstName $employeeLastName",
 )

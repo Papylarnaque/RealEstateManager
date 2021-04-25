@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.AutoCompleteTextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.database.model.DetailedEstate
+import com.openclassrooms.realestatemanager.database.model.Employee
 import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
@@ -28,42 +29,38 @@ val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 class CreationFragment : Fragment() {
 
     // TODO Keep typed data while rotating device
-    private val pictureListAdapter = CreatePictureListAdapter(PictureListener { picture ->
+    private val pictureListAdapter = CreatePictureListAdapter(CreatePictureListener { picture ->
         // TODO() Handle picture click for rename / delete picture
     })
     private val args: CreationFragmentArgs by navArgs()
     private var errorMessage: String? = null
-    private var imageUrl: String? = null
     private var editMode = false
     private var estateKey = System.currentTimeMillis()
+    private lateinit var allEmployees: List<Employee>
 
     // Late init var
     private lateinit var binding: FragmentCreationBinding
     private lateinit var viewModel: CreationViewModel
-    private lateinit var spinnerTypes: List<String>
-    private lateinit var estate: Estate
-    private lateinit var spinner: Spinner
+    private lateinit var types: List<String>
+    private lateinit var employees: List<String>
+    private lateinit var detailedEstate: DetailedEstate
+    private lateinit var typesSpinner: AutoCompleteTextView
+    private lateinit var employeesSpinner: AutoCompleteTextView
     private var listPicture: MutableList<Picture> = ArrayList()
+
+    // Pictures functionality val
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-            viewModel.saveImageFromCamera(bitmap)
+            val pictureUrl = viewModel.saveImageFromCamera(bitmap)
+            savePictures(pictureUrl)
         }
+
     private val selectPicture = registerForActivityResult(GetContentWithMimeTypes()) { uri ->
         uri?.let {
             // TODO() call this as new instance each time gallery is clicked ?
-            viewModel.copyImageFromUriToAppFolder(uri)
-            listPicture.add(
-                Picture(
-                    url = uri.toString(),
-                    displayName = "New Picture",
-                    estateId = estateKey,
-                    orderNumber = listPicture.size + 1
-                )
-            )
-            notifyPicturesChanged(listPicture)
+            savePictures(uri.toString())
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (args.estateKey != -1L) {
@@ -82,13 +79,7 @@ class CreationFragment : Fragment() {
         binding = FragmentCreationBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
 
-        binding.createRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-        binding.createRecyclerviewPictures.layoutManager = mLayoutManager
-
         initBindings()
-
         return binding.root
     }
 
@@ -104,11 +95,12 @@ class CreationFragment : Fragment() {
      */
     private fun editModeBinding() {
         viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
-            estate = it
+            this.detailedEstate = it
             if (it != null) {
-                binding.estate = it
+                binding.detailedEstate = it
             }
             setTypeSpinner()
+            setEmployeeSpinner()
             binding.editEstateAvailability.visibility = View.VISIBLE
         })
     }
@@ -117,11 +109,15 @@ class CreationFragment : Fragment() {
      * Global View Bindings
      */
     private fun initBindings() {
+        binding.createRecyclerviewPictures.adapter = pictureListAdapter
+        val mLayoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.createRecyclerviewPictures.layoutManager = mLayoutManager
+
         binding.createTakePicture.setOnClickListener {
             // Open camera for image
             takePicture.launch(null)
             // TODO() NavigateUp from Camera navigates back to the creationFragment
-            // TODO() Import image from gallery
         }
 
         binding.createPickGallery.setOnClickListener {
@@ -148,22 +144,10 @@ class CreationFragment : Fragment() {
             editModeBinding()
         } else {
             setTypeSpinner()
+            setEmployeeSpinner()
         }
 
 
-    }
-
-    //-------------------- NAVIGATION ----------------------//
-
-    private fun navigateAfterSaveClick() {
-        // When an item is clicked.
-        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
-            estate?.let {
-                NavHostFragment.findNavController(this).navigateUp()
-            } ?: NavHostFragment.findNavController(this)
-                .navigate(R.id.action_creationFragment_to_listFragment)
-
-        })
     }
 
     //----------------- MANAGE ESTATE ---------------------//
@@ -171,99 +155,127 @@ class CreationFragment : Fragment() {
      * Handle Estate data
      */
     private fun shareEstate(): Estate {
-        if (editMode) {
-            return Estate(
-                startTime = args.estateKey,
-                estateCity = getEstateCity(),
-                estateCityPostalCode = getEstatePostalCode(),
-                estateStreetNumber = getEstateStreetNumber(),
-                estateStreet = getEstateStreet(),
-                estateRooms = getEstateRooms(),
-                estateSurface = getEstateSurface(),
-                estatePrice = getEstatePrice(),
-                estateDescription = getEstateDescription(),
-                estateType = getEstateType(),
-//                estateEmployee = getEstateEmployee(),
-                employeeId = 1,
-                endTime = getEstateAvailability(),
-                estatePois = "Test",
-            )
-        } else return Estate(
+//        if (editMode) {
+//            return Estate(
+//                startTime = args.estateKey,
+//                estateCity = getEstateCity(),
+//                estateCityPostalCode = getEstatePostalCode(),
+//                estateStreetNumber = getEstateStreetNumber(),
+//                estateStreet = getEstateStreet(),
+//                estateRooms = getRooms(),
+//                estateSurface = getSurface(),
+//                estatePrice = getPrice(),
+//                estateDescription = getDescription(),
+//                estateTypeId = getType(),
+//                employeeId = getEmployee(),
+//                endTime = getEstateAvailability(),
+////                estatePois = "Test",
+//                estatePois = 1
+//            )
+//        } else
+        return Estate(
             startTime = estateKey,
             estateCity = getEstateCity(),
             estateCityPostalCode = getEstatePostalCode(),
             estateStreetNumber = getEstateStreetNumber(),
             estateStreet = getEstateStreet(),
-            estateRooms = getEstateRooms(),
-            estateSurface = getEstateSurface(),
-            estatePrice = getEstatePrice(),
-            estateDescription = getEstateDescription(),
-            estateType = getEstateType(),
-//                estateEmployee = getEstateEmployee(),
-            employeeId = 1,
+            estateRooms = getRooms(),
+            estateSurface = getSurface(),
+            estatePrice = getPrice(),
+            estateDescription = getDescription(),
+            estateTypeId = getType(),
+            employeeId = getEmployee(),
             endTime = getEstateAvailability(),
-            estatePois = "Test"
+//            estatePois = "Test"
+            estatePois = 1
         )
-    }
-
-    private fun getEstateType(): String {
-        return if (spinner.selectedItemId == Spinner.INVALID_ROW_ID) {
-            errorMessage = getString(R.string.create_type_error_text)
-            ""
-        } else {
-            spinner.selectedItem.toString()
-        }
     }
 
 
     //----------- Estate Data for Creation ----------------//
 
-    private fun notifyPicturesChanged(it: List<Picture>) {
-        pictureListAdapter.submitList(it as MutableList<Picture>)
+    private fun savePictures(pictureUrl: String) {
+        listPicture.add(
+            Picture(
+                url = pictureUrl,
+                estateId = estateKey,
+                orderNumber = listPicture.size + 1
+            )
+        )
+        notifyPicturesChanged(listPicture)
     }
 
+    private fun notifyPicturesChanged(it: List<Picture>) {
+        pictureListAdapter.submitList(it as MutableList<Picture>)
+        pictureListAdapter.notifyDataSetChanged()
+    }
+
+
+    //----------- Spinners Configuration ----------------//
+
     private fun setTypeSpinner() {
-        spinner = binding.createEstateTypeSpinner
+        typesSpinner = binding.createEstateTypeSpinnerEdit
 
-        viewModel.allTypes().observe(viewLifecycleOwner, { typeList ->
-            spinnerTypes = typeList.map { it.typeName }
+        viewModel.allTypes().observe(viewLifecycleOwner, { it ->
+            types = it.map { it.typeName }
 
-            val arrayAdapter = ArrayAdapter(
-                requireContext(),
-                R.layout.support_simple_spinner_dropdown_item,
-                spinnerTypes
-            )
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = arrayAdapter
+            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, types)
+            typesSpinner.setAdapter(adapter)
 
-
-            if (editMode) {
-                for (i in 0 until spinner.count) {
-                    val s = spinnerTypes[i]
-                    if (s == estate.estateType) {
-                        spinner.setSelection(i)
-                    }
-                }
-            }
-
-            spinner.onItemSelectedListener = object :
-                AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View, position: Int, id: Long
-                ) {
-                    // do nothing on selected item
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    errorMessage = getString(R.string.create_type_error_text)
-                }
-            }
+            if (editMode)
+                detailedEstate.type?.let { t ->
+                    typesSpinner.setSelection(t.typeId) }
+            else
+                typesSpinner.setSelection(0)
         })
 
     }
 
-    private fun getEstateDescription(): String {
+    private fun setEmployeeSpinner() {
+        employeesSpinner = binding.createEstateEmployeeSpinnerEdit
+
+        viewModel.allEmployees().observe(viewLifecycleOwner, { it ->
+            allEmployees = it
+            employees = it.map { it.employeeFullName }
+
+            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, employees)
+            employeesSpinner.setAdapter(adapter)
+
+            if (editMode)
+                detailedEstate.employee.let { e ->
+                    employeesSpinner.setSelection(employees.indexOf(e!!.employeeFullName))
+                }
+            else
+                employeesSpinner.setSelection(0)
+
+            employeesSpinner
+        })
+
+    }
+
+
+    //----------- Estate Data for Creation ----------------//
+
+    private fun getType(): Int {
+        return if (typesSpinner.selectionStart == 0) {
+            errorMessage = getString(R.string.create_type_error_text)
+            0
+        } else {
+            types.indexOf(typesSpinner.text.toString()) + 1
+        }
+    }
+
+    private fun getEmployee(): Int {
+        val spinnerIndex = employees.indexOf(employeesSpinner.text.toString())
+        return if (spinnerIndex == -1) {
+            errorMessage = getString(R.string.create_employee_error_text)
+            0
+        } else {
+            allEmployees[spinnerIndex].employeeId
+        }
+    }
+
+    private fun getDescription(): String {
         val descriptionMin = resources.getInteger(R.integer.create_description_minimum)
         if (binding.createDescriptionEdit.text.toString().length < descriptionMin) {
             errorMessage =
@@ -275,7 +287,7 @@ class CreationFragment : Fragment() {
         return binding.createDescriptionEdit.text.toString()
     }
 
-    private fun getEstatePrice(): Int {
+    private fun getPrice(): Int {
         val priceMin = resources.getInteger(R.integer.create_price_minimum)
         binding.createPriceEdit.text.toString().toIntOrNull().let {
             return when (it) {
@@ -294,7 +306,7 @@ class CreationFragment : Fragment() {
         }
     }
 
-    private fun getEstateSurface(): Int? {
+    private fun getSurface(): Int? {
         return if (binding.createSurfaceEdit.text.toString().isBlank()) {
             null
         } else {
@@ -302,7 +314,7 @@ class CreationFragment : Fragment() {
         }
     }
 
-    private fun getEstateRooms(): Int? {
+    private fun getRooms(): Int? {
         return if (binding.createRoomsEdit.text.toString().isBlank()) {
             null
         } else {
@@ -349,6 +361,25 @@ class CreationFragment : Fragment() {
             System.currentTimeMillis()
         }
     }
+
+    //------------------- ESTATE SAVED ---------------------//
+
+    private fun navigateAfterSaveClick() {
+        // When an item is clicked.
+        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
+            estate?.let {
+                NavHostFragment.findNavController(this).navigateUp()
+            } ?: NavHostFragment.findNavController(this)
+                .navigate(R.id.action_creationFragment_to_listFragment)
+
+            confirmEstateSaved()
+        })
+    }
+
+    private fun confirmEstateSaved() = if (editMode)
+        KUtil.infoSnackBar(requireView(), getString(R.string.edit_estate_confirmation))
+    else
+        KUtil.infoSnackBar(requireView(), getString(R.string.create_estate_confirmation))
 
 
 }

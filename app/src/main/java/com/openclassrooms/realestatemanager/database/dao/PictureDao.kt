@@ -20,6 +20,16 @@ interface PictureDao {
     suspend fun updatePicture(picture: Picture)
 
     /**
+     * replaces the old url with the new one.
+     *
+     * @param oldUrl replaced by
+     * @param pictureUrl new value to write
+     */
+    @Query("UPDATE picture_table SET  picture_url= :pictureUrl WHERE picture_url= :oldUrl")
+    suspend fun replaceUrl(oldUrl: String, pictureUrl: String)
+
+
+    /**
      * Selects and returns the row that matches the supplied estateId.
      *
      * @param estateId to match

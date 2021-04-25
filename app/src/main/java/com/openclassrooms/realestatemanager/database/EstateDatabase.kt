@@ -15,7 +15,7 @@ import java.util.*
 
 @Database(
     entities = [Estate::class, Poi::class, Employee::class, Type::class, Picture::class],
-    version = 1, exportSchema = false
+    version = 2, exportSchema = false
 )
 abstract class EstateDatabase : RoomDatabase() {
 
@@ -102,11 +102,17 @@ abstract class EstateDatabase : RoomDatabase() {
                 )
             )
 
+            typeDao.insert(Type(typeId = 1, typeName = "Duplex"))
+            typeDao.insert(Type(typeId = 2, typeName = "Loft"))
+            typeDao.insert(Type(typeId = 3, typeName = "Manor"))
+            typeDao.insert(Type(typeId = 4, typeName = "Penthouse"))
+
+
             estateDao.insert(
                 Estate(
                     startTime = Calendar.getInstance().timeInMillis,
                     endTime = null,
-                    estateType = "House",
+                    estateTypeId = 3,
                     estatePrice = 450000,
 //                    estateEmployee = "Etienne",
                     employeeId = 1,
@@ -118,48 +124,17 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateStreet = "rue des Ponts",
                     estateStreetNumber = 10,
                     estateCityPostalCode = "44000",
-                    estatePois = "School;Theatre;Town hall"
+//                    estatePois = "School;Theatre;Town hall"
+                    estatePois = 1
                 )
             )
 
-            poiDao.insert(
-                Poi(
-                poiId = 1,
-                poiType = "Town hall"
-            )
-            )
-            poiDao.insert(
-                Poi(
-                poiId = 2,
-                poiType = "Shop"
-            )
-            )
-            poiDao.insert(
-                Poi(
-                poiId = 3,
-                poiType = "School"
-            )
-            )
+            poiDao.insert(Poi(poiId = 1, poiType = "Town hall"))
+            poiDao.insert(Poi(poiId = 2, poiType = "Shop"))
+            poiDao.insert(Poi(poiId = 3, poiType = "School"))
+            poiDao.insert(Poi(poiId = 4, poiType = "Municipal Garden"))
+            poiDao.insert(Poi(poiId = 5, poiType = "Restaurants"))
 
-
-            typeDao.insert(
-                Type(
-                typeId = 1,
-                typeName = "House"
-            )
-            )
-            typeDao.insert(
-                Type(
-                typeId = 2,
-                typeName = "Flat"
-            )
-            )
-            typeDao.insert(
-                Type(
-                typeId = 3,
-                typeName = "Land"
-            )
-            )
 
             Log.i("EstateDatabase", "Database populated")
         }

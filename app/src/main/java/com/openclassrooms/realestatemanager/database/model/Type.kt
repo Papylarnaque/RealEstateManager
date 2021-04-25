@@ -9,7 +9,7 @@ data class Type(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "type_id")
-    val typeId: Long,
+    val typeId: Int,
 
     @ColumnInfo(name = "name")
     var typeName: String,

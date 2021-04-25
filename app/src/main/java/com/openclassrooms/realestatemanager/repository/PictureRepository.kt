@@ -13,6 +13,10 @@ class PictureRepository(private val pictureDao: PictureDao) {
         pictureDao.insert(picture)
     }
 
+    suspend fun insert(oldUrl: String, pictureUrl: String) {
+        pictureDao.replaceUrl(oldUrl, pictureUrl)
+    }
+
     suspend fun update(picture: Picture) {
         pictureDao.updatePicture(picture)
         Log.i("Picture update", picture.url)

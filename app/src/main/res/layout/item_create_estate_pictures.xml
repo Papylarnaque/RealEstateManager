@@ -7,7 +7,7 @@
 
         <variable
             name="clickListener"
-            type="com.openclassrooms.realestatemanager.detail.PictureListener" />
+            type="com.openclassrooms.realestatemanager.detail.CreatePictureListener" />
 
         <variable
             name="picture"
@@ -53,6 +53,7 @@
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_small"
             android:background="@drawable/layout_circle"
+            android:onClick="@{() -> clickListener.delete(picture)}"
             android:contentDescription="@string/item_estate_picture_description"
             android:src="@drawable/ic_baseline_delete_forever_24"
             app:layout_constraintTop_toTopOf="@id/item_estate_picture"

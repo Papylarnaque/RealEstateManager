@@ -7,12 +7,8 @@
     <data>
 
         <variable
-            name="estate"
-            type="com.openclassrooms.realestatemanager.database.model.Estate" />
-
-        <variable
-            name="employee"
-            type="com.openclassrooms.realestatemanager.database.model.Employee" />
+            name="detailedEstate"
+            type="com.openclassrooms.realestatemanager.database.model.DetailedEstate" />
 
     </data>
 
@@ -31,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:paddingStart="@dimen/margin_small"
+                android:paddingEnd="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="@+id/create_type_text"
                 app:layout_constraintTop_toBottomOf="@+id/create_type_text">
 
@@ -46,7 +42,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/createRecyclerviewPictures"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/detail_estate_picture_height"
                     android:layout_marginTop="@dimen/margin_small"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +53,8 @@
                     android:id="@+id/createTakePicture"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginBottom="@dimen/margin_small"
                     android:contentDescription="@string/item_estate_picture_description"
                     android:maxHeight="@dimen/detail_estate_picture_height"
                     android:src="@drawable/ic_baseline_photo_camera_24"
@@ -70,24 +66,62 @@
                     android:id="@+id/createPickGallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="@dimen/margin_small"
                     android:contentDescription="@string/item_estate_picture_description"
                     android:maxHeight="@dimen/detail_estate_picture_height"
                     android:src="@drawable/ic_baseline_add_photo_gallery_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/create_guideline_vertical"
-                    app:layout_constraintTop_toBottomOf="@id/createRecyclerviewPictures" />
+                    app:layout_constraintTop_toTopOf="@id/createTakePicture" />
 
-                <!--    TYPE    -->
-                <Spinner
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/createEstateTypeSpinner"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:hint="@string/create_type_title_text"
+                    app:layout_constraintEnd_toStartOf="@id/create_price_textLayout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture"/>
+                    app:layout_constraintTop_toBottomOf="@+id/createTakePicture"
+                    tools:hint="Type">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createEstateTypeSpinnerEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions"
+                        android:labelFor="@+id/createEstateTypeSpinnerEdit"
+                        android:text="@={detailedEstate.type.typeName}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--    PRICE    -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_price_textLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:hint="@string/create_price_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/createEstateTypeSpinner"
+                    app:layout_constraintTop_toTopOf="@id/createEstateTypeSpinner">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_price_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_money_24"
+                        android:drawablePadding="@dimen/margin_small"
+                        android:inputType="number|textMultiLine"
+                        android:maxLength="@integer/create_price_maximum_length"
+                        android:text='@{detailedEstate.estate.estatePrice== null ? "" : Integer.toString(detailedEstate.estate.estatePrice) }' />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <!--    DESCRIPTION    -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -95,7 +129,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/create_description_text"
                     app:counterEnabled="true"
                     app:layout_constraintTop_toBottomOf="@id/createEstateTypeSpinner">
@@ -106,62 +140,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableStart="@drawable/ic_baseline_description_24"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="@dimen/margin_small"
                         android:inputType="textMultiLine"
                         android:singleLine="false"
-                        android:text="@={estate.estateDescription}"
+                        android:text="@={detailedEstate.estate.estateDescription}"
                         android:textColor="@color/colorPrimary"
                         tools:textColorHint="@color/colorPrimaryText" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!--    PRICE    -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/create_price_textLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:hint="@string/create_price_text"
-                    app:layout_constraintEnd_toStartOf="@id/create_employee_textLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/create_description_textLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_price_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawableStart="@drawable/ic_baseline_money_24"
-                        android:drawablePadding="10dp"
-                        android:inputType="number|textMultiLine"
-                        android:maxLength="@integer/create_price_maximum_length"
-                        android:text='@{estate.estatePrice== null ? "" : Integer.toString(estate.estatePrice) }' />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <!--    EMPLOYEE    -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/create_employee_textLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/create_employee_text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/create_price_textLayout"
-                    app:layout_constraintTop_toBottomOf="@id/create_description_textLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_employee_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawableStart="@drawable/ic_baseline_person_24"
-                        android:drawablePadding="10dp"
-                        android:inputType="text"
-                        android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,21 +155,21 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
                     android:hint="@string/create_surface_text"
                     app:layout_constraintEnd_toStartOf="@id/create_rooms_textLayout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/create_price_textLayout">
+                    app:layout_constraintTop_toBottomOf="@id/create_description_textLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_surface_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_surface_24"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="@dimen/margin_small"
                         android:inputType="number|textMultiLine"
-                        android:text='@{estate.estateSurface== null ? "" : Integer.toString(estate.estateSurface) }'
+                        android:text='@{detailedEstate.estate.estateSurface== null ? "" : Integer.toString(detailedEstate.estate.estateSurface) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -196,21 +180,20 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="@dimen/margin_small"
                     android:hint="@string/create_rooms_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/create_surface_textLayout"
-                    app:layout_constraintTop_toBottomOf="@id/create_price_textLayout">
+                    app:layout_constraintTop_toTopOf="@id/create_surface_textLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_rooms_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_rooms_24"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="@dimen/margin_small"
                         android:inputType="number"
-                        android:text='@{estate.estateRooms== null ? "" : Integer.toString(estate.estateRooms) }'
+                        android:text='@{detailedEstate.estate.estateRooms== null ? "" : Integer.toString(detailedEstate.estate.estateRooms) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -221,8 +204,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginEnd="@dimen/margin_normal"
                     android:hint="@string/create_address_street_text"
                     app:layout_constraintEnd_toStartOf="@id/create_address_streetnumber_textLayout"
                     app:layout_constraintStart_toStartOf="parent"
@@ -233,9 +216,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_address_24"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="@dimen/margin_small"
                         android:inputType="textPostalAddress"
-                        android:text="@{estate.estateStreet}"
+                        android:text="@{detailedEstate.estate.estateStreet}"
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -246,17 +229,16 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:hint="@string/create_address_streetnumber_text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/create_rooms_textLayout">
+                    app:layout_constraintTop_toTopOf="@id/create_address_street_textLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/create_address_streetnumber_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number"
-                        android:text='@{estate.estateStreetNumber== null ? "" : Integer.toString(estate.estateStreetNumber) }'
+                        android:text='@{detailedEstate.estate.estateStreetNumber== null ? "" : Integer.toString(detailedEstate.estate.estateStreetNumber) }'
                         android:textColor="@color/colorPrimary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -267,7 +249,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/create_address_postalcode_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/create_address_street_textLayout">
@@ -277,7 +259,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number|textMultiLine"
-                        android:text='@{estate.estateCityPostalCode== null ? "" : estate.estateCityPostalCode }'
+                        android:text='@{detailedEstate.estate.estateCityPostalCode== null ? "" : detailedEstate.estate.estateCityPostalCode }'
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -287,8 +269,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/create_address_city_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/create_address_postalcode_textLayout"
@@ -299,30 +281,57 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPostalAddress|textCapCharacters"
-                        android:text="@{estate.estateCity}"
+                        android:text="@{detailedEstate.estate.estateCity}"
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--    EMPLOYEE    -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/createEstateEmployeeSpinner"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:hint="@string/create_employee_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/create_address_postalcode_textLayout"
+                    app:layout_constraintTop_toBottomOf="@id/create_address_postalcode_textLayout">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createEstateEmployeeSpinnerEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_person_24"
+                        android:drawablePadding="@dimen/margin_small"
+                        android:inputType="textNoSuggestions|textFilter"
+                        android:labelFor="@+id/create_employee_edit"
+                        android:text="@{@string/create_employee(detailedEstate.employee.employeeFirstName, detailedEstate.employee.employeeLastName)}"
+                        android:textColor="@color/colorPrimary" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <MultiAutoCompleteTextView
                     android:id="@+id/poi_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/margin_normal"
                     android:label="@id/poi_text"
-                    app:layout_constraintTop_toBottomOf="@id/create_address_postalcode_textLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/createEstateEmployeeSpinner" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/edit_estate_availability"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="25dp"
-                    android:checked="@{estate.endTime==null}"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:checked="@{detailedEstate.estate.endTime==null}"
                     android:text="@string/edit_estate_availability"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@id/create_address_postalcode_textLayout"
                     app:layout_constraintTop_toBottomOf="@id/poi_text"
-                    app:switchPadding="20dp" />
+                    app:switchPadding="@dimen/margin_normal" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
@@ -335,6 +344,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="45dp"
             android:layout_marginBottom="45dp"
+            android:backgroundTint="@color/green"
             android:contentDescription="@string/create_estate_description"
             android:src="@drawable/ic_baseline_save_24"
             app:layout_constraintBottom_toBottomOf="parent"

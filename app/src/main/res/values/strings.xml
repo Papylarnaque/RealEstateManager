@@ -21,12 +21,13 @@
     <string name="detail_estate_address_text">%1$s %2$s, \n%3$s %4$s</string>
     <string name="detail_estate_address_streetnumber">%1$s,&#160;  </string>  <!--1 white space-->
     <string name="detail_estate_address_postalcode">%1$s &#160; </string>
+    <string name="detail_employee_text">Estate managed by \n%1$s %2$s</string>
 
 
 
 
     <!--  CREATE  -->
-    <string name="create_type_title_text">Type:</string>
+    <string name="create_type_title_text">Type</string>
     <string name="create_estate_house">House</string>
     <string name="create_estate_flat">Flat</string>
     <string name="create_description_text">Description</string>
@@ -42,6 +43,7 @@
     <string name="add_estate_titlebar">Add a new Estate</string>
     <string name="edit_estate_availability">Available</string>
     <string name="edit_estate_sold">Sold</string>
+    <string name="create_employee">%1$s %2$s</string>
 
     <!--  CREATE / EDIT Errors  -->
     <string name="create_description_error_text">Estate Description is less than %1$s characters</string>
@@ -57,6 +59,9 @@
     <string name="create_streetnumber_error_text">Provide a street for the street number</string>
     <string name="create_estate_land">Land</string>
     <string name="sold_tag_description">Sold tag on the estate</string>
+    <string name="create_employee_error_text">An Employee is required</string>
+    <string name="create_estate_confirmation">Estate successfully created</string>
+    <string name="edit_estate_confirmation">Estate successfully updated</string>
 
 
 </resources>
