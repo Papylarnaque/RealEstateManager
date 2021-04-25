@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
-            android:text="@{@string/item_estate_first_line_text(it.type)}"
+            android:text="@{it.type.typeName}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/item_estate_picture"

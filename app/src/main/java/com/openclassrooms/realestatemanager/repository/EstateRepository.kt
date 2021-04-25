@@ -20,20 +20,7 @@ class EstateRepository (private val estateDao: EstateDao) {
         Log.i("EstateUpdate", "${estate.estatePrice}")
     }
 
-//    fun getEstate(estateKey: Long): LiveData<Estate> {
-//        return estateDao.getEstate(estateKey)
-//    }
-
     fun getEstate(estateKey: Long): LiveData<DetailedEstate> {
         return estateDao.getEstate(estateKey)
     }
-
-//    fun getDetailedEstates(): LiveData<List<DetailedEstate>> {
-//        return estateDao.getDetailedEstates()
-//    }
-
-
-
-
-
 }

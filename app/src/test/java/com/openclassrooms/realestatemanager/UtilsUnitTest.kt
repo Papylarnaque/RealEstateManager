@@ -6,7 +6,8 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.test.mock.MockContext
-import com.openclassrooms.realestatemanager.Utils.EUR_DOLLAR_RATIO
+import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.utils.Utils.EUR_DOLLAR_RATIO
 import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Test

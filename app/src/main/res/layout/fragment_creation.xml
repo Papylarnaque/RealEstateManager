@@ -306,9 +306,7 @@
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="textNoSuggestions|textFilter"
                         android:labelFor="@+id/create_employee_edit"
-                        android:text="@{@string/create_employee(detailedEstate.employee.employeeFirstName, detailedEstate.employee.employeeLastName)}"
                         android:textColor="@color/colorPrimary" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
 

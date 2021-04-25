@@ -1,7 +1,8 @@
 package com.openclassrooms.realestatemanager;
 
 import android.content.Context;
-import android.net.wifi.WifiManager;
+
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,7 +13,6 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class UtilsUnitTest {
 

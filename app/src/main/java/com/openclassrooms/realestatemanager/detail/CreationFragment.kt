@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.openclassrooms.realestatemanager.KUtil
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
@@ -21,6 +20,7 @@ import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
 import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
+import com.openclassrooms.realestatemanager.utils.KUtil
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import kotlin.math.abs
 
@@ -155,24 +155,6 @@ class CreationFragment : Fragment() {
      * Handle Estate data
      */
     private fun shareEstate(): Estate {
-//        if (editMode) {
-//            return Estate(
-//                startTime = args.estateKey,
-//                estateCity = getEstateCity(),
-//                estateCityPostalCode = getEstatePostalCode(),
-//                estateStreetNumber = getEstateStreetNumber(),
-//                estateStreet = getEstateStreet(),
-//                estateRooms = getRooms(),
-//                estateSurface = getSurface(),
-//                estatePrice = getPrice(),
-//                estateDescription = getDescription(),
-//                estateTypeId = getType(),
-//                employeeId = getEmployee(),
-//                endTime = getEstateAvailability(),
-////                estatePois = "Test",
-//                estatePois = 1
-//            )
-//        } else
         return Estate(
             startTime = estateKey,
             estateCity = getEstateCity(),
@@ -190,7 +172,6 @@ class CreationFragment : Fragment() {
             estatePois = 1
         )
     }
-
 
     //----------- Estate Data for Creation ----------------//
 
