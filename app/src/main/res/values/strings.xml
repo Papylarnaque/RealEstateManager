@@ -44,6 +44,7 @@
     <string name="edit_estate_availability">Available</string>
     <string name="edit_estate_sold">Sold</string>
     <string name="create_employee">%1$s %2$s</string>
+    <string name="create_pois_text">Pois </string>
 
     <!--  CREATE / EDIT Errors  -->
     <string name="create_description_error_text">Estate Description is less than %1$s characters</string>
@@ -62,6 +63,7 @@
     <string name="create_employee_error_text">An Employee is required</string>
     <string name="create_estate_confirmation">Estate successfully created</string>
     <string name="edit_estate_confirmation">Estate successfully updated</string>
+    <string name="detail_pois_title">Nearby POIs</string>
 
 
 </resources>

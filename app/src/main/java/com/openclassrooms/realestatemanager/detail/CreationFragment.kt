@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
@@ -29,8 +31,9 @@ val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 class CreationFragment : Fragment() {
 
     // TODO Keep typed data while rotating device
-    private val pictureListAdapter = CreatePictureListAdapter(CreatePictureListener { picture ->
-        // TODO() Handle picture click for rename / delete picture
+    private val pictureListAdapter = CreatePictureListAdapter(CreatePictureListener {
+        //   picture ->
+        //   TODO() Handle picture click for rename / delete picture
     })
     private val args: CreationFragmentArgs by navArgs()
     private var errorMessage: String? = null
@@ -41,12 +44,14 @@ class CreationFragment : Fragment() {
     // Late init var
     private lateinit var binding: FragmentCreationBinding
     private lateinit var viewModel: CreationViewModel
-    private lateinit var types: List<String>
-    private lateinit var employees: List<String>
     private lateinit var detailedEstate: DetailedEstate
+    private var listPicture: MutableList<Picture> = ArrayList()
     private lateinit var typesSpinner: AutoCompleteTextView
     private lateinit var employeesSpinner: AutoCompleteTextView
-    private var listPicture: MutableList<Picture> = ArrayList()
+    private lateinit var poiChipGroup: ChipGroup
+    private lateinit var types: List<String>
+    private lateinit var employees: List<String>
+    private lateinit var pois: List<String>
 
     // Pictures functionality val
     private val takePicture =
@@ -57,7 +62,6 @@ class CreationFragment : Fragment() {
 
     private val selectPicture = registerForActivityResult(GetContentWithMimeTypes()) { uri ->
         uri?.let {
-            // TODO() call this as new instance each time gallery is clicked ?
             savePictures(uri.toString())
         }
     }
@@ -101,6 +105,7 @@ class CreationFragment : Fragment() {
             }
             setTypeSpinner()
             setEmployeeSpinner()
+            setPoisCheckList()
             binding.editEstateAvailability.visibility = View.VISIBLE
         })
     }
@@ -145,6 +150,7 @@ class CreationFragment : Fragment() {
         } else {
             setTypeSpinner()
             setEmployeeSpinner()
+            setPoisCheckList()
         }
 
 
@@ -168,8 +174,7 @@ class CreationFragment : Fragment() {
             estateTypeId = getType(),
             employeeId = getEmployee(),
             endTime = getEstateAvailability(),
-//            estatePois = "Test"
-            estatePois = 1
+            estatePois = getPois()
         )
     }
 
@@ -205,7 +210,8 @@ class CreationFragment : Fragment() {
 
             if (editMode)
                 detailedEstate.type?.let { t ->
-                    typesSpinner.setSelection(t.typeId) }
+                    typesSpinner.setSelection(t.typeId)
+                }
             else
                 typesSpinner.setSelection(0)
         })
@@ -224,18 +230,42 @@ class CreationFragment : Fragment() {
 
             if (editMode)
                 detailedEstate.employee.let { e ->
-                    employeesSpinner.setSelection(employees.indexOf(e!!.employeeFullName))
+                    employeesSpinner.setText(e!!.employeeFullName, false)
                 }
             else
                 employeesSpinner.setSelection(0)
 
             employeesSpinner
         })
-
     }
 
+    private fun setPoisCheckList() {
+        if (editMode) {
+            pois = detailedEstate.estate?.estatePois!!.split("|")
+        }
+
+        poiChipGroup = binding.createPoisChipGroup
+        viewModel.allPois().observe(viewLifecycleOwner, { it ->
+            val pois = it.map { it.poiName }
+            for (string in pois) {
+                val chip = layoutInflater.inflate(
+                    R.layout.create_poi,
+                    poiChipGroup,
+                    false
+                ) as Chip
+                chip.id = pois.indexOf(string)
+                chip.text = string;
+                poiChipGroup.addView(chip, poiChipGroup.childCount - 1);
+                if (editMode) {
+                    if (this.pois.contains(pois.indexOf(string).toString()))
+                        chip.isChecked = true
+                }
+            }
+        })
+    }
 
     //----------- Estate Data for Creation ----------------//
+
 
     private fun getType(): Int {
         return if (typesSpinner.selectionStart == 0) {
@@ -333,6 +363,10 @@ class CreationFragment : Fragment() {
             errorMessage = getString(R.string.create_city_error_text)
         }
         return createEstateCity
+    }
+
+    private fun getPois(): String {
+        return poiChipGroup.checkedChipIds.joinToString("|")
     }
 
     private fun getEstateAvailability(): Long? {

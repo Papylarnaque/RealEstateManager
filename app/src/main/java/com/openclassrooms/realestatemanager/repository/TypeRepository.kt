@@ -16,8 +16,4 @@ class TypeRepository(private val typeDao: TypeDao) {
         typeDao.updateType(type)
     }
 
-    fun getAllTypesStatic(): List<Type> {
-        return typeDao.getAllTypesStatic()
-    }
-
 }

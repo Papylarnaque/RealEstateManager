@@ -125,15 +125,15 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateStreetNumber = 10,
                     estateCityPostalCode = "44000",
 //                    estatePois = "School;Theatre;Town hall"
-                    estatePois = 1
+                    estatePois = "1|5"
                 )
             )
 
-            poiDao.insert(Poi(poiId = 1, poiType = "Town hall"))
-            poiDao.insert(Poi(poiId = 2, poiType = "Shop"))
-            poiDao.insert(Poi(poiId = 3, poiType = "School"))
-            poiDao.insert(Poi(poiId = 4, poiType = "Municipal Garden"))
-            poiDao.insert(Poi(poiId = 5, poiType = "Restaurants"))
+            poiDao.insert(Poi(poiId = 1, poiName = "Town hall"))
+            poiDao.insert(Poi(poiId = 2, poiName = "Shop"))
+            poiDao.insert(Poi(poiId = 3, poiName = "School"))
+            poiDao.insert(Poi(poiId = 4, poiName = "Municipal Garden"))
+            poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
 
 
             Log.i("EstateDatabase", "Database populated")

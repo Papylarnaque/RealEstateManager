@@ -54,6 +54,6 @@ data class Estate(
         val employeeId: Int,
 
         @ColumnInfo(name = "poi_id")
-        val estatePois: Int,
+        val estatePois: String,
         )
 

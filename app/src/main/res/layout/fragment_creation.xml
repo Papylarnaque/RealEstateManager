@@ -305,19 +305,37 @@
                         android:drawableStart="@drawable/ic_baseline_person_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="textNoSuggestions|textFilter"
-                        android:labelFor="@+id/create_employee_edit"
+                        android:labelFor="@+id/createEstateEmployeeSpinnerEdit"
                         android:textColor="@color/colorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/poi_text"
+                <!--    POIS    -->
+                <TextView
+                    android:id="@+id/createPoisChipGroupTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:label="@id/poi_text"
-                    app:layout_constraintTop_toBottomOf="@id/createEstateEmployeeSpinner" />
+                    android:hint="@string/create_pois_text"
+                    android:textColorHint="@color/grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createEstateEmployeeSpinner"
+                    tools:hint="Pois"
+                    tools:textColorHint="@color/grey" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/createPoisChipGroup"
+                    style="@style/Widget.MaterialComponents.ChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingVertical="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createPoisChipGroupTitle"
+                    app:selectionRequired="false" />
+
+                <!--    AVAILABILITY    -->
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/edit_estate_availability"
                     android:layout_width="wrap_content"
@@ -328,8 +346,19 @@
                     android:text="@string/edit_estate_availability"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@id/create_address_postalcode_textLayout"
-                    app:layout_constraintTop_toBottomOf="@id/poi_text"
+                    app:layout_constraintTop_toBottomOf="@id/createPoisChipGroup"
                     app:switchPadding="@dimen/margin_normal" />
+
+                <!-- Additional bottom space for UX when scrolling to bottom -->
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/detail_estate_picture_height"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
+                    tools:layout_editor_absoluteX="158dp"
+                    tools:layout_editor_absoluteY="798dp" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
@@ -342,7 +371,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="45dp"
             android:layout_marginBottom="45dp"
-            android:backgroundTint="@color/green"
+            android:background="@color/green"
             android:contentDescription="@string/create_estate_description"
             android:src="@drawable/ic_baseline_save_24"
             app:layout_constraintBottom_toBottomOf="parent"

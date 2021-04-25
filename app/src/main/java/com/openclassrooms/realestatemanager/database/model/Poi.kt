@@ -12,6 +12,6 @@ data class Poi(
     val poiId: Long,
 
     @ColumnInfo(name = "poi_name")
-    var poiType: String,
+    var poiName: String,
 )
 

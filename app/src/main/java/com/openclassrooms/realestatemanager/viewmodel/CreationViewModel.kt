@@ -12,10 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.EstateDatabase.Companion.getDatabase
 import com.openclassrooms.realestatemanager.database.model.*
-import com.openclassrooms.realestatemanager.repository.EmployeeRepository
-import com.openclassrooms.realestatemanager.repository.EstateRepository
-import com.openclassrooms.realestatemanager.repository.PictureRepository
-import com.openclassrooms.realestatemanager.repository.TypeRepository
+import com.openclassrooms.realestatemanager.repository.*
 import com.openclassrooms.realestatemanager.utils.Source
 import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
@@ -40,6 +37,9 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     private val employeeDao = getDatabase(application, viewModelScope).employeeDao()
     private val employeeRepository: EmployeeRepository = EmployeeRepository(employeeDao)
+
+    private val poiDao = getDatabase(application, viewModelScope).poiDao()
+    private val poiRepository: PoiRepository = PoiRepository(poiDao)
 
     private val imagesFolder: File by lazy { getImagesFolder(getApplication()) }
     private val context: Context
@@ -95,6 +95,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
     fun allEmployees(): LiveData<List<Employee>> = employeeRepository.allEmployees
+    fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
 
 
 //----------------- MANAGE PICTURES --------------------//
