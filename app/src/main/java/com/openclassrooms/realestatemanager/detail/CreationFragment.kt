@@ -51,7 +51,7 @@ class CreationFragment : Fragment() {
     private lateinit var poiChipGroup: ChipGroup
     private lateinit var types: List<String>
     private lateinit var employees: List<String>
-    private lateinit var pois: List<String>
+    private lateinit var estatePoisIdList: List<String>
 
     // Pictures functionality val
     private val takePicture =
@@ -241,23 +241,22 @@ class CreationFragment : Fragment() {
 
     private fun setPoisCheckList() {
         if (editMode) {
-            pois = detailedEstate.estate?.estatePois!!.split("|")
+            estatePoisIdList = detailedEstate.estate?.estatePois!!.split("|")
         }
-
         poiChipGroup = binding.createPoisChipGroup
-        viewModel.allPois().observe(viewLifecycleOwner, { it ->
-            val pois = it.map { it.poiName }
-            for (string in pois) {
+        viewModel.allPois().observe(viewLifecycleOwner, {
+            poiChipGroup.removeAllViews()
+            for (poi in it) {
                 val chip = layoutInflater.inflate(
                     R.layout.create_poi,
                     poiChipGroup,
                     false
                 ) as Chip
-                chip.id = pois.indexOf(string)
-                chip.text = string;
+                chip.id = poi.poiId
+                chip.text = poi.poiName
                 poiChipGroup.addView(chip, poiChipGroup.childCount - 1);
                 if (editMode) {
-                    if (this.pois.contains(pois.indexOf(string).toString()))
+                    if (estatePoisIdList.contains(chip.id.toString()))
                         chip.isChecked = true
                 }
             }

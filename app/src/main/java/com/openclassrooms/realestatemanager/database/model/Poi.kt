@@ -9,7 +9,7 @@ data class Poi(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "poi_id")
-    val poiId: Long,
+    val poiId: Int,
 
     @ColumnInfo(name = "poi_name")
     var poiName: String,

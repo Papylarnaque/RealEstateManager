@@ -25,14 +25,6 @@ interface TypeDao {
     @Query("SELECT * FROM type_table")
     fun getAllTypes(): LiveData<List<Type>>
 
-
-    /**
-     * Selects and returns all rows in the table,
-     */
-    @Query("SELECT * FROM type_table")
-    fun getAllTypesStatic(): List<Type>
-
-
     @Query("DELETE FROM type_table")
     fun deleteAll()
 

@@ -206,8 +206,6 @@
                 app:layout_constraintTop_toTopOf="@id/detail_address_image"
                 tools:text="Address:" />
 
-            <!--    ADDRESS        -->
-
             <TextView
                 android:id="@+id/detail_address_streetnumber_content"
                 android:layout_width="wrap_content"
@@ -245,18 +243,40 @@
                 app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
                 tools:text="Nantes" />
 
+            <!--///////// Pois /////////-->
+
             <ImageView
-                android:id="@+id/estate_sold_tag"
-                android:layout_width="@dimen/item_estate_height"
-                android:layout_height="@dimen/item_estate_height"
-                android:contentDescription="@string/sold_tag_description"
-                android:src="@drawable/sold"
-                android:visibility="@{detailedEstate.estate.endTime!=null? View.VISIBLE : View.GONE}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/detail_pois_image"
+                android:layout_width="@dimen/detail_content_image"
+                android:layout_height="@dimen/detail_content_image"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:contentDescription="@string/detail_surface_image_description"
+                android:src="@drawable/ic_baseline_pois_24"
+                app:layout_constraintStart_toStartOf="@id/detail_price_image"
+                app:layout_constraintTop_toBottomOf="@+id/detail_address_postalcode_content"
+                tools:srcCompat="@drawable/ic_baseline_address_24" />
 
+            <TextView
+                android:id="@+id/detail_pois_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:text="@string/detail_pois_title"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/detail_pois_image"
+                app:layout_constraintTop_toTopOf="@id/detail_pois_image"
+                tools:text="@string/detail_pois_title" />
 
-            <!--///////// Rooms /////////-->
+            <TextView
+                android:id="@+id/detail_pois_content"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_normal"
+                tools:text="School, Town Hall"
+                app:layout_constraintStart_toEndOf="@id/detail_address_image"
+                app:layout_constraintTop_toBottomOf="@id/detail_pois_title" />
+
+            <!--///////// Employee /////////-->
 
             <TextView
                 android:id="@+id/detail_employee_text"
@@ -271,9 +291,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_address_city_content"
+                app:layout_constraintTop_toBottomOf="@id/detail_pois_content"
                 tools:text="Estate managed by \nEtienne DESCAMPS" />
 
+
+            <!--///////// Sold TAG /////////-->
+
+            <ImageView
+                android:id="@+id/estate_sold_tag"
+                android:layout_width="@dimen/item_estate_height"
+                android:layout_height="@dimen/item_estate_height"
+                android:contentDescription="@string/sold_tag_description"
+                android:src="@drawable/sold"
+                android:visibility="@{detailedEstate.estate.endTime!=null? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

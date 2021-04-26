@@ -23,7 +23,7 @@ class DetailFragment : Fragment() {
     private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
     private lateinit var detailedEstate: DetailedEstate
     private var estateKey: Long = 0
-    private val pictureListAdapter = DetailPictureListAdapter(DetailPictureListener{ picture ->
+    private val pictureListAdapter = DetailPictureListAdapter(DetailPictureListener { picture ->
         // TODO() viewModel.onPictureClicked(picture)
     })
 
@@ -32,13 +32,8 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailBinding.inflate(layoutInflater)
 
-        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
-
+        initBindings()
         getEstate()
 
         // override back navigation from detail fragment
@@ -51,11 +46,8 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-//        getEstate()
-
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -104,11 +96,38 @@ class DetailFragment : Fragment() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
         pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
+        bindPois()
         binding.executePendingBindings()
     }
 
+    private fun initBindings() {
+        binding = FragmentDetailBinding.inflate(layoutInflater)
 
-    // TODO() Click on picture should open it full screen
+        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
+        val mLayoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
+    }
+
+    private fun bindPois() {
+        val estatePoisIdList = detailedEstate.estate?.estatePois!!.split("|")
+        val poisStr = StringBuilder()
+        viewModel.allPois().observe(viewLifecycleOwner, {
+            for (poi in it) {
+                if (estatePoisIdList.contains(poi.poiId.toString())) {
+                    if (poisStr.isEmpty()) {
+                        poisStr.append(poi.poiName)
+                    } else {
+                        poisStr.append(", " + poi.poiName)
+                    }
+                }
+            }
+            binding.detailPoisContent.text = poisStr
+        })
+
+    }
+
+// TODO() Click on picture should open it full screen
 
 
 }

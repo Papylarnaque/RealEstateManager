@@ -114,7 +114,6 @@ abstract class EstateDatabase : RoomDatabase() {
                     endTime = null,
                     estateTypeId = 3,
                     estatePrice = 450000,
-//                    estateEmployee = "Etienne",
                     employeeId = 1,
                     estateCity = "Nantes",
 //                    pictureUrl = "/data/user/0/com.openclassrooms.realestatemanager/files/images/camera-1618351774020.jpg",
@@ -124,16 +123,18 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateStreet = "rue des Ponts",
                     estateStreetNumber = 10,
                     estateCityPostalCode = "44000",
-//                    estatePois = "School;Theatre;Town hall"
                     estatePois = "1|5"
                 )
             )
 
             poiDao.insert(Poi(poiId = 1, poiName = "Town hall"))
             poiDao.insert(Poi(poiId = 2, poiName = "Shop"))
-            poiDao.insert(Poi(poiId = 3, poiName = "School"))
+            poiDao.insert(Poi(poiId = 3, poiName = "Primary School"))
+            poiDao.insert(Poi(poiId = 911, poiName = "Police Station"))
+            poiDao.insert(Poi(poiId = 1000, poiName = "Pharmacy"))
             poiDao.insert(Poi(poiId = 4, poiName = "Municipal Garden"))
             poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
+            poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
 
 
             Log.i("EstateDatabase", "Database populated")
