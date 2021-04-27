@@ -15,6 +15,8 @@ import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DetailFragment : Fragment() {
 
@@ -36,15 +38,12 @@ class DetailFragment : Fragment() {
         initBindings()
         getEstate()
 
-        // override back navigation from detail fragment
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
-                NavHostFragment.findNavController(requireParentFragment())
-                    .navigate(R.id.action_detailFragment_to_listFragment)
-            }
-        }
+        setBackNav()
+
+
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -78,6 +77,15 @@ class DetailFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun initBindings() {
+        binding = FragmentDetailBinding.inflate(layoutInflater)
+
+        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
+        val mLayoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
+    }
+
     private fun getEstate() {
         if (viewModel.navigateToEstateDetail.value != null) {
             detailedEstate = viewModel.navigateToEstateDetail.value!!
@@ -96,17 +104,32 @@ class DetailFragment : Fragment() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
         pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
+        bindDates()
         bindPois()
         binding.executePendingBindings()
     }
 
-    private fun initBindings() {
-        binding = FragmentDetailBinding.inflate(layoutInflater)
+    private fun bindDates() {
+        val dateFormat = "dd/MM/yyyy"
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter = SimpleDateFormat(dateFormat, Locale.US)
 
-        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
+        // Start Time
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = detailedEstate.estate?.startTime!!
+        binding.detailDateStart.text = getString(
+            R.string.detail_date_start,
+            formatter.format(calendar.time)
+        )
+
+        if (detailedEstate.estate!!.endTime != null) {
+            calendar.timeInMillis = detailedEstate.estate!!.endTime!!
+            binding.detailDateSold.text = getString(
+                R.string.detail_date_sold,
+                formatter.format(calendar.time)
+            )
+            binding.detailDateSold.visibility = View.VISIBLE
+        }
     }
 
     private fun bindPois() {
@@ -125,6 +148,15 @@ class DetailFragment : Fragment() {
             binding.detailPoisContent.text = poisStr
         })
 
+    }
+
+    private fun setBackNav() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
+                NavHostFragment.findNavController(requireParentFragment())
+                    .navigate(R.id.action_detailFragment_to_listFragment)
+            }
+        }
     }
 
 // TODO() Click on picture should open it full screen

@@ -16,13 +16,14 @@
     <string name="detail_surface_title">"Surface: "</string>
     <string name="detail_estate_rooms_text">%1$s rooms</string>
     <string name="string_detail_not_selected_text">No estate selected</string>
-
     <string name="detail_address_title">Address:</string>
     <string name="detail_estate_address_text">%1$s %2$s, \n%3$s %4$s</string>
     <string name="detail_estate_address_streetnumber">%1$s,&#160;  </string>  <!--1 white space-->
     <string name="detail_estate_address_postalcode">%1$s &#160; </string>
     <string name="detail_employee_text">Estate managed by \n%1$s %2$s</string>
-
+    <string name="detail_pois_title">Nearby POIs</string>
+    <string name="detail_date_start">Created on\n%1$s</string>
+    <string name="detail_date_sold">Sold on\n%1$s</string>
 
 
 
@@ -46,24 +47,25 @@
     <string name="create_employee">%1$s %2$s</string>
     <string name="create_pois_text">Pois </string>
 
-    <!--  CREATE / EDIT Errors  -->
+    <!--  CREATE / EDIT Notifications  -->
     <string name="create_description_error_text">Estate Description is less than %1$s characters</string>
     <string name="create_price_missing_error_text">Estate price is required</string>
     <string name="create_type_error_text">Estate Type is required</string>
     <string name="create_city_error_text">Estate City is required</string>
     <string name="create_price_toolow_error_text">Estate Price seems too low</string>
+    <string name="create_streetnumber_error_text">Provide a street for the street number</string>
+    <string name="create_estate_land">Land</string>
+    <string name="create_employee_error_text">An Employee is required</string>
+    <string name="create_estate_confirmation">Estate successfully created</string>
+    <string name="edit_estate_confirmation">Estate successfully updated</string>
 
     <!--  Image descriptions  -->
     <string name="create_estate_description">Create an estate image</string>
     <string name="detail_rooms_image_description">Number of rooms</string>
     <string name="detail_surface_image_description">Surface of the estate</string>
-    <string name="create_streetnumber_error_text">Provide a street for the street number</string>
-    <string name="create_estate_land">Land</string>
     <string name="sold_tag_description">Sold tag on the estate</string>
-    <string name="create_employee_error_text">An Employee is required</string>
-    <string name="create_estate_confirmation">Estate successfully created</string>
-    <string name="edit_estate_confirmation">Estate successfully updated</string>
-    <string name="detail_pois_title">Nearby POIs</string>
+    <string name="create_pickerdate_title">Select the sale date</string>
+    <string name="create_endtime_error_text">Sale date should be later than creation date</string>
 
 
 </resources>

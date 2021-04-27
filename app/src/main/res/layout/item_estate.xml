@@ -83,9 +83,10 @@
             tools:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/estate_sold_tag"
+            android:id="@+id/detailSoldTag"
             android:layout_width="@dimen/item_estate_height"
             android:layout_height="@dimen/item_estate_height"
+            android:layout_marginEnd="@dimen/margin_small"
             android:contentDescription="@string/sold_tag_description"
             android:src="@drawable/sold"
             android:visibility="invisible"

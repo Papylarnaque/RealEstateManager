@@ -317,12 +317,12 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/create_pois_text"
-                    android:textColorHint="@color/grey"
+                    android:textColorHint="@color/gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/createEstateEmployeeSpinner"
                     tools:hint="Pois"
-                    tools:textColorHint="@color/grey" />
+                    tools:textColorHint="@color/gray" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/createPoisChipGroup"
@@ -349,6 +349,39 @@
                     app:layout_constraintTop_toBottomOf="@id/createPoisChipGroup"
                     app:switchPadding="@dimen/margin_normal" />
 
+                <!--///////// DATES /////////-->
+
+                <TextView
+                    android:id="@+id/createDateStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:autofillHints=""
+                    android:drawablePadding="@dimen/margin_small"
+                    android:ems="10"
+                    app:drawableStartCompat="@drawable/ic_calendar_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
+                    tools:layout_editor_absoluteX="51dp"
+                    tools:layout_editor_absoluteY="665dp"
+                    tools:text="Created on \n25/12/2020" />
+
+                <TextView
+                    android:id="@+id/createDateSold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:autofillHints=""
+                    android:drawablePadding="@dimen/margin_small"
+                    android:ems="10"
+                    android:visibility="invisible"
+                    app:drawableStartCompat="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
+                    tools:layout_editor_absoluteX="51dp"
+                    tools:layout_editor_absoluteY="665dp"
+                    tools:text="Sold on \n01/01/2021" />
+
                 <!-- Additional bottom space for UX when scrolling to bottom -->
                 <Space
                     android:layout_width="wrap_content"
@@ -371,7 +404,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="45dp"
             android:layout_marginBottom="45dp"
-            android:background="@color/green"
             android:contentDescription="@string/create_estate_description"
             android:src="@drawable/ic_baseline_save_24"
             app:layout_constraintBottom_toBottomOf="parent"

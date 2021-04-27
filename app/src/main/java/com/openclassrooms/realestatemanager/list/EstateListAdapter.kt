@@ -36,7 +36,7 @@ class EstateListAdapter(private val clickListener: EstateListener) :
             binding.clickListener = clickListener
             // if SOLD
             if (item.estate?.endTime != null) {
-                binding.estateSoldTag.visibility = View.VISIBLE
+                binding.detailSoldTag.visibility = View.VISIBLE
                 binding.itemEstateThirdLine.visibility = View.INVISIBLE
             }
 

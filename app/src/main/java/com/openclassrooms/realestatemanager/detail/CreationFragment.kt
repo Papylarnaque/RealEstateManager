@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.detail
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +25,14 @@ import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
 import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.utils.KUtil
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 
+
 val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
+const val DATEFORMAT = "dd/MM/yyyy"
 
 class CreationFragment : Fragment() {
 
@@ -39,7 +45,10 @@ class CreationFragment : Fragment() {
     private var errorMessage: String? = null
     private var editMode = false
     private var estateKey = System.currentTimeMillis()
+    private var endTime: Long? = null
     private lateinit var allEmployees: List<Employee>
+    private val formatter = SimpleDateFormat(DATEFORMAT, Locale.US)
+    private val calendar: Calendar = Calendar.getInstance()
 
     // Late init var
     private lateinit var binding: FragmentCreationBinding
@@ -106,6 +115,7 @@ class CreationFragment : Fragment() {
             setTypeSpinner()
             setEmployeeSpinner()
             setPoisCheckList()
+            bindDates()
             binding.editEstateAvailability.visibility = View.VISIBLE
         })
     }
@@ -129,6 +139,37 @@ class CreationFragment : Fragment() {
             selectPicture.launch(IMAGE_MIME_TYPE)
         }
 
+        binding.editEstateAvailability.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!isChecked && detailedEstate.estate?.endTime == null) {
+                // Get Current Date
+                val c = Calendar.getInstance()
+                val mYear = c[Calendar.YEAR]
+                val mMonth = c[Calendar.MONTH]
+                val mDay = c[Calendar.DAY_OF_MONTH]
+
+
+                val datePickerDialog = DatePickerDialog(
+                    requireContext(),
+                    { view, year, monthOfYear, dayOfMonth ->
+                        val c1 = Calendar.getInstance()
+                        c1.set(Calendar.YEAR, year)
+                        c1.set(Calendar.MONTH, monthOfYear)
+                        c1.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        endTime = c1.timeInMillis
+                        bindSoldDate()
+                    }, mYear, mMonth, mDay
+                )
+
+                datePickerDialog.setTitle(R.string.create_pickerdate_title)
+                datePickerDialog.datePicker.minDate = estateKey
+                datePickerDialog.show()
+
+            } else if (isChecked) {
+                binding.createDateSold.visibility = View.INVISIBLE
+            }
+        }
+
+
         binding.createEstate.setOnClickListener {
             val estate = shareEstate()
             if (!errorMessage.isNullOrEmpty()) {
@@ -138,7 +179,6 @@ class CreationFragment : Fragment() {
                 viewModel.saveEstate(editMode, estate, listPicture)
             }
         }
-
         if (editMode) {
             viewModel.getEstatePictures(estateKey).observe(viewLifecycleOwner, {
                 it?.let {
@@ -156,6 +196,37 @@ class CreationFragment : Fragment() {
 
     }
 
+    private fun bindSoldDate() {
+        if (endTime!! < estateKey) {
+            KUtil.infoSnackBar(requireView(), getString(R.string.create_endtime_error_text))
+        } else {
+            calendar.timeInMillis = endTime!!
+            binding.createDateSold.text = getString(
+                R.string.detail_date_sold,
+                formatter.format(calendar.time)
+            )
+            binding.createDateSold.visibility = View.VISIBLE
+        }
+    }
+
+
+    private fun bindDates() {
+        calendar.timeInMillis = detailedEstate.estate?.startTime!!
+        binding.createDateStart.text = getString(
+            R.string.detail_date_start,
+            formatter.format(calendar.time)
+        )
+
+        if (detailedEstate.estate!!.endTime != null) {
+            calendar.timeInMillis = detailedEstate.estate!!.endTime!!
+            binding.createDateSold.text = getString(
+                R.string.detail_date_sold,
+                formatter.format(calendar.time)
+            )
+            binding.createDateSold.visibility = View.VISIBLE
+        }
+    }
+
     //----------------- MANAGE ESTATE ---------------------//
     /**
      * Handle Estate data
@@ -163,18 +234,18 @@ class CreationFragment : Fragment() {
     private fun shareEstate(): Estate {
         return Estate(
             startTime = estateKey,
+            endTime = getEstateAvailability(),
             estateCity = getEstateCity(),
             estateCityPostalCode = getEstatePostalCode(),
             estateStreetNumber = getEstateStreetNumber(),
             estateStreet = getEstateStreet(),
             estateRooms = getRooms(),
             estateSurface = getSurface(),
-            estatePrice = getPrice(),
-            estateDescription = getDescription(),
-            estateTypeId = getType(),
+            estatePois = getPois(),
             employeeId = getEmployee(),
-            endTime = getEstateAvailability(),
-            estatePois = getPois()
+            estateDescription = getDescription(),
+            estatePrice = getPrice(),
+            estateTypeId = getType(),
         )
     }
 
@@ -369,10 +440,9 @@ class CreationFragment : Fragment() {
     }
 
     private fun getEstateAvailability(): Long? {
-        return if (binding.editEstateAvailability.isChecked) {
-            null
-        } else {
-            System.currentTimeMillis()
+        return when {
+            binding.editEstateAvailability.isChecked -> null
+            else -> this.endTime
         }
     }
 

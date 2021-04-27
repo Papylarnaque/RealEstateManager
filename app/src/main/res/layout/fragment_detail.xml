@@ -13,7 +13,7 @@
     </data>
 
     <ScrollView
-        android:id="@+id/detail_estate_scrollview"
+        android:id="@+id/detailEstateScrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -26,7 +26,7 @@
 
             <!--    TITLE    -->
             <TextView
-                android:id="@+id/detail_title_type_text"
+                android:id="@+id/detailTitleType"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -41,15 +41,15 @@
                 tools:text="HOUSE" />
 
             <TextView
-                android:id="@+id/detail_title_surface_text"
+                android:id="@+id/detailTitleSurface"
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/margin_normal"
                 android:paddingEnd="@dimen/margin_normal"
                 android:text='@{detailedEstate.estate.estateSurface==null ? "" : @string/detail_estate_title_surface_text(Integer.toString(detailedEstate.estate.estateSurface))}'
-                app:layout_constraintBottom_toBottomOf="@id/detail_title_type_text"
-                app:layout_constraintStart_toEndOf="@+id/detail_title_type_text"
-                app:layout_constraintTop_toTopOf="@id/detail_title_type_text"
+                app:layout_constraintBottom_toBottomOf="@id/detailTitleType"
+                app:layout_constraintStart_toEndOf="@+id/detailTitleType"
+                app:layout_constraintTop_toTopOf="@id/detailTitleType"
                 tools:text="250 m²" />
 
             <!--    PICTURES    -->
@@ -61,7 +61,7 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_title_type_text"
+                app:layout_constraintTop_toBottomOf="@id/detailTitleType"
                 tools:listitem="@layout/item_detail_estate_pictures" />
 
             <TextView
@@ -89,10 +89,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/detail_description_title_text"
                 tools:text="@string/lorem_ipsum" />
 
-            <!--///////// Price /////////-->
+            <!--  Price  -->
 
             <ImageView
-                android:id="@+id/detail_price_image"
+                android:id="@+id/detailPriceImage"
                 android:layout_width="@dimen/detail_content_image"
                 android:layout_height="@dimen/detail_content_image"
                 android:layout_marginStart="@dimen/margin_small"
@@ -100,186 +100,181 @@
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_money_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/detail_description_content_text"
-                tools:srcCompat="@drawable/ic_baseline_money_24" />
+                app:layout_constraintTop_toBottomOf="@+id/detail_description_content_text" />
 
             <TextView
-                android:id="@+id/detail_price_title"
+                android:id="@+id/detailPriceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/detail_price_title"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/detail_price_image"
-                app:layout_constraintTop_toTopOf="@id/detail_price_image"
+                app:layout_constraintStart_toEndOf="@id/detailPriceImage"
+                app:layout_constraintTop_toTopOf="@id/detailPriceImage"
                 tools:text="Price:" />
 
             <TextView
-                android:id="@+id/detail_price_content"
+                android:id="@+id/detailPriceContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{detailedEstate.estate.estatePrice== null ? "" : @string/detail_estate_price_text(Integer.toString(detailedEstate.estate.estatePrice)) }'
-                app:layout_constraintStart_toEndOf="@id/detail_price_image"
-                app:layout_constraintTop_toBottomOf="@id/detail_price_title"
+                app:layout_constraintStart_toEndOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@id/detailPriceTitle"
                 tools:text="1.000.000 $" />
 
             <!--///////// Surface /////////-->
 
             <ImageView
-                android:id="@+id/detail_surface_image"
+                android:id="@+id/detailSurfaceImage"
                 android:layout_width="@dimen/detail_content_image"
                 android:layout_height="@dimen/detail_content_image"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_surface_24"
-                app:layout_constraintStart_toStartOf="@id/detail_price_image"
-                app:layout_constraintTop_toBottomOf="@+id/detail_price_content"
-                tools:srcCompat="@drawable/ic_baseline_surface_24" />
+                app:layout_constraintStart_toStartOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@+id/detailPriceContent" />
 
             <TextView
-                android:id="@+id/detail_surface_title"
+                android:id="@+id/detailSurfaceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/detail_surface_title"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/detail_surface_image"
-                app:layout_constraintTop_toTopOf="@id/detail_surface_image"
+                app:layout_constraintStart_toEndOf="@id/detailSurfaceImage"
+                app:layout_constraintTop_toTopOf="@id/detailSurfaceImage"
                 tools:text="Surface:" />
 
             <TextView
-                android:id="@+id/detail_surface_content"
+                android:id="@+id/detailSurfaceContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{detailedEstate.estate.estateSurface==null ? "" : @string/detail_estate_title_surface_text(Integer.toString(detailedEstate.estate.estateSurface))}'
-                app:layout_constraintStart_toEndOf="@id/detail_surface_image"
-                app:layout_constraintTop_toBottomOf="@id/detail_surface_title"
+                app:layout_constraintStart_toEndOf="@id/detailSurfaceImage"
+                app:layout_constraintTop_toBottomOf="@id/detailSurfaceTitle"
                 tools:text="250 m²" />
 
             <!--///////// Rooms /////////-->
 
             <ImageView
-                android:id="@+id/detail_rooms_image"
+                android:id="@+id/detailRoomsImage"
                 android:layout_width="@dimen/detail_content_image"
                 android:layout_height="@dimen/detail_content_image"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_rooms_image_description"
                 android:src="@drawable/ic_baseline_rooms_24"
-                app:layout_constraintStart_toStartOf="@id/detail_price_image"
-                app:layout_constraintTop_toBottomOf="@+id/detail_surface_content"
-                tools:srcCompat="@drawable/ic_baseline_rooms_24" />
+                app:layout_constraintStart_toStartOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@+id/detailSurfaceContent" />
 
             <TextView
-                android:id="@+id/detail_rooms_text"
+                android:id="@+id/detailRoomsContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="@{@string/detail_estate_rooms_text(Integer.toString(detailedEstate.estate.estateRooms))}"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/detail_rooms_image"
-                app:layout_constraintTop_toTopOf="@id/detail_rooms_image"
+                app:layout_constraintStart_toEndOf="@id/detailRoomsImage"
+                app:layout_constraintTop_toTopOf="@id/detailRoomsImage"
                 tools:text="5 rooms" />
 
             <!--///////// Address /////////-->
 
             <ImageView
-                android:id="@+id/detail_address_image"
+                android:id="@+id/detailAddressImage"
                 android:layout_width="@dimen/detail_content_image"
                 android:layout_height="@dimen/detail_content_image"
                 android:layout_marginTop="@dimen/margin_large"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_address_24"
-                app:layout_constraintStart_toStartOf="@id/detail_price_image"
-                app:layout_constraintTop_toBottomOf="@+id/detail_rooms_text"
-                tools:srcCompat="@drawable/ic_baseline_address_24" />
+                app:layout_constraintStart_toStartOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@+id/detailRoomsContent" />
 
             <TextView
-                android:id="@+id/detail_address_title"
+                android:id="@+id/detailAddressTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/detail_address_title"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/detail_address_image"
-                app:layout_constraintTop_toTopOf="@id/detail_address_image"
+                app:layout_constraintStart_toEndOf="@id/detailAddressImage"
+                app:layout_constraintTop_toTopOf="@id/detailAddressImage"
                 tools:text="Address:" />
 
             <TextView
-                android:id="@+id/detail_address_streetnumber_content"
+                android:id="@+id/detailAddressStreetNumberContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text='@{detailedEstate.estate.estateStreetNumber==null ? "" : @string/detail_estate_address_streetnumber(detailedEstate.estate.estateStreetNumber)}'
-                app:layout_constraintStart_toEndOf="@id/detail_address_image"
-                app:layout_constraintTop_toBottomOf="@id/detail_address_title"
+                app:layout_constraintStart_toEndOf="@id/detailAddressImage"
+                app:layout_constraintTop_toBottomOf="@id/detailAddressTitle"
                 tools:text="10, " />
 
             <TextView
-                android:id="@+id/detail_address_street_content"
+                android:id="@+id/detailAddressStreetContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{detailedEstate.estate.estateStreet}"
-                app:layout_constraintStart_toEndOf="@id/detail_address_streetnumber_content"
-                app:layout_constraintTop_toBottomOf="@id/detail_address_title"
+                app:layout_constraintStart_toEndOf="@id/detailAddressStreetNumberContent"
+                app:layout_constraintTop_toBottomOf="@id/detailAddressTitle"
                 tools:text="rue des As" />
 
             <TextView
-                android:id="@+id/detail_address_postalcode_content"
+                android:id="@+id/detailAddressPostalContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text='@{detailedEstate.estate.estateCityPostalCode==null? "" : @string/detail_estate_address_postalcode(detailedEstate.estate.estateCityPostalCode)}'
-                app:layout_constraintStart_toStartOf="@id/detail_address_streetnumber_content"
-                app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
+                app:layout_constraintStart_toStartOf="@id/detailAddressStreetNumberContent"
+                app:layout_constraintTop_toBottomOf="@id/detailAddressStreetNumberContent"
                 tools:text="44000 " />
 
             <TextView
-                android:id="@+id/detail_address_city_content"
+                android:id="@+id/detailAddressCityContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{detailedEstate.estate.estateCity}"
-                app:layout_constraintStart_toEndOf="@id/detail_address_postalcode_content"
-                app:layout_constraintTop_toBottomOf="@id/detail_address_streetnumber_content"
+                app:layout_constraintStart_toEndOf="@id/detailAddressPostalContent"
+                app:layout_constraintTop_toBottomOf="@id/detailAddressStreetNumberContent"
                 tools:text="Nantes" />
 
             <!--///////// Pois /////////-->
 
             <ImageView
-                android:id="@+id/detail_pois_image"
+                android:id="@+id/detailPoisImage"
                 android:layout_width="@dimen/detail_content_image"
                 android:layout_height="@dimen/detail_content_image"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:contentDescription="@string/detail_surface_image_description"
                 android:src="@drawable/ic_baseline_pois_24"
-                app:layout_constraintStart_toStartOf="@id/detail_price_image"
-                app:layout_constraintTop_toBottomOf="@+id/detail_address_postalcode_content"
-                tools:srcCompat="@drawable/ic_baseline_address_24" />
+                app:layout_constraintStart_toStartOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@+id/detailAddressPostalContent" />
 
             <TextView
-                android:id="@+id/detail_pois_title"
+                android:id="@+id/detailPoisTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/detail_pois_title"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/detail_pois_image"
-                app:layout_constraintTop_toTopOf="@id/detail_pois_image"
+                app:layout_constraintStart_toEndOf="@id/detailPoisImage"
+                app:layout_constraintTop_toTopOf="@id/detailPoisImage"
                 tools:text="@string/detail_pois_title" />
 
             <TextView
-                android:id="@+id/detail_pois_content"
+                android:id="@+id/detailPoisContent"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
-                tools:text="School, Town Hall"
-                app:layout_constraintStart_toEndOf="@id/detail_address_image"
-                app:layout_constraintTop_toBottomOf="@id/detail_pois_title" />
+                app:layout_constraintStart_toEndOf="@id/detailAddressImage"
+                app:layout_constraintTop_toBottomOf="@id/detailPoisTitle"
+                tools:text="School, Town Hall" />
 
             <!--///////// Employee /////////-->
 
             <TextView
-                android:id="@+id/detail_employee_text"
+                android:id="@+id/detailEmployee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -288,17 +283,48 @@
                 android:text="@{@string/detail_employee_text(detailedEstate.employee.employeeFirstName, detailedEstate.employee.employeeLastName)}"
                 android:textAlignment="center"
                 app:drawableLeftCompat="@drawable/ic_baseline_person_24"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_pois_content"
+                app:layout_constraintTop_toBottomOf="@id/detailPoisContent"
                 tools:text="Estate managed by \nEtienne DESCAMPS" />
 
+            <!--///////// DATES /////////-->
+
+            <TextView
+                android:id="@+id/detailDateStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:autofillHints=""
+                android:drawablePadding="@dimen/margin_small"
+                android:ems="10"
+                app:drawableStartCompat="@drawable/ic_calendar_24"
+                app:layout_constraintStart_toStartOf="@id/detailPriceImage"
+                app:layout_constraintTop_toBottomOf="@id/detailEmployee"
+                tools:layout_editor_absoluteX="51dp"
+                tools:layout_editor_absoluteY="665dp"
+                tools:text="Created on \n25/12/2020" />
+
+            <TextView
+                android:id="@+id/detailDateSold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:autofillHints=""
+                android:drawablePadding="@dimen/margin_small"
+                android:ems="10"
+                android:visibility="invisible"
+                app:drawableStartCompat="@drawable/ic_calendar_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailEmployee"
+                tools:layout_editor_absoluteX="51dp"
+                tools:layout_editor_absoluteY="665dp"
+                tools:text="Sold on \n01/01/2021" />
 
             <!--///////// Sold TAG /////////-->
 
             <ImageView
-                android:id="@+id/estate_sold_tag"
+                android:id="@+id/detailSoldTag"
                 android:layout_width="@dimen/item_estate_height"
                 android:layout_height="@dimen/item_estate_height"
                 android:contentDescription="@string/sold_tag_description"
@@ -306,6 +332,7 @@
                 android:visibility="@{detailedEstate.estate.endTime!=null? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

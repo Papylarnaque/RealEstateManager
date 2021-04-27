@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.repository.*
 import com.openclassrooms.realestatemanager.utils.Source
 import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
+import com.openclassrooms.realestatemanager.utils.getImagesFolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -100,24 +101,13 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
 //----------------- MANAGE PICTURES --------------------//
 
-    private fun getImagesFolder(context: Context): File {
-        return File(context.filesDir, "images/").also {
-            if (!it.exists()) {
-                it.mkdir()
-            }
-        }
-    }
 
     fun saveImageFromCamera(bitmap: Bitmap): String {
         val imageFile = File(imagesFolder, generateFilename(Source.CAMERA))
         val imageStream = FileOutputStream(imageFile)
-
         Log.i("TakePicture", "$imageFile")
 
         compressPicture(bitmap, imageStream)
-
-
-//        sharePictureURI(imageFile.path)
         return imageFile.path
     }
 
