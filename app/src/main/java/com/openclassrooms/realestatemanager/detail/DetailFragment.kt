@@ -14,6 +14,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
+import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +59,6 @@ class DetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //get item id to handle item clicks
         when (item.itemId) {
-
             R.id.edit_estate -> {
                 //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
@@ -67,6 +67,23 @@ class DetailFragment : Fragment() {
                         DetailFragmentDirections
                             .actionDetailFragmentToCreationFragment(detailedEstate.estate!!.startTime)
                     )
+            }
+
+            R.id.convert_price -> {
+                with(binding.detailPriceContent.text) {
+                    if (this.contains("$")) { // convert to euro
+                        binding.detailPriceContent.text = getString(
+                            R.string.detail_estate_price_euro,
+                            detailedEstate.estate?.estatePrice?.let { Utils.convertDollarToEuro(it) }
+                                .toString()
+                        )
+                    } else { // convert to dollar
+                        binding.detailPriceContent.text = getString(
+                            R.string.detail_estate_price_dollar,
+                            detailedEstate.estate?.estatePrice.toString()
+                        )
+                    }
+                }
             }
 
             android.R.id.home -> {

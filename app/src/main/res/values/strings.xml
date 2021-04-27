@@ -12,7 +12,8 @@
     <string name="detail_estate_title_surface_text">%1$s m²</string>
     <string name="detail_description_title_text">Description:</string>
     <string name="detail_price_title">Price:</string>
-    <string name="detail_estate_price_text">%1$s $</string>
+    <string name="detail_estate_price_dollar">%1$s $</string>
+    <string name="detail_estate_price_euro">%1$s €</string>
     <string name="detail_surface_title">"Surface: "</string>
     <string name="detail_estate_rooms_text">%1$s rooms</string>
     <string name="string_detail_not_selected_text">No estate selected</string>

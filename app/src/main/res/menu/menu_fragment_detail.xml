@@ -10,4 +10,10 @@
         android:title="@string/add_property_text"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/convert_price"
+        android:icon="@drawable/ic_baseline_money_24"
+        android:title="@string/add_property_text"
+        app:showAsAction="always" />
+
 </menu>
