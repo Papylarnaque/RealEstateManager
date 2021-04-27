@@ -75,20 +75,18 @@ class CreationFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         if (args.estateKey != -1L) {
             estateKey = args.estateKey
             editMode = true
             (activity as MainActivity).supportActionBar!!.title =
                 getString(R.string.edit_estate_titlebar)
         }
-        super.onCreate(savedInstanceState)
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
         binding = FragmentCreationBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
 
@@ -281,7 +279,7 @@ class CreationFragment : Fragment() {
 
             if (editMode)
                 detailedEstate.type?.let { t ->
-                    typesSpinner.setSelection(t.typeId)
+                    typesSpinner.setText(t.typeName, false)
                 }
             else
                 typesSpinner.setSelection(0)
