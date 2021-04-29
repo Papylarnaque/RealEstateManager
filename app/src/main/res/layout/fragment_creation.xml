@@ -114,7 +114,7 @@
                         android:id="@+id/create_price_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:drawableStart="@drawable/ic_baseline_money_24"
+                        android:drawableStart="@drawable/ic_baseline_dollar_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="number|textMultiLine"
                         android:maxLength="@integer/create_price_maximum_length"

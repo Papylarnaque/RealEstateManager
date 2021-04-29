@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.activity.addCallback
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -72,12 +73,27 @@ class DetailFragment : Fragment() {
             R.id.convert_price -> {
                 with(binding.detailPriceContent.text) {
                     if (this.contains("$")) { // convert to euro
+                        item.icon = getDrawable(requireContext(), R.drawable.ic_baseline_dollar_24)
+                        binding.detailPriceImage.setImageDrawable(
+                            getDrawable(
+                                requireContext(),
+                                R.drawable.ic_baseline_euro_24
+                            )
+                        )
+
                         binding.detailPriceContent.text = getString(
                             R.string.detail_estate_price_euro,
                             detailedEstate.estate?.estatePrice?.let { Utils.convertDollarToEuro(it) }
                                 .toString()
                         )
                     } else { // convert to dollar
+                        item.icon = getDrawable(requireContext(), R.drawable.ic_baseline_euro_24)
+                        binding.detailPriceImage.setImageDrawable(
+                            getDrawable(
+                                requireContext(),
+                                R.drawable.ic_baseline_dollar_24
+                            )
+                        )
                         binding.detailPriceContent.text = getString(
                             R.string.detail_estate_price_dollar,
                             detailedEstate.estate?.estatePrice.toString()

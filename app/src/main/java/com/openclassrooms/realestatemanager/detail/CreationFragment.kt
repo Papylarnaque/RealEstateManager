@@ -17,10 +17,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.model.DetailedEstate
-import com.openclassrooms.realestatemanager.database.model.Employee
-import com.openclassrooms.realestatemanager.database.model.Estate
-import com.openclassrooms.realestatemanager.database.model.Picture
+import com.openclassrooms.realestatemanager.database.model.*
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
 import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
 import com.openclassrooms.realestatemanager.utils.KUtil
@@ -46,7 +43,6 @@ class CreationFragment : Fragment() {
     private var editMode = false
     private var estateKey = System.currentTimeMillis()
     private var endTime: Long? = null
-    private lateinit var allEmployees: List<Employee>
     private val formatter = SimpleDateFormat(DATEFORMAT, Locale.US)
     private val calendar: Calendar = Calendar.getInstance()
 
@@ -58,7 +54,9 @@ class CreationFragment : Fragment() {
     private lateinit var typesSpinner: AutoCompleteTextView
     private lateinit var employeesSpinner: AutoCompleteTextView
     private lateinit var poiChipGroup: ChipGroup
+    private lateinit var allTypes: List<Type>
     private lateinit var types: List<String>
+    private lateinit var allEmployees: List<Employee>
     private lateinit var employees: List<String>
     private lateinit var estatePoisIdList: List<String>
 
@@ -272,6 +270,7 @@ class CreationFragment : Fragment() {
         typesSpinner = binding.createEstateTypeSpinnerEdit
 
         viewModel.allTypes().observe(viewLifecycleOwner, { it ->
+            allTypes = it
             types = it.map { it.typeName }
 
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, types)
@@ -336,11 +335,12 @@ class CreationFragment : Fragment() {
 
 
     private fun getType(): Int {
-        return if (typesSpinner.selectionStart == 0) {
+        val spinnerIndex = types.indexOf(typesSpinner.text.toString())
+        return if (spinnerIndex == -1) {
             errorMessage = getString(R.string.create_type_error_text)
             0
         } else {
-            types.indexOf(typesSpinner.text.toString()) + 1
+            allTypes[spinnerIndex].typeId
         }
     }
 
