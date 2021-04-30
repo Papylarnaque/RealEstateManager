@@ -67,6 +67,7 @@
     <string name="sold_tag_description">Sold tag on the estate</string>
     <string name="create_pickerdate_title">Select the sale date</string>
     <string name="create_endtime_error_text">Sale date should be later than creation date</string>
+    <string name="detail_map_description">Static map for the estate</string>
 
 
 </resources>

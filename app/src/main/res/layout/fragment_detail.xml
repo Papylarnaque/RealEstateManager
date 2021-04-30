@@ -89,6 +89,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/detail_description_title_text"
                 tools:text="@string/lorem_ipsum" />
 
+
+            <!--  STATIC MAP  -->
+
+
+            <ImageView
+                android:id="@+id/detailMapView"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:background="@drawable/layout_border"
+                android:contentDescription="@string/detail_map_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/detailPriceImage"
+                app:srcCompat="@mipmap/ic_launcher" />
+
             <!--  Price  -->
 
             <ImageView
@@ -332,6 +347,7 @@
                 android:visibility="@{detailedEstate.estate.endTime!=null? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

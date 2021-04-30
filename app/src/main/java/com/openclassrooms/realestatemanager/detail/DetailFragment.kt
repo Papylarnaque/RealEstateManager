@@ -11,10 +11,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.load
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
+import com.openclassrooms.realestatemanager.utils.StaticMapBuilder.Companion.buildUrl
 import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 import java.text.SimpleDateFormat
@@ -139,8 +141,16 @@ class DetailFragment : Fragment() {
         pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
         bindDates()
         bindPois()
+        bindMapView()
         binding.executePendingBindings()
     }
+
+    private fun bindMapView() {
+        val staticUrl = buildUrl(detailedEstate)
+        binding.detailMapView.load(staticUrl)
+        Log.i("DetailFragment", "Static MAP url = $staticUrl")
+    }
+
 
     private fun bindDates() {
         val dateFormat = "dd/MM/yyyy"
