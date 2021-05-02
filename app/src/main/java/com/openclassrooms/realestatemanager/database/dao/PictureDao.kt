@@ -43,7 +43,10 @@ interface PictureDao {
     @Query("SELECT * FROM picture_table ORDER BY order_number")
     fun getAllPictures(): LiveData<List<Picture>>
 
-    @Query("DELETE FROM poi_table")
+    @Query("DELETE FROM picture_table")
     fun deleteAll()
+
+    @Query("DELETE FROM picture_table WHERE picture_url= :pictureUrl")
+    fun deletePicture(pictureUrl: String)
 
 }

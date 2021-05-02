@@ -68,6 +68,14 @@
     <string name="create_pickerdate_title">Select the sale date</string>
     <string name="create_endtime_error_text">Sale date should be later than creation date</string>
     <string name="detail_map_description">Static map for the estate</string>
+    <string name="create_picture_name_hint">Picture name</string>
+    <string name="create_picture_delete_dialog_title">Delete picture</string>
+    <string name="create_picture_delete_dialog_message">The picture will be permanently deleted.</string>
+    <string name="create_picture_delete_dialog_confirmation">Picture deleted</string>
+    <string name="create_picture_delete_dialog_positivebutton">Confirm picture deletion</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="create_picture_click_dialog_title">Update picture name</string>
+    <string name="create_picture_click_dialog_positivebutton">Confirm modifications</string>
 
 
 </resources>

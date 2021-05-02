@@ -10,6 +10,10 @@
             type="com.openclassrooms.realestatemanager.detail.CreatePictureListener" />
 
         <variable
+            name="deleteListener"
+            type="com.openclassrooms.realestatemanager.detail.DeletePictureListener" />
+
+        <variable
             name="picture"
             type="com.openclassrooms.realestatemanager.database.model.Picture" />
     </data>
@@ -53,7 +57,7 @@
             android:layout_marginEnd="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_small"
             android:background="@drawable/layout_circle"
-            android:onClick="@{() -> clickListener.delete(picture)}"
+            android:onClick="@{() -> deleteListener.delete(picture)}"
             android:contentDescription="@string/item_estate_picture_description"
             android:src="@drawable/ic_baseline_delete_forever_24"
             app:layout_constraintTop_toTopOf="@id/item_estate_picture"

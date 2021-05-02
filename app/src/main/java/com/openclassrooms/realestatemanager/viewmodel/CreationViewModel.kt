@@ -75,10 +75,15 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     private fun savePictures(listPicture: List<Picture>) {
         for (picture in listPicture) {
+            // check if picture is already stored in app folder, otherwise copy file in it
             if (!picture.url.contains(imagesFolder.path, true))
                 picture.url = copyImageFromUriToAppFolder(picture.url.toUri())
-            viewModelScope.launch { pictureRepository.insert(picture) }
+            insertPicture(picture)
         }
+    }
+
+    fun insertPicture(picture: Picture) {
+        viewModelScope.launch { pictureRepository.insert(picture) }
     }
 
 
@@ -135,6 +140,16 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
         return imageFile.toString()
     }
 
+
+    fun deletePicture(picture: Picture) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val myFile = File(picture.url)
+                if (myFile.exists()) myFile.delete()
+                pictureRepository.deletePicture(picture)
+            }
+        }
+    }
 
 //------------------ NOTIFICATIONS ---------------------//
 

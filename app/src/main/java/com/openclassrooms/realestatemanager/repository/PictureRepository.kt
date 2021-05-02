@@ -7,8 +7,6 @@ import com.openclassrooms.realestatemanager.database.model.Picture
 
 class PictureRepository(private val pictureDao: PictureDao) {
 
-    val allPictures: LiveData<List<Picture>> = pictureDao.getAllPictures()
-
     suspend fun insert(picture: Picture) {
         pictureDao.insert(picture)
     }
@@ -24,6 +22,10 @@ class PictureRepository(private val pictureDao: PictureDao) {
 
     fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
         return pictureDao.getEstatePictures(estateKey)
+    }
+
+    fun deletePicture(picture: Picture) {
+        pictureDao.deletePicture(picture.url)
     }
 
 }

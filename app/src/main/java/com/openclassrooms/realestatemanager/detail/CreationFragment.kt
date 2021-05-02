@@ -1,12 +1,15 @@
 package com.openclassrooms.realestatemanager.detail
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,17 +30,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
-
 val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 const val DATEFORMAT = "dd/MM/yyyy"
 
 class CreationFragment : Fragment() {
 
     // TODO Keep typed data while rotating device
-    private val pictureListAdapter = CreatePictureListAdapter(CreatePictureListener {
-        //   picture ->
-        //   TODO() Handle picture click for rename / delete picture
-    })
     private val args: CreationFragmentArgs by navArgs()
     private var errorMessage: String? = null
     private var editMode = false
@@ -45,12 +43,16 @@ class CreationFragment : Fragment() {
     private var endTime: Long? = null
     private val formatter = SimpleDateFormat(DATEFORMAT, Locale.US)
     private val calendar: Calendar = Calendar.getInstance()
+    private var listPicture: MutableList<Picture> = ArrayList()
+    private val pictureListAdapter = CreatePictureListAdapter(
+        CreatePictureListener {
+            onPictureClicked(it)
+        }, DeletePictureListener { onPictureBinClicked(it) })
 
     // Late init var
     private lateinit var binding: FragmentCreationBinding
     private lateinit var viewModel: CreationViewModel
     private lateinit var detailedEstate: DetailedEstate
-    private var listPicture: MutableList<Picture> = ArrayList()
     private lateinit var typesSpinner: AutoCompleteTextView
     private lateinit var employeesSpinner: AutoCompleteTextView
     private lateinit var poiChipGroup: ChipGroup
@@ -73,7 +75,6 @@ class CreationFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -87,7 +88,6 @@ class CreationFragment : Fragment() {
 
         binding = FragmentCreationBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(CreationViewModel::class.java)
-
         initBindings()
         return binding.root
     }
@@ -97,7 +97,7 @@ class CreationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    //------------------- MANAGE VIEW ----------------------//
+//------------------- MANAGE VIEW ----------------------//
 
     /**
      * EDIT MODE specific bindings
@@ -188,8 +188,6 @@ class CreationFragment : Fragment() {
             setEmployeeSpinner()
             setPoisCheckList()
         }
-
-
     }
 
     private fun bindSoldDate() {
@@ -223,7 +221,7 @@ class CreationFragment : Fragment() {
         }
     }
 
-    //----------------- MANAGE ESTATE ---------------------//
+//----------------- MANAGE ESTATE ---------------------//
     /**
      * Handle Estate data
      */
@@ -245,7 +243,7 @@ class CreationFragment : Fragment() {
         )
     }
 
-    //----------- Estate Data for Creation ----------------//
+//----------- Estate Data for Creation ----------------//
 
     private fun savePictures(pictureUrl: String) {
         listPicture.add(
@@ -264,7 +262,7 @@ class CreationFragment : Fragment() {
     }
 
 
-    //----------- Spinners Configuration ----------------//
+//----------- Spinners Configuration ----------------//
 
     private fun setTypeSpinner() {
         typesSpinner = binding.createEstateTypeSpinnerEdit
@@ -309,6 +307,7 @@ class CreationFragment : Fragment() {
 
     private fun setPoisCheckList() {
         if (editMode) {
+            // TODO() in repository
             estatePoisIdList = detailedEstate.estate?.estatePois!!.split("|")
         }
         poiChipGroup = binding.createPoisChipGroup
@@ -331,8 +330,7 @@ class CreationFragment : Fragment() {
         })
     }
 
-    //----------- Estate Data for Creation ----------------//
-
+//----------- Estate Data for Creation ----------------//
 
     private fun getType(): Int {
         val spinnerIndex = types.indexOf(typesSpinner.text.toString())
@@ -444,7 +442,7 @@ class CreationFragment : Fragment() {
         }
     }
 
-    //------------------- ESTATE SAVED ---------------------//
+//------------------- ESTATE SAVED ---------------------//
 
     private fun navigateAfterSaveClick() {
         // When an item is clicked.
@@ -463,5 +461,69 @@ class CreationFragment : Fragment() {
     else
         KUtil.infoSnackBar(requireView(), getString(R.string.create_estate_confirmation))
 
+
+    // ----------- PICTURE CLICK HANDLING ---------//
+
+
+    private fun onPictureClicked(picture: Picture) {
+        //   TODO() Handle picture click for rename / delete picture
+        openPictureRenameDialog(picture)
+    }
+
+    private fun openPictureRenameDialog(picture: Picture) {
+
+        val builder = AlertDialog.Builder(requireContext())
+
+        val editPictureName = EditText(activity);
+        editPictureName.setText(picture.displayName)
+        with(builder)
+        {
+            setTitle(getString(R.string.create_picture_click_dialog_title))
+            setView(editPictureName)
+
+            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                picture.displayName = editPictureName.text.toString()
+                viewModel.insertPicture(picture)
+                notifyPicturesChanged(listPicture)
+            }
+
+            val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+                dialog.dismiss()
+            }
+
+            setPositiveButton(getString(R.string.create_picture_click_dialog_positivebutton), positiveButtonClick)
+            setNegativeButton(getString(R.string.cancel_dialog), negativeButtonClick)
+            show()
+        }
+    }
+
+    private fun onPictureBinClicked(picture: Picture) {
+        openPictureDeleteDialog(picture)
+    }
+
+    private fun openPictureDeleteDialog(picture: Picture) {
+        val builder = AlertDialog.Builder(requireContext())
+
+        with(builder)
+        {
+            setTitle(getString(R.string.create_picture_delete_dialog_title))
+            setMessage(getString(R.string.create_picture_delete_dialog_message))
+
+            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                viewModel.deletePicture(picture) // async deletion
+                listPicture.remove(picture) // delete then refresh view
+                notifyPicturesChanged(listPicture)
+                KUtil.infoSnackBar(requireView(), getString(R.string.create_picture_delete_dialog_confirmation))
+            }
+
+            val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+                dialog.dismiss()
+            }
+
+            setPositiveButton(getString(R.string.create_picture_delete_dialog_positivebutton), positiveButtonClick)
+            setNegativeButton(getString(R.string.cancel_dialog), negativeButtonClick)
+            show()
+        }
+    }
 
 }
