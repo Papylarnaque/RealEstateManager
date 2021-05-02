@@ -3,6 +3,10 @@ package com.openclassrooms.realestatemanager.utils
 import com.openclassrooms.realestatemanager.BuildConfig
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 
+const val URL_ZOOM = 14
+const val URL_ZOOM_RATIO = 175
+const val URL_MARKER_SIZE = "tiny"
+
 class StaticMapBuilder {
 
 
@@ -12,6 +16,7 @@ class StaticMapBuilder {
             val number: Int? = detailedEstate.estate?.estateStreetNumber
             val street: String? = detailedEstate.estate?.estateStreet
             val city: String? = detailedEstate.estate?.estateCity
+            val postal: String? = detailedEstate.estate?.estateCityPostalCode
 
             val addressBuilder: StringBuilder = StringBuilder()
             addressBuilder.append(number)
@@ -19,14 +24,16 @@ class StaticMapBuilder {
             addressBuilder.append(street)
             addressBuilder.append("+")
             addressBuilder.append(city)
+            addressBuilder.append("+")
+            addressBuilder.append(postal)
 
             val urlBase = "https://maps.googleapis.com/maps/api/staticmap?"
             val separator = "&"
             val urlCenter = "center="
-            val urlZoom = "zoom=14"
-            val urlSize = "size=200x200"
+            val urlZoom = "zoom=$URL_ZOOM"
+            val urlSize = "size=$URL_ZOOM_RATIO"+"x$URL_ZOOM_RATIO"
             val urlMarkers = "markers="
-            val urlMarkersSize = "size:tiny"
+            val urlMarkersSize = "size:$URL_MARKER_SIZE"
             val urlKey = "key="
             val key = BuildConfig.STATIC_MAP_KEY
             val strBuilder: StringBuilder = StringBuilder()
