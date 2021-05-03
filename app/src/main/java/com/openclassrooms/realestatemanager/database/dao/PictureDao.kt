@@ -34,7 +34,7 @@ interface PictureDao {
      *
      * @param estateId to match
      */
-    @Query("SELECT * FROM picture_table WHERE estate_id = :estateId")
+    @Query("SELECT * FROM picture_table WHERE estate_id = :estateId ORDER BY order_number ASC")
     fun getEstatePictures(estateId: Long): LiveData<List<Picture>>
 
     /**
