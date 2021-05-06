@@ -5,7 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/listFragment">
 
-
     <fragment
         android:id="@+id/listFragment"
         android:name="com.openclassrooms.realestatemanager.list.EstateListFragment"
@@ -25,6 +24,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@anim/slide_out_up" />
+        <action
+            android:id="@+id/action_listFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
 
     <fragment
@@ -72,6 +74,19 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_up" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.openclassrooms.realestatemanager.map.MapFragment"
+        android:label="MapFragment" >
+        <argument
+            android:name="estateKey"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_mapFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
 
 </navigation>

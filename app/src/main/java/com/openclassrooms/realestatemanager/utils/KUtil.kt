@@ -15,13 +15,13 @@ class KUtil {
     companion object {
         fun infoSnackBar(view: View, MESSAGE: String) {
             val snackBar = Snackbar.make(
-                    view, MESSAGE,
-                    Snackbar.LENGTH_LONG
+                view, MESSAGE,
+                Snackbar.LENGTH_LONG
             )
             val snackBarView = snackBar.view
             snackBarView.setBackgroundColor(Color.BLACK)
             val textView =
-                    snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+                snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
             textView.setTextColor(Color.WHITE)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 textView.textAlignment = View.TEXT_ALIGNMENT_CENTER;
@@ -31,6 +31,5 @@ class KUtil {
             snackBar.show()
         }
     }
-
 
 }

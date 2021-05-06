@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set up the action bar for use with the NavController
         setupActionBarWithNavController(navController)
+
     }
 
 
@@ -45,5 +46,12 @@ class MainActivity : AppCompatActivity() {
     private fun isTwoPane() {
         twoPane = findViewById<View>(R.id.detail_fragment_container) != null
     }
+
+
+
+
+
+
+
 
 }

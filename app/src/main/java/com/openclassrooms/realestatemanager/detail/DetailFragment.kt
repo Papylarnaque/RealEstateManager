@@ -41,10 +41,7 @@ class DetailFragment : Fragment() {
 
         initBindings()
         getEstate()
-
         setBackNav()
-
-
         return binding.root
     }
 

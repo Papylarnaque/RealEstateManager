@@ -46,6 +46,9 @@ data class Estate(
 
         @ColumnInfo(name = "city")
         val estateCity: String,
+//
+//        @ColumnInfo(name = "latlng")
+//        val estateLatlng: LatLng,
 
         @ColumnInfo(name = "postal_code")
         val estateCityPostalCode: String?,

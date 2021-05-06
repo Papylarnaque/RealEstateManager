@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
@@ -21,6 +22,7 @@ class EstateListFragment : Fragment() {
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
     private val viewModel: EstateListViewModel by viewModels()
+    private var detailedEstatesList: List<DetailedEstate> = emptyList()
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
     })
@@ -29,7 +31,7 @@ class EstateListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         initBindings()
         getEstates()
@@ -47,7 +49,7 @@ class EstateListFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_list, menu);
+        inflater.inflate(R.menu.menu_fragment_list, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -64,6 +66,12 @@ class EstateListFragment : Fragment() {
                 NavHostFragment.findNavController(this)
                     .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(-1L))
             }
+
+            R.id.open_map -> {
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.mapFragment)
+
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -76,16 +84,22 @@ class EstateListFragment : Fragment() {
     }
 
     private fun getEstates() {
-        viewModel.allDetailedEstates.observe(viewLifecycleOwner, {
-            it?.let {
-                estateListAdapter.submitList(it as MutableList<DetailedEstate>)
+        viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
+            it.let {
+                detailedEstatesList = it
+                notifyListChanged()
             }
-        })
+        }
+    }
+
+    private fun notifyListChanged() {
+        estateListAdapter.submitList(detailedEstatesList as MutableList<DetailedEstate>)
     }
 
     private fun onEstateClick() {
         // When an item is clicked.
-        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { it ->
+        // TODO Check Kotlin 1.4 observe simplification
+        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
             it?.let {
                 // If SINGLE layout mode
                 if (binding.detailFragmentContainer == null) {
@@ -101,7 +115,7 @@ class EstateListFragment : Fragment() {
                         .commit()
                 }
             }
-        })
+        }
     }
 
 

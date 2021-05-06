@@ -18,7 +18,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
+        manifestPlaceholders =
+                [GMAPS_API_KEY: apikeyProperties["GMAPS_API_KEY"]]
+
         buildConfigField("String", "STATIC_MAP_KEY", apikeyProperties['STATIC_MAP_KEY'])
+        buildConfigField("String", "GMAPS_API_KEY", apikeyProperties['GMAPS_API_KEY'])
+        buildConfigField("String", "GEOCODE_API_KEY", apikeyProperties['GEOCODE_API_KEY'])
     }
     buildTypes {
         release {
@@ -67,12 +72,27 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.fragment:fragment-ktx:1.3.3"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     // Glide to Coil
     implementation("io.coil-kt:coil:1.2.0")
+    // Maps
+    implementation "com.google.android.gms:play-services-maps:$google_play_services_version"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
 
     // Android KTX
     implementation 'androidx.core:core-ktx:1.3.2'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //OkHttp for API 19 support
+    //noinspection GradleDependency
+    implementation("com.squareup.okhttp3:okhttp:3.12.12") {
+        force = true //API 19 support
+    }
+    //noinspection GradleDependency
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.12'
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
@@ -102,7 +122,7 @@ dependencies {
     // Coroutines
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
 
-    // Roboelectri
+    // Roboelectric
     testImplementation 'org.robolectric:robolectric:4.4'
 
     // AndroidJUnitRunner and JUnit Rules for Unit Testing

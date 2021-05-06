@@ -98,11 +98,10 @@
                 android:layout_width="175dp"
                 android:layout_height="175dp"
                 android:layout_marginEnd="@dimen/margin_large"
-                android:background="@drawable/layout_border"
                 android:contentDescription="@string/detail_map_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/detailPriceImage"
-                app:srcCompat="@mipmap/ic_launcher" />
+                tools:srcCompat="@mipmap/ic_launcher" />
 
             <!--  Price  -->
 

@@ -76,6 +76,11 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="create_picture_click_dialog_title">Update picture name</string>
     <string name="create_picture_click_dialog_positivebutton">Confirm modifications</string>
+    <string name="convert_price">Convert estate price</string>
+    <string name="NO">NO</string>
+    <string name="camera_access_required">camera_access_required</string>
+    <string name="camera_permission_not_available">camera_permission_not_available</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
 
 
 </resources>

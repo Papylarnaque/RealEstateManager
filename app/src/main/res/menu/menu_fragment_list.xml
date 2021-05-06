@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_menu">
 
-
     <item
-        android:id="@+id/convert_price"
-        android:icon="@drawable/ic_baseline_euro_24"
-        android:title="@string/add_property_text"
+        android:id="@+id/open_map"
+        android:icon="@drawable/ic_baseline_gps_fixed_24"
+        android:title="MAPS"
         app:showAsAction="always" />
 
     <item
