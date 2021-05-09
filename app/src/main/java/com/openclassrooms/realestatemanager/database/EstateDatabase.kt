@@ -93,12 +93,12 @@ abstract class EstateDatabase : RoomDatabase() {
             // INSERT DATA
             employeeDao.insert(
                 Employee(
-                    employeeFirstName = "Etienne", employeeLastName = "DESCAMPS", employeeId = 1
+                    employeeFirstName = "Etienne", employeeLastName = "DOC", employeeId = 1
                 )
             )
             employeeDao.insert(
                 Employee(
-                    employeeFirstName = "Aurélie", employeeLastName = "RAYMOND", employeeId = 2
+                    employeeFirstName = "Aurélie", employeeLastName = "ROC", employeeId = 2
                 )
             )
 
@@ -107,6 +107,14 @@ abstract class EstateDatabase : RoomDatabase() {
             typeDao.insert(Type(typeId = 3, typeName = "Manor"))
             typeDao.insert(Type(typeId = 4, typeName = "Penthouse"))
 
+            poiDao.insert(Poi(poiId = 1, poiName = "Town hall"))
+            poiDao.insert(Poi(poiId = 2, poiName = "Shop"))
+            poiDao.insert(Poi(poiId = 3, poiName = "Primary School"))
+            poiDao.insert(Poi(poiId = 911, poiName = "Police Station"))
+            poiDao.insert(Poi(poiId = 1000, poiName = "Pharmacy"))
+            poiDao.insert(Poi(poiId = 4, poiName = "Municipal Garden"))
+            poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
+            poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
 
             estateDao.insert(
                 Estate(
@@ -126,16 +134,6 @@ abstract class EstateDatabase : RoomDatabase() {
                     estatePois = "1|5"
                 )
             )
-
-            poiDao.insert(Poi(poiId = 1, poiName = "Town hall"))
-            poiDao.insert(Poi(poiId = 2, poiName = "Shop"))
-            poiDao.insert(Poi(poiId = 3, poiName = "Primary School"))
-            poiDao.insert(Poi(poiId = 911, poiName = "Police Station"))
-            poiDao.insert(Poi(poiId = 1000, poiName = "Pharmacy"))
-            poiDao.insert(Poi(poiId = 4, poiName = "Municipal Garden"))
-            poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
-            poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
-
 
             Log.i("EstateDatabase", "Database populated")
         }

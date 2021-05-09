@@ -17,6 +17,4 @@ class DetailedEstate {
     @Relation(parentColumn = "employee_id", entityColumn = "employee_id", entity = Employee::class)
     var employee: Employee? = null
 
-//    @Relation(parentColumn = "poi_id", entityColumn = "poi_id", entity = Poi::class)
-//    var pois: Poi? = null
 }

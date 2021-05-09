@@ -10,15 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,7 +26,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.api.ResultAPIMap
@@ -36,31 +35,50 @@ import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.databinding.FragmentMapBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.service.GeocodeService
-import com.openclassrooms.realestatemanager.utils.KUtil
+import com.openclassrooms.realestatemanager.utils.hasPermission
 import com.openclassrooms.realestatemanager.utils.showSnackbar
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 import java.util.*
 
-open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
+const val INITIAL_ZOOM = 12f
+const val TAG = "MapFragment"
 
-    private val TAG = "MapFragment"
-    private val INITIAL_ZOOM = 12f
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
+
     private lateinit var binding: FragmentMapBinding
     private lateinit var navController: NavController
-    private var fusedLocationClient: FusedLocationProviderClient? = null
+
+    // The Fused Location Provider provides access to location APIs.
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission has been granted. Start camera preview Activity.
+                binding.root.showSnackbar(
+                    R.string.camera_permission_granted,
+                    Snackbar.LENGTH_INDEFINITE,
+                    R.string.ok
+                ) {
+                    requestCurrentLocation()
+                }
+            } else {
+                // Permission request was denied.
+                binding.root.showSnackbar(
+                    R.string.camera_permission_denied,
+                    Snackbar.LENGTH_SHORT,
+                    R.string.ok)
+            }
+        }
     private lateinit var mMap: MapView
     private lateinit var googleMap: GoogleMap
     private val viewModel: EstateListViewModel by viewModels()
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
     private lateinit var lastUserLocation: Location
-    private var locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult ?: return
-            for (location in locationResult.locations) {
-                lastUserLocation = location
-            }
-        }
-    }
+    private var cancellationTokenSource = CancellationTokenSource()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -73,15 +91,19 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
-//        val view = inflater.inflate(R.layout.fragment_map, container, false)
-
-//        mMap = view.findViewById(R.id.map) as MapView
         mMap = binding.map
         mMap.onCreate(savedInstanceState)
         mMap.getMapAsync(this)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-//        return view
+//        val permissionApproved =
+//            requireContext().hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+//
+//        if (permissionApproved) {
+//            requestCurrentLocation()
+//        }
+
+        checkPermissions()
+
         return binding.root
     }
 
@@ -99,14 +121,8 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         googleMap.setOnMyLocationButtonClickListener(this)
 
         getEstates()
-
-        if (!checkPermissions()) {
-            requestPermissions()
-        } else {
-            getLastLocation()
-        }
-        enableCompassButton(googleMap)
         mMapSetUpClickListener()
+//        enableCompassButton()
     }
 
     override fun onResume() {
@@ -128,6 +144,8 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
     override fun onStop() {
         super.onStop()
         mMap.onStop()
+        // Cancels location request (if in flight).
+        cancellationTokenSource.cancel()
     }
 
     override fun onDestroy() {
@@ -147,10 +165,6 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             it.let {
                 detailedEstatesList = it
                 for (estate in detailedEstatesList) {
-                    //                    if (estate.estate?.estateLatlng !=null){
-                    //                        setMarkers(estate)
-                    //                    } else {
-                    // Request each estate latlng
                     GeocodeService.getGeocode(estate)
                 }
             }
@@ -162,18 +176,11 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         ) { changedGeocodeResults ->
             //Do something with the changed value
             setMarkers(changedGeocodeResults)
-//                googleMap, LatLng(
-//                    changedGeocodeResults[0].geometry?.location?.lat!!,
-//                    changedGeocodeResults[0].geometry?.location?.lng!!
-//                )
-//            )
         }
 
     }
 
     private fun setMarkers(item: List<ResultAPIMap>) {
-//    private fun setMarkers(item: HashMap<Long, ResultAPIMap>) {
-//        for (estate in item) {
         val newMarker = googleMap.addMarker(
             MarkerOptions()
                 .position(
@@ -181,15 +188,13 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
                         item[0].geometry?.location?.lat!!,
                         item[0].geometry?.location?.lng!!
                     )
-//                        estate.value.geometry?.location?.lat!!,
-//                        estate.value.geometry?.location?.lat!!)
                 )
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 .title(item[0].address.toString())
-                .snippet(item[0].address.toString())
+//                .snippet(item[0].address.toString())
         )
+        // TODO Set the estate startime as tag
         newMarker?.tag = detailedEstatesList[0].estate!!.startTime
-//        }
     }
 
     // Handle click on marker info
@@ -223,46 +228,11 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
     // Permission managed before this call
 
     @SuppressLint("MissingPermission")
-    open fun enableCompassButton(googleMap: GoogleMap) {
+    fun enableCompassButton() {
         googleMap.isMyLocationEnabled = true
         googleMap.uiSettings.isMapToolbarEnabled = false
     }
 
-    override fun onMyLocationButtonClick(): Boolean {
-        requestLocationPermission()
-        getLastLocation()
-        return false
-    }
-
-    // Last fused Location
-
-    @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
-        fusedLocationClient?.lastLocation?.addOnSuccessListener(requireActivity(),
-            OnSuccessListener { location ->
-                if (location == null) {
-                    // TODO requestCurrentLocation()
-                    Log.w(TAG, "onSuccess:null")
-                    return@OnSuccessListener
-                }
-                Log.i(TAG, "onSuccess lastLocation: ${location.latitude}, ${location.longitude}")
-                lastUserLocation = location
-                zoomOnUserLocation()
-            })?.addOnFailureListener(requireActivity()) { e ->
-            Log.w(TAG, "getLastLocation:onFailure", e)
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() {
-//        fusedLocationClient?.requestLocationUpdates(locationRequest,
-//            locationCallback,
-//            Looper.getMainLooper())
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient?.removeLocationUpdates(locationCallback)
-    }
 
     private fun zoomOnUserLocation() {
         googleMap.moveCamera(
@@ -275,97 +245,88 @@ open class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
     // Location permission
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission has been granted. Start camera preview Activity.
-                KUtil.infoSnackBar(
-                    requireView(), "Location permission granted"
-                )
-//                getLastLocation()
-            } else {
-                // Permission request was denied.
-                KUtil.infoSnackBar(
-                    requireView(), "Location permission DENIED"
-                )
-                requestLocationPermission()
+    /**
+     * Gets current location.
+     * Note: The code checks for permission before calling this method, that is, it's never called
+     * from a method with a missing permission. Also, I include a second check with my extension
+     * function in case devs just copy/paste this code.
+     */
+    @SuppressLint("MissingPermission")
+    private fun requestCurrentLocation() {
+        Log.d(TAG, "requestCurrentLocation()")
+        if (requireContext().hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Returns a single current location fix on the device.
+            val currentLocationTask: Task<Location> = fusedLocationClient.getCurrentLocation(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                cancellationTokenSource.token
+            )
+
+            currentLocationTask.addOnCompleteListener { task: Task<Location> ->
+                val result = if (task.isSuccessful && task.result != null) {
+                    val result: Location = task.result
+                    lastUserLocation = result
+                    "Location (success): ${result.latitude}, ${result.longitude}"
+                } else {
+                    val exception = task.exception
+                    "Location (failure): $exception"
+                }
+
+                Log.d(TAG, "getCurrentLocation() result: $result")
             }
         }
+    }
 
+    override fun onMyLocationButtonClick(): Boolean {
+        zoomOnUserLocation()
+        return false
+    }
+
+
+
+
+
+
+
+
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            binding.root.showSnackbar(
+                R.string.camera_permission_available,
+                Snackbar.LENGTH_INDEFINITE,
+                R.string.ok
+            ) {
+                requestCurrentLocation()
+            }
+        } else requestCameraPermission()
+    }
 
     /**
      * Requests the [android.Manifest.permission.CAMERA] permission.
      * If an additional rationale should be displayed, the user has to launch the request from
      * a SnackBar that includes additional information.
      */
-    private fun requestLocationPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+    private fun requestCameraPermission() {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // Display a SnackBar with a button to request the missing permission.
-            view?.showSnackbar(
+            binding.root.showSnackbar(
                 R.string.camera_access_required,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.ok
             ) {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
         } else {
             // You can directly ask for the permission.
-            view?.showSnackbar(
+            binding.root.showSnackbar(
                 R.string.camera_permission_not_available,
                 Snackbar.LENGTH_LONG,
                 R.string.ok
             ) {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
         }
     }
-
-    private fun requestPermissions() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-            requireActivity(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-
-        // Provide an additional rationale to the user. This would happen if the user denied the
-        // request previously, but didn't check the "Don't ask again" checkbox.
-        if (shouldProvideRationale) {
-            Log.i(TAG, "Displaying permission rationale to provide additional context.")
-
-//            view?.showSnackbar(R.string.permission_rationale, android.R.string.ok,
-//                view.OnClickListener {
-//                    // Request permission
-//                    ActivityCompat.requestPermissions(requireActivity(),
-//                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//                        REQUEST_PERMISSIONS_REQUEST_CODE)
-//                })
-
-        } else {
-            Log.i(TAG, "Requesting permission")
-            // Request permission. It's possible this can be auto answered if device policy
-            // sets the permission in a given state or the user denied the permission
-            // previously and checked "Never ask again".
-//            ActivityCompat.requestPermissions(requireActivity(),
-//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//                REQUEST_PERMISSIONS_REQUEST_CODE)
-        }
-    }
-
-    /**
-     * Return the current state of the permissions needed.
-     */
-    private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        return permissionState == PackageManager.PERMISSION_GRANTED
-    }
-
-
 }
