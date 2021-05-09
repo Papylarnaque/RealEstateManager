@@ -81,6 +81,10 @@
     <string name="camera_access_required">camera_access_required</string>
     <string name="camera_permission_not_available">camera_permission_not_available</string>
     <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="camera_permission_granted">camera_permission_granted</string>
+    <string name="camera_permission_denied">camera_permission_denied</string>
+    <string name="camera_permission_available">camera_permission_available</string>
+    <string name="internet_required">Please connect to the Internet in order to enable this functionality</string>
 
 
 </resources>

@@ -17,7 +17,7 @@ import java.util.Locale;
 public class Utils {
 
     public static final Float EUR_DOLLAR_RATIO = 0.812f;
-
+    public static final String DATEFORMAT = "dd/MM/yyyy";
     /**
      * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
      *
@@ -44,8 +44,13 @@ public class Utils {
      * @return the current Date formatted as a String dd/MM/yyyy
      */
     public static String getTodayDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+        DateFormat dateFormat = new SimpleDateFormat(DATEFORMAT, Locale.FRANCE);
         return dateFormat.format(new Date());
+    }
+
+    public static String getFormattedDateFromMillis(Long millisDate) {
+        DateFormat dateFormat = new SimpleDateFormat(DATEFORMAT, Locale.FRANCE);
+        return dateFormat.format(millisDate);
     }
 
     /**
