@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
@@ -14,6 +13,8 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
+import com.openclassrooms.realestatemanager.utils.KUtil
+import com.openclassrooms.realestatemanager.utils.Utils.isInternetAvailable
 import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
 
 // TODO() Implement Filter depending on PRICE & AVAILABILITY
@@ -68,9 +69,12 @@ class EstateListFragment : Fragment() {
             }
 
             R.id.open_map -> {
+                if (isInternetAvailable(context)){
                 NavHostFragment.findNavController(this)
-                    .navigate(R.id.mapFragment)
-
+                    .navigate(R.id.mapFragment)}
+                else{
+                    KUtil.infoSnackBar(binding.root, getString(R.string.internet_required))
+                }
             }
         }
 
@@ -98,7 +102,6 @@ class EstateListFragment : Fragment() {
 
     private fun onEstateClick() {
         // When an item is clicked.
-        // TODO Check Kotlin 1.4 observe simplification
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
             it?.let {
                 // If SINGLE layout mode
