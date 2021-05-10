@@ -75,14 +75,18 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     private fun savePictures(listPicture: List<Picture>) {
         for (picture in listPicture) {
+            savePicture(picture)
+        }
+    }
+
+    fun savePicture(picture: Picture) {
             // check if picture is already stored in app folder, otherwise copy file in it
             if (!picture.url.contains(imagesFolder.path, true))
                 picture.url = copyImageFromUriToAppFolder(picture.url.toUri())
             insertPicture(picture)
-        }
     }
 
-    fun insertPicture(picture: Picture) {
+    private fun insertPicture(picture: Picture) {
         viewModelScope.launch { pictureRepository.insert(picture) }
     }
 
