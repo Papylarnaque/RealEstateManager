@@ -8,8 +8,6 @@
         android:layout_height="match_parent"
         >
 
-<!--    TODO Fix crash on tablet in landscape due to Recyclerview on api 19    -->
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_estate_list"
             android:layout_width="0dp"

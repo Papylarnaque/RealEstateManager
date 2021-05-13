@@ -20,10 +20,17 @@
         android:layout_height="@dimen/item_estate_height"
         android:background="@drawable/layout_border"
         android:onClick="@{() -> clickListener.onClick(it)}"
-        app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
-        app:layout_constraintTop_toTopOf="@+id/item_estate_third_line"
         android:paddingStart="@dimen/margin_small"
-        android:paddingEnd="@dimen/margin_small">
+        android:paddingEnd="@dimen/margin_small"
+        app:layout_constraintBottom_toTopOf="@+id/item_estate_third_line"
+        app:layout_constraintTop_toTopOf="@+id/item_estate_third_line">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="240dp" />
 
         <ImageView
             android:id="@+id/item_estate_picture"
@@ -57,41 +64,40 @@
             android:text="@{it.estate.estateCity.toString()}"
             android:textSize="15sp"
             android:textStyle="italic"
-            app:layout_constraintTop_toBottomOf="@+id/item_estate_first_line"
             app:layout_constraintStart_toStartOf="@+id/item_estate_first_line"
+            app:layout_constraintTop_toBottomOf="@+id/item_estate_first_line"
             tools:text="Nantes"
             tools:textSize="15sp"
             tools:textStyle="italic" />
-
-        <!-- TODO() add Price currency -->
 
         <TextView
             android:id="@+id/item_estate_third_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/detail_estate_price_dollar(Integer.toString(it.estate.estatePrice))}"
             android:textColor="@color/green"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/item_estate_description"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
-            tools:text="555.475.000 $"
+            tools:text="555475000 $"
             tools:textColor="@color/green"
             tools:textSize="20sp"
             tools:textStyle="bold" />
 
         <TextView
             android:id="@+id/item_estate_description"
-            android:layout_width="@dimen/item_estate_description_width"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
             android:maxLines="3"
             android:text="@{it.estate.estateDescription.toString()}"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/lorem_ipsum"
             tools:textSize="15sp" />
