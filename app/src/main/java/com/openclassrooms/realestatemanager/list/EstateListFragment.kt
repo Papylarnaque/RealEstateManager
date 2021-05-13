@@ -15,15 +15,16 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.utils.KUtil
 import com.openclassrooms.realestatemanager.utils.Utils.isInternetAvailable
-import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
+import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 
 // TODO() Implement Filter depending on PRICE & AVAILABILITY
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
-    private val viewModel: EstateListViewModel by viewModels()
+    private val viewModel: ListDetailViewModel by viewModels()
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
+    private lateinit var estate: DetailedEstate
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
     })
@@ -47,10 +48,16 @@ class EstateListFragment : Fragment() {
             requireActivity(),
             R.id.nav_host_fragment
         )
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_list, menu)
+        if (binding.detailFragmentContainer != null) {
+            inflater.inflate(R.menu.menu_fragment_list_detail, menu)
+        } else {
+            inflater.inflate(R.menu.menu_fragment_list, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -69,12 +76,21 @@ class EstateListFragment : Fragment() {
             }
 
             R.id.open_map -> {
-                if (isInternetAvailable(context)){
-                NavHostFragment.findNavController(this)
-                    .navigate(R.id.mapFragment)}
-                else{
+                if (isInternetAvailable(context)) {
+                    NavHostFragment.findNavController(this)
+                        .navigate(R.id.mapFragment)
+                } else {
                     KUtil.infoSnackBar(binding.root, getString(R.string.internet_required))
                 }
+            }
+
+            R.id.edit_estate -> {
+                //Open CreationFragment for Edition
+                Log.i("EstateListFragment", "Click on edit an estate")
+                NavHostFragment.findNavController(this)
+                    .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(
+                        estate.estate?.startTime!!
+                    ))
             }
         }
 
@@ -103,9 +119,11 @@ class EstateListFragment : Fragment() {
     private fun onEstateClick() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
-            it?.let {
+            it.let {
+                estate = it
                 // If SINGLE layout mode
-                if (binding.detailFragmentContainer == null) {
+                // if (binding.detailFragmentContainer == null) {
+                if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
                     navController.navigate(
                         EstateListFragmentDirections
                             .actionListFragmentToDetailFragment(it.estate!!.startTime)

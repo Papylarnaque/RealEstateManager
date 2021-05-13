@@ -481,6 +481,7 @@ class CreationFragment : Fragment() {
                 picture.displayName = editPictureName.text.toString()
                 viewModel.savePicture(picture)
                 notifyPicturesChanged(listPicture)
+                // TODO Fix crash when landscape click on confirm button (similar to edit estate crash in landscape)
             }
 
             val negativeButtonClick = { dialog: DialogInterface, _: Int ->

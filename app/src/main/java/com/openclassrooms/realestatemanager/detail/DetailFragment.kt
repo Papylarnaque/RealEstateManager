@@ -18,7 +18,7 @@ import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.utils.StaticMapBuilder.Companion.buildUrl
 import com.openclassrooms.realestatemanager.utils.Utils
-import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
+import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,9 +26,8 @@ class DetailFragment : Fragment() {
 
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
-    private val viewModel: EstateListViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: ListDetailViewModel by viewModels({ requireParentFragment() })
     private lateinit var detailedEstate: DetailedEstate
-    private var estateKey: Long = 0
     private val pictureListAdapter = DetailPictureListAdapter(DetailPictureListener { picture ->
         // TODO() viewModel.onPictureClicked(picture)
     })
@@ -38,7 +37,6 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         initBindings()
         getEstate()
         setBackNav()
@@ -52,7 +50,10 @@ class DetailFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_detail, menu);
+        // If TabletMode, Menu managed by EstateList
+        if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
+            inflater.inflate(R.menu.menu_fragment_detail, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -62,11 +63,13 @@ class DetailFragment : Fragment() {
             R.id.edit_estate -> {
                 //Open CreationFragment for Edition
                 Log.i("DetailFragment", "Click on edit an estate")
-                NavHostFragment.findNavController(this)
-                    .navigate(
-                        DetailFragmentDirections
-                            .actionDetailFragmentToCreationFragment(detailedEstate.estate!!.startTime)
-                    )
+                if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
+                    NavHostFragment.findNavController(this)
+                        .navigate(
+                            DetailFragmentDirections
+                                .actionDetailFragmentToCreationFragment(detailedEstate.estate!!.startTime)
+                        )
+                }
             }
 
             R.id.convert_price -> {
@@ -122,13 +125,11 @@ class DetailFragment : Fragment() {
         if (viewModel.navigateToEstateDetail.value != null) {
             detailedEstate = viewModel.navigateToEstateDetail.value!!
             bindEstate()
-            estateKey = detailedEstate.estate!!.startTime
         } else {
-            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, { it ->
+            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
                 detailedEstate = it
                 bindEstate()
             })
-            estateKey = args.estateKey
         }
     }
 

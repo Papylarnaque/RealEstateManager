@@ -37,7 +37,7 @@ import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.service.GeocodeService
 import com.openclassrooms.realestatemanager.utils.hasPermission
 import com.openclassrooms.realestatemanager.utils.showSnackbar
-import com.openclassrooms.realestatemanager.viewmodel.EstateListViewModel
+import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 import java.util.*
 
 const val INITIAL_ZOOM = 12f
@@ -75,7 +75,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         }
     private lateinit var mMap: MapView
     private lateinit var googleMap: GoogleMap
-    private val viewModel: EstateListViewModel by viewModels()
+    private val viewModel: ListDetailViewModel by viewModels()
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
     private lateinit var lastUserLocation: Location
     private var cancellationTokenSource = CancellationTokenSource()
@@ -95,14 +95,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         mMap.onCreate(savedInstanceState)
         mMap.getMapAsync(this)
 
-//        val permissionApproved =
-//            requireContext().hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-//
-//        if (permissionApproved) {
-//            requestCurrentLocation()
-//        }
+        val permissionApproved =
+            requireContext().hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 
-        checkPermissions()
+        if (permissionApproved) {
+            requestCurrentLocation()
+        }
+
+//        checkPermissions()
 
         return binding.root
     }
@@ -298,7 +298,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
             ) {
                 requestCurrentLocation()
             }
-        } else requestCameraPermission()
+        } else requestLocationPermission()
     }
 
     /**
@@ -306,7 +306,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
      * If an additional rationale should be displayed, the user has to launch the request from
      * a SnackBar that includes additional information.
      */
-    private fun requestCameraPermission() {
+    private fun requestLocationPermission() {
         if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
@@ -325,7 +325,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
                 Snackbar.LENGTH_LONG,
                 R.string.ok
             ) {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
         }
     }

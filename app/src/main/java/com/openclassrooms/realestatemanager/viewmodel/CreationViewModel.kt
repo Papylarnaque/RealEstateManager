@@ -46,7 +46,13 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     private val context: Context
         get() = getApplication()
 
-    // TODO() Manage saving pictures
+
+    //------------------------------------------------------//
+
+    fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
+    fun allEmployees(): LiveData<List<Employee>> = employeeRepository.allEmployees
+    fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
+
 
     //--------------- CREATION & EDITION ------------------//
 
@@ -100,13 +106,6 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
         return pictureRepository.getEstatePictures(estateKey)
     }
-
-//------------------------------------------------------//
-
-    fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
-    fun allEmployees(): LiveData<List<Employee>> = employeeRepository.allEmployees
-    fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
-
 
 //----------------- MANAGE PICTURES --------------------//
 

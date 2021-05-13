@@ -30,7 +30,8 @@
             android:required="false" />
                 <meta-data
                     android:name="com.google.android.geo.API_KEY"
-                    android:value='${GMAPS_API_KEY}' />
+                    android:value="AIzaSyAwMVHRczEoXqI-AgBxM9zGjN5yGszS21w" />
+<!--                    android:value='${GMAPS_API_KEY}' />-->
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">

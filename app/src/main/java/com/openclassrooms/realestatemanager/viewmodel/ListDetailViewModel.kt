@@ -12,11 +12,10 @@ import com.openclassrooms.realestatemanager.repository.EstateRepository
 import com.openclassrooms.realestatemanager.repository.PoiRepository
 
 
-class EstateListViewModel(application: Application) : AndroidViewModel(application) {
+class ListDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val estateDao = EstateDatabase.getDatabase(application, viewModelScope).estateDao()
     private val estateRepository: EstateRepository = EstateRepository(estateDao)
-
     private val poiDao = EstateDatabase.getDatabase(application, viewModelScope).poiDao()
     private val poiRepository: PoiRepository = PoiRepository(poiDao)
 
