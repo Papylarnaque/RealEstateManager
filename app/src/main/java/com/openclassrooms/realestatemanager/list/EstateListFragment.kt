@@ -24,7 +24,7 @@ class EstateListFragment : Fragment() {
     private lateinit var navController: NavController
     private val viewModel: ListDetailViewModel by viewModels()
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
-    private lateinit var estate: DetailedEstate
+    private var estate: DetailedEstate? = null
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
     })
@@ -53,10 +53,10 @@ class EstateListFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (binding.detailFragmentContainer != null) {
-            inflater.inflate(R.menu.menu_fragment_list_detail, menu)
-        } else {
-            inflater.inflate(R.menu.menu_fragment_list, menu)
+        inflater.inflate(R.menu.menu_fragment_list_detail, menu)
+        if (estate != null) {
+            menu.findItem(R.id.edit_estate).isVisible = true
+            menu.findItem(R.id.convert_price).isVisible = true
         }
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -89,7 +89,7 @@ class EstateListFragment : Fragment() {
                 Log.i("EstateListFragment", "Click on edit an estate")
                 NavHostFragment.findNavController(this)
                     .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(
-                        estate.estate?.startTime!!
+                        estate?.estate?.startTime!!
                     ))
             }
         }
@@ -119,15 +119,15 @@ class EstateListFragment : Fragment() {
     private fun onEstateClick() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
-            it.let {
+            it?.let {
                 estate = it
                 // If SINGLE layout mode
-                // if (binding.detailFragmentContainer == null) {
                 if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
                     navController.navigate(
                         EstateListFragmentDirections
                             .actionListFragmentToDetailFragment(it.estate!!.startTime)
                     )
+//                    navController.navigate(R.id.action_listFragment_to_detailFragment)
                 }
                 // If LANDSCAPE and MASTER-DETAIL dual layout
                 else {
@@ -135,10 +135,8 @@ class EstateListFragment : Fragment() {
                         .replace(binding.detailFragmentContainer!!.id, DetailFragment())
                         .commit()
                 }
-            }
+            }?:KUtil.infoSnackBar(requireView(), "null estate")
         }
     }
-
-
 }
 

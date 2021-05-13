@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
 
-
+    <!--  MENU  -->
     <string name="add_property_text">Add a property</string>
-    <string name="item_estate_picture_description">Picture of the estate</string>
+
+
     <string name="lorem_ipsum">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</string>
 
 
@@ -85,6 +86,7 @@
     <string name="camera_permission_denied">camera_permission_denied</string>
     <string name="camera_permission_available">camera_permission_available</string>
     <string name="internet_required">Please connect to the Internet in order to enable this functionality</string>
-
+    <string name="item_estate_picture_description">Picture of the estate</string>
+    <string name="open_map_text">Open Maps</string>
 
 </resources>

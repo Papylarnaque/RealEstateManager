@@ -116,22 +116,79 @@ abstract class EstateDatabase : RoomDatabase() {
             poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
             poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
 
+            val startTime1: Long = Calendar.getInstance().timeInMillis
+
             estateDao.insert(
                 Estate(
-                    startTime = Calendar.getInstance().timeInMillis,
+                    startTime = startTime1,
                     endTime = null,
                     estateTypeId = 3,
                     estatePrice = 450000,
                     employeeId = 1,
-                    estateCity = "Nantes",
-//                    pictureUrl = "/data/user/0/com.openclassrooms.realestatemanager/files/images/camera-1618351774020.jpg",
+                    estateCity = "WASHINGTON",
                     estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
                     estateSurface = 250,
                     estateRooms = 5,
-                    estateStreet = "rue des Ponts",
-                    estateStreetNumber = 10,
-                    estateCityPostalCode = "44000",
+                    estateStreet = "Pennsylvania Avenue NW",
+                    estateStreetNumber = 1600,
+                    estateCityPostalCode = "DC 20500",
                     estatePois = "1|5"
+                )
+            )
+
+            pictureDao.insert(
+                Picture(
+                    url = "https://www.whitehouse.gov/wp-content/uploads/2021/01/about_the_white_house.jpg",
+                    displayName = "Front",
+                    estateId = startTime1,
+                    orderNumber = 1
+                )
+            )
+
+            pictureDao.insert(
+                Picture(
+                    url = "https://www.whitehouse.gov/wp-content/uploads/2021/01/white_house_building_wide.jpg",
+                    displayName = "Aerial view",
+                    estateId = startTime1,
+                    orderNumber = 2
+                )
+            )
+
+            val startTime2: Long = Calendar.getInstance().timeInMillis
+
+            estateDao.insert(
+                Estate(
+                    startTime = startTime2,
+                    endTime = null,
+                    estateTypeId = 3,
+                    estatePrice = 350000,
+                    employeeId = 1,
+                    estateCity = "SEATTLE",
+                    estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
+                    estateSurface = 100,
+                    estateRooms = 1,
+                    estateStreet = "Broad St",
+                    estateStreetNumber = 400,
+                    estateCityPostalCode = "WA 98109",
+                    estatePois = "777|911|1|3"
+                )
+            )
+
+            pictureDao.insert(
+                Picture(
+                    url = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Space_Needle_2011-07-04.jpg/1200px-Space_Needle_2011-07-04.jpg",
+                    displayName = "Aerial view",
+                    estateId = startTime2,
+                    orderNumber = 1
+                )
+            )
+
+            pictureDao.insert(
+                Picture(
+                    url = "https://upload.wikimedia.org/wikipedia/commons/b/b9/Seattle_Space_needle.jpg",
+                    displayName = "Street view",
+                    estateId = startTime2,
+                    orderNumber = 2
                 )
             )
 

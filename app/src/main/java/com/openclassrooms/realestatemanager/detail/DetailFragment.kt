@@ -129,6 +129,8 @@ class DetailFragment : Fragment() {
             viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
                 detailedEstate = it
                 bindEstate()
+                //save estate in VM
+                viewModel.onEstateClicked(it)
             })
         }
     }
@@ -196,11 +198,25 @@ class DetailFragment : Fragment() {
             if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
                 NavHostFragment.findNavController(requireParentFragment())
                     .navigate(R.id.action_detailFragment_to_listFragment)
+                viewModel.navigateToEstateDetail.value = null
             }
         }
     }
 
-// TODO() Click on picture should open it full screen
+
+    override fun onResume() {
+        if (this@DetailFragment.findNavController().currentDestination?.id == R.id.listFragment) {
+            // do nothing
+        } else {
+        if (requireContext().resources.getBoolean(R.bool.isTablet)) {
+            NavHostFragment.findNavController(requireParentFragment())
+                .navigate(R.id.action_detailFragment_to_listFragment)
+//            viewModel.onEstateClicked(viewModel.navigateToEstateDetail.value!!)
+        }}
+
+
+        super.onResume()
+    }
 
 
 }
