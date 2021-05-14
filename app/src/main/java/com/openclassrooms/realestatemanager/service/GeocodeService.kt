@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.openclassrooms.realestatemanager.BuildConfig
+import com.openclassrooms.realestatemanager.database.api.EstateGeocode
 import com.openclassrooms.realestatemanager.database.api.ResultAPIMap
 import com.openclassrooms.realestatemanager.database.api.ResultsAPIMap
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
@@ -17,21 +18,17 @@ object GeocodeService {
     private const val TAG = "GeocodeService"
 
     // Nearby Places API variables
-//    private val listenGeocodeResults: MutableLiveData<HashMap<Long,ResultAPIMap>> =
-//        MutableLiveData<HashMap<Long,ResultAPIMap>>()
-//    val geocodeResults: LiveData<HashMap<Long,ResultAPIMap>> = listenGeocodeResults
-
-    private val listenGeocodeResults: MutableLiveData<List<ResultAPIMap>> =
-        MutableLiveData<List<ResultAPIMap>>()
-    val geocodeResults: LiveData<List<ResultAPIMap>> = listenGeocodeResults
+    private val listenEstateGeocode: MutableLiveData<EstateGeocode> =
+        MutableLiveData<EstateGeocode>()
+    val estateGeocode: LiveData<EstateGeocode> = listenEstateGeocode
 
     fun getGeocode(detailedEstate: DetailedEstate) {
         val apiMap: APIRequest = APIClient.client.create(APIRequest::class.java)
-        val nearbyPlaces: Call<ResultsAPIMap?>? = apiMap.getGeocode(
+        val geocodes: Call<ResultsAPIMap?>? = apiMap.getGeocode(
             AddressUtil.buildAddress(detailedEstate),
             BuildConfig.GEOCODE_API_KEY
         )
-        nearbyPlaces!!.enqueue(object : Callback<ResultsAPIMap?> {
+        geocodes!!.enqueue(object : Callback<ResultsAPIMap?> {
             override fun onResponse(
                 call: Call<ResultsAPIMap?>,
                 response: Response<ResultsAPIMap?>
@@ -42,14 +39,8 @@ object GeocodeService {
                         Log.d(TAG, "getGeocode successful $body")
                         if (body.results != null) {
                             // keep first result as the right one
-//                            listenGeocodeResults.value?.set(detailedEstate.estate!!.startTime, body.results[0])
-                            listenGeocodeResults.value = body.results
+                            convertToEstateGeocode(detailedEstate, body.results)
                         }
-//                        for (geocodeResult in body.results!!) {
-//                            if (!placeDetailsResultHashmap.containsKey(nearbyPlacesResult.getPlaceId())) {
-//                                getPlaceDetails(geocodeResult.geometry)
-//                            }
-//                        }
                     }
                 }
             }
@@ -59,5 +50,15 @@ object GeocodeService {
             }
         })
     }
+
+    private fun convertToEstateGeocode(value: DetailedEstate, value1: List<ResultAPIMap>) {
+        listenEstateGeocode.value = EstateGeocode(
+            startTime = value.estate!!.startTime,
+            lat = value1[0].geometry?.location?.lat,
+            lng = value1[0].geometry?.location?.lng,
+            address = value1[0].address
+        )
+    }
+
 
 }

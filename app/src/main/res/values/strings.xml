@@ -3,7 +3,7 @@
 
     <!--  MENU  -->
     <string name="add_property_text">Add a property</string>
-
+    <string name="open_map_text">Open Maps</string>
 
     <string name="lorem_ipsum">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</string>
 
@@ -60,16 +60,9 @@
     <string name="create_employee_error_text">An Employee is required</string>
     <string name="create_estate_confirmation">Estate successfully created</string>
     <string name="edit_estate_confirmation">Estate successfully updated</string>
-
-    <!--  Image descriptions  -->
-    <string name="create_estate_description">Create an estate image</string>
-    <string name="detail_rooms_image_description">Number of rooms</string>
-    <string name="detail_surface_image_description">Surface of the estate</string>
-    <string name="sold_tag_description">Sold tag on the estate</string>
-    <string name="create_pickerdate_title">Select the sale date</string>
+	<string name="create_pickerdate_title">Select the sale date</string>
     <string name="create_endtime_error_text">Sale date should be later than creation date</string>
-    <string name="detail_map_description">Static map for the estate</string>
-    <string name="create_picture_name_hint">Picture name</string>
+	<string name="create_picture_name_hint">Picture name</string>
     <string name="create_picture_delete_dialog_title">Delete picture</string>
     <string name="create_picture_delete_dialog_message">The picture will be permanently deleted.</string>
     <string name="create_picture_delete_dialog_confirmation">Picture deleted</string>
@@ -78,15 +71,25 @@
     <string name="create_picture_click_dialog_title">Update picture name</string>
     <string name="create_picture_click_dialog_positivebutton">Confirm modifications</string>
     <string name="convert_price">Convert estate price</string>
-    <string name="NO">NO</string>
-    <string name="camera_access_required">camera_access_required</string>
-    <string name="camera_permission_not_available">camera_permission_not_available</string>
-    <string name="permission_rationale">Location permission is needed for core functionality</string>
-    <string name="camera_permission_granted">camera_permission_granted</string>
-    <string name="camera_permission_denied">camera_permission_denied</string>
-    <string name="camera_permission_available">camera_permission_available</string>
-    <string name="internet_required">Please connect to the Internet in order to enable this functionality</string>
+	
+	<!--  MAP  -->
+	<string name="internet_required">Please connect to the Internet in order to enable this functionality</string>
+    <string name="location_permission_denied">The location access has been denied.</string>
+    <string name="permission_required_toast">The location access has been denied.</string>
+    <string name="permission_rationale_location">Do you accept to share your location ?</string>
+    <string name="permission_accept">Accept</string>
+    <string name="permission_refuse">Refuse</string>
+	<string name="NO">NO</string>
+	
+    <!--  Image descriptions  -->
+    <string name="create_estate_description">Create an estate image</string>
+    <string name="detail_rooms_image_description">Number of rooms</string>
+    <string name="detail_surface_image_description">Surface of the estate</string>
+    <string name="sold_tag_description">Sold tag on the estate</string>
+    <string name="detail_map_description">Static map for the estate</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
-    <string name="open_map_text">Open Maps</string>
+
+	
+
 
 </resources>

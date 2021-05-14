@@ -116,81 +116,144 @@ abstract class EstateDatabase : RoomDatabase() {
             poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
             poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
 
-            val startTime1: Long = Calendar.getInstance().timeInMillis
-
+            val startTime1: Long = 1615760275000 // Sunday 14 March 2021
             estateDao.insert(
                 Estate(
                     startTime = startTime1,
                     endTime = null,
-                    estateTypeId = 3,
-                    estatePrice = 450000,
+                    estateTypeId = 4,
+                    estatePrice = 5750000,
                     employeeId = 1,
-                    estateCity = "WASHINGTON",
-                    estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
+                    estateCity = "NEW-YORK",
+                    estateDescription = "Apt. PH43 ",
                     estateSurface = 250,
                     estateRooms = 5,
-                    estateStreet = "Pennsylvania Avenue NW",
-                    estateStreetNumber = 1600,
-                    estateCityPostalCode = "DC 20500",
+                    estateStreet = "Central Park West",
+                    estateStreetNumber = 15,
+                    estateCityPostalCode = "",
                     estatePois = "1|5"
                 )
             )
-
             pictureDao.insert(
                 Picture(
-                    url = "https://www.whitehouse.gov/wp-content/uploads/2021/01/about_the_white_house.jpg",
-                    displayName = "Front",
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/5/c6/2141285/15-Central-Park-West-a5967e4d46440c42c6c6efd692a2b1cf-24733632645c94789d8fa3bdd721aa19.jpg",
+                    displayName = "",
                     estateId = startTime1,
                     orderNumber = 1
                 )
             )
-
             pictureDao.insert(
                 Picture(
-                    url = "https://www.whitehouse.gov/wp-content/uploads/2021/01/white_house_building_wide.jpg",
-                    displayName = "Aerial view",
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/5/c6/2141285/15-Central-Park-West-90af8946b03137fe5feefdbfaaf0ecc0-495202d8403dbd449273d6b01b59fc60.jpg",
+                    displayName = "",
                     estateId = startTime1,
                     orderNumber = 2
                 )
             )
+            pictureDao.insert(
+                Picture(
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/5/c6/2141285/15-Central-Park-West-cba149cd3294a3c34d1f9c2318ba6fa4-3c947d12aca2a63cdb8c2f32fc0ba8c3.jpg",
+                    displayName = "Bedroom",
+                    estateId = startTime1,
+                    orderNumber = 3
+                )
+            )
+            pictureDao.insert(
+                Picture(
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/5/c6/2141285/15-Central-Park-West-b45100247b4f59c27c85fb946e4b3676-228ee9fd6423ec8d0f2c98ea011afbae.jpg",
+                    displayName = "Bathroom",
+                    estateId = startTime1,
+                    orderNumber = 4
+                )
+            )
+            pictureDao.insert(
+                Picture(
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/5/c6/2141285/15-Central-Park-West-8e0dbea5f9baf228e688678674302a9a-cd4abf3f0b487b8913ae2b2e476e15f3.jpg",
+                    displayName = "Balcony",
+                    estateId = startTime1,
+                    orderNumber = 5
+                )
+            )
 
             val startTime2: Long = Calendar.getInstance().timeInMillis
-
             estateDao.insert(
                 Estate(
                     startTime = startTime2,
                     endTime = null,
                     estateTypeId = 3,
-                    estatePrice = 350000,
+                    estatePrice = 12500000,
                     employeeId = 1,
-                    estateCity = "SEATTLE",
-                    estateDescription = "A nice house near of the Loire and surrounded by a peaceful municipal garden.",
+                    estateCity = "NEW-YORK",
+                    estateDescription = "A Fifth Avenue Masterpiece with open Central Park and Reservoir Views, this sprawling 12 room Pre-War Cooperative is pristine and ready to move in due to a recent full renovation by Ferguson Shamamian. The interiors were meticulously curated by the world-renowned designer, Bunny Williams, the distinguished expert in creating homes that are as grand and stylish as they are comfortable and serene. This residence is far from the exception, featuring finest quality finishes throughout and an atmosphere of sophistication that can be compared to nothing else available. Stepping into the private jewel box 14th floor elevator landing, one is welcomed by spectacular light bouncing from the glossy custom patinaed Venetian Plaster adorning the walls of a double-wide Gallery and pouring through to illuminate the rest of the open yet classic floorplan.",
                     estateSurface = 100,
                     estateRooms = 1,
-                    estateStreet = "Broad St",
-                    estateStreetNumber = 400,
+                    estateStreet = "Fifth Avenue",
+                    estateStreetNumber = 1158,
                     estateCityPostalCode = "WA 98109",
                     estatePois = "777|911|1|3"
                 )
             )
-
             pictureDao.insert(
                 Picture(
-                    url = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Space_Needle_2011-07-04.jpg/1200px-Space_Needle_2011-07-04.jpg",
-                    displayName = "Aerial view",
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/6/73/2398006/1158-Fifth-Avenue-63c30dd74d1255ae9af2cb8dc9f85c8d-794949be90de93955f20ab44c55af7c3.jpg",
+                    displayName = "Outside view",
                     estateId = startTime2,
                     orderNumber = 1
                 )
             )
-
             pictureDao.insert(
                 Picture(
-                    url = "https://upload.wikimedia.org/wikipedia/commons/b/b9/Seattle_Space_needle.jpg",
-                    displayName = "Street view",
+                    url = "https://thumbs.cityrealty.com/fit-in/x340/6/73/2398006/1158-Fifth-Avenue-84a8f5bdf3b3fdc737e545e71ca0deb4-8ad080f92a8aa6d9665af9d30a7712e5.jpg",
+                    displayName = "Kitchen",
                     estateId = startTime2,
                     orderNumber = 2
                 )
             )
+
+            val startTime3: Long = Calendar.getInstance().timeInMillis
+            estateDao.insert(
+                Estate(
+                    startTime = startTime3,
+                    endTime = null,
+                    estateTypeId = 4,
+                    estatePrice = 1500000,
+                    employeeId = 1,
+                    estateCity = "NEW-YORK",
+                    estateDescription = "A nice residence in the heart of Manhattan. " +
+                            "Located at the 50th floor",
+                    estateSurface = 200,
+                    estateRooms = 8,
+                    estateStreet = "Park Avenue",
+                    estateStreetNumber = 432,
+                    estateCityPostalCode = null,
+                    estatePois = "777|911|1|3"
+                )
+            )
+            pictureDao.insert(
+                Picture(
+                    url = "https://www.432parkavenue.com/assets/imgs/content/residences/1.jpg",
+                    displayName = "Building view",
+                    estateId = startTime3,
+                    orderNumber = 1
+                )
+            )
+            pictureDao.insert(
+                Picture(
+                    url = "https://www.432parkavenue.com/assets/imgs/content/views/432_View_01.jpg",
+                    displayName = "Outside view",
+                    estateId = startTime3,
+                    orderNumber = 2
+                )
+            )
+            pictureDao.insert(
+                Picture(
+                    url = "https://www.432parkavenue.com/assets/imgs/content/residences/2.jpg",
+                    displayName = "Inside view",
+                    estateId = startTime3,
+                    orderNumber = 3
+                )
+            )
+
 
             Log.i("EstateDatabase", "Database populated")
         }
