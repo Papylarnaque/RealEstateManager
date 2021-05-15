@@ -88,8 +88,9 @@
     <string name="sold_tag_description">Sold tag on the estate</string>
     <string name="detail_map_description">Static map for the estate</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
-
-	
+    <string name="search_estate">Search an estate</string>
+    <string name="search_type_title_text">Type</string>
+    <string name="search_button_text">Search</string>
 
 
 </resources>

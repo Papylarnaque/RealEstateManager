@@ -22,9 +22,9 @@ import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.*
 import com.openclassrooms.realestatemanager.databinding.FragmentCreationBinding
-import com.openclassrooms.realestatemanager.utils.GetContentWithMimeTypes
-import com.openclassrooms.realestatemanager.utils.KUtil
+import com.openclassrooms.realestatemanager.utils.MimeTypesUtil
 import com.openclassrooms.realestatemanager.utils.Utils.getFormattedDateFromMillis
+import com.openclassrooms.realestatemanager.utils.infoSnackBar
 import com.openclassrooms.realestatemanager.viewmodel.CreationViewModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -66,7 +66,7 @@ class CreationFragment : Fragment() {
             savePictures(pictureUrl)
         }
 
-    private val selectPicture = registerForActivityResult(GetContentWithMimeTypes()) { uri ->
+    private val selectPicture = registerForActivityResult(MimeTypesUtil()) { uri ->
         uri?.let {
             savePictures(uri.toString())
         }
@@ -182,7 +182,7 @@ class CreationFragment : Fragment() {
         binding.createEstate.setOnClickListener {
             val estate = shareEstate()
             if (!errorMessage.isNullOrEmpty()) {
-                errorMessage?.let { KUtil.infoSnackBar(requireView(), it) }
+                errorMessage?.let { infoSnackBar(requireView(), it) }
                 errorMessage = null
             } else {
                 viewModel.saveEstate(editMode, estate, listPicture)
@@ -454,9 +454,9 @@ class CreationFragment : Fragment() {
     }
 
     private fun confirmEstateSaved() = if (editMode)
-        KUtil.infoSnackBar(requireView(), getString(R.string.edit_estate_confirmation))
+        infoSnackBar(requireView(), getString(R.string.edit_estate_confirmation))
     else
-        KUtil.infoSnackBar(requireView(), getString(R.string.create_estate_confirmation))
+        infoSnackBar(requireView(), getString(R.string.create_estate_confirmation))
 
 
     // ----------- PICTURE CLICK HANDLING ---------//
@@ -510,7 +510,7 @@ class CreationFragment : Fragment() {
                 viewModel.deletePicture(picture) // async deletion
                 listPicture.remove(picture) // delete then refresh view
                 notifyPicturesChanged(listPicture)
-                KUtil.infoSnackBar(requireView(), getString(R.string.create_picture_delete_dialog_confirmation))
+                infoSnackBar(requireView(), getString(R.string.create_picture_delete_dialog_confirmation))
             }
 
             val negativeButtonClick = { dialog: DialogInterface, _: Int ->

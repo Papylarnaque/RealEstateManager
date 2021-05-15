@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 
-class GetContentWithMimeTypes : ActivityResultContract<Array<String>, Uri?>() {
+class MimeTypesUtil : ActivityResultContract<Array<String>, Uri?>() {
     override fun createIntent(
         context: Context,
         input: Array<String>

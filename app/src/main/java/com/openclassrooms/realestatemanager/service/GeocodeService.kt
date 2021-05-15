@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.database.api.EstateGeocode
 import com.openclassrooms.realestatemanager.database.api.ResultAPIMap
 import com.openclassrooms.realestatemanager.database.api.ResultsAPIMap
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
-import com.openclassrooms.realestatemanager.utils.AddressUtil
+import com.openclassrooms.realestatemanager.utils.buildAddress
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +25,7 @@ object GeocodeService {
     fun getGeocode(detailedEstate: DetailedEstate) {
         val apiMap: APIRequest = APIClient.client.create(APIRequest::class.java)
         val geocodes: Call<ResultsAPIMap?>? = apiMap.getGeocode(
-            AddressUtil.buildAddress(detailedEstate),
+            buildAddress(detailedEstate),
             BuildConfig.GEOCODE_API_KEY
         )
         geocodes!!.enqueue(object : Callback<ResultsAPIMap?> {

@@ -8,26 +8,10 @@ const val URL_ZOOM_RATIO = 175
 const val URL_MARKER_SIZE = "tiny"
 
 class StaticMapBuilder {
-
-
     companion object {
         fun buildUrl(detailedEstate: DetailedEstate): String {
 
-            val addressStr = AddressUtil.buildAddress(detailedEstate)
-
-//            val number: Int? = detailedEstate.estate?.estateStreetNumber
-//            val street: String? = detailedEstate.estate?.estateStreet
-//            val city: String? = detailedEstate.estate?.estateCity
-//            val postal: String? = detailedEstate.estate?.estateCityPostalCode
-//
-//            val addressBuilder: StringBuilder = StringBuilder()
-//            addressBuilder.append(number)
-//            addressBuilder.append("+")
-//            addressBuilder.append(street)
-//            addressBuilder.append("+")
-//            addressBuilder.append(city)
-//            addressBuilder.append("+")
-//            addressBuilder.append(postal)
+            val addressStr = buildAddress(detailedEstate)
 
             val urlBase = "https://maps.googleapis.com/maps/api/staticmap?"
             val separator = "&"

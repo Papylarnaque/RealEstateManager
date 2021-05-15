@@ -25,11 +25,5 @@ fun getImagesFolder(context: Context): File {
 fun generateFilename(source: Source) = "$source-${System.currentTimeMillis()}.jpg"
 
 fun copyImageFromStream(input: InputStream, outputStream: OutputStream) {
-//    withContext(Dispatchers.IO) {
         input.copyTo(outputStream)
-//    }
-
-
-
-
 }

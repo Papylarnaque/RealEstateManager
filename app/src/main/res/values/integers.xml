@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="create_description_minimum">10</integer>
-    <integer name="create_price_minimum">999</integer>
+    <integer name="create_price_minimum">99999</integer>
     <integer name="create_price_maximum_length">9</integer>
 </resources>

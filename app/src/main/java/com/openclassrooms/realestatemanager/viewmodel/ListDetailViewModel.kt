@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Poi
+import com.openclassrooms.realestatemanager.database.model.Type
 import com.openclassrooms.realestatemanager.repository.EstateRepository
 import com.openclassrooms.realestatemanager.repository.PoiRepository
+import com.openclassrooms.realestatemanager.repository.TypeRepository
 
 
 class ListDetailViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,9 +20,12 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val estateRepository: EstateRepository = EstateRepository(estateDao)
     private val poiDao = EstateDatabase.getDatabase(application, viewModelScope).poiDao()
     private val poiRepository: PoiRepository = PoiRepository(poiDao)
+    private val typeDao = EstateDatabase.getDatabase(application, viewModelScope).typeDao()
+    private val typeRepository: TypeRepository = TypeRepository(typeDao)
 
     val allDetailedEstates: LiveData<List<DetailedEstate>> = estateRepository.allDetailedEstates
     fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
+    fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
 
     fun getEstateWithId(estateKey: Long): LiveData<DetailedEstate> {
         return estateRepository.getEstate(estateKey)
