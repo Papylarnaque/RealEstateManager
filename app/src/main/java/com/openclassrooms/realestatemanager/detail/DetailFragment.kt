@@ -126,7 +126,7 @@ class DetailFragment : Fragment() {
             detailedEstate = viewModel.navigateToEstateDetail.value!!
             bindEstate()
         } else {
-            viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
+            viewModel.getEstate(args.estateKey).observe(viewLifecycleOwner, {
                 detailedEstate = it
                 bindEstate()
                 //save estate in VM

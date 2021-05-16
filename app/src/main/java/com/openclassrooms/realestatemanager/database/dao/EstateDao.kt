@@ -56,6 +56,7 @@ interface EstateDao {
     @Query("DELETE FROM estate_table")
     fun deleteAll()
 
-
+    @Query("SELECT * FROM estate_table")
+    fun getEstateList(): Cursor
 
 }

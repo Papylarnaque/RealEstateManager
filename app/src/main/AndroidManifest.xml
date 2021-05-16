@@ -36,10 +36,14 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".database.provider.ContentProvider"
+            android:authorities="fr.openclassrooms.realestatemanager.database.provider"
+            android:exported="false" />
     </application>
 
 </manifest>

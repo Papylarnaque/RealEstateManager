@@ -26,10 +26,7 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     val allDetailedEstates: LiveData<List<DetailedEstate>> = estateRepository.allDetailedEstates
     fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
     fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
-
-    fun getEstateWithId(estateKey: Long): LiveData<DetailedEstate> {
-        return estateRepository.getEstate(estateKey)
-    }
+    fun getEstate(id: Long): LiveData<DetailedEstate> = estateRepository.getEstate(id)
 
     /**
      * Navigation for the EstateListDetail fragment.
@@ -41,6 +38,5 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     fun onEstateClicked(estate: DetailedEstate) {
         _navigateToEstateDetail.value = estate
     }
-
 
 }

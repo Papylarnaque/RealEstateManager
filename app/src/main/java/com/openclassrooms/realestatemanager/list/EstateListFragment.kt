@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.list
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -17,7 +16,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
-import com.openclassrooms.realestatemanager.utils.Utils.isInternetAvailable
+import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.infoSnackBar
 import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 
@@ -42,7 +41,6 @@ class EstateListFragment : Fragment() {
         initBindings()
         getEstates()
         onEstateClick()
-
         return binding.root
     }
 
@@ -67,36 +65,11 @@ class EstateListFragment : Fragment() {
      * Handle item clicks of menu
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //get item id to handle item clicks
         when (item.itemId) {
-
-            R.id.add_estate -> {
-                Log.i("EstateListFragment", "Click on create a new estate")
-                NavHostFragment.findNavController(this)
-                    .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(-1L))
-            }
-
-            R.id.open_map -> {
-                if (isInternetAvailable(context)) {
-                    NavHostFragment.findNavController(this)
-                        .navigate(R.id.mapFragment)
-                } else {
-                    infoSnackBar(binding.root, getString(R.string.internet_required))
-                }
-            }
-
-            R.id.edit_estate -> {
-                Log.i("EstateListFragment", "Click on edit an estate")
-                NavHostFragment.findNavController(this)
-                    .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(
-                        estate?.estate?.startTime!!
-                    ))
-            }
-
-            R.id.search_estate -> {
-                Log.i("EstateListFragment", "Click on search an estate")
-                searchEstateDialog()
-            }
+            R.id.add_estate -> navigateCreateEstate()
+            R.id.open_map -> navigateMapView()
+            R.id.edit_estate -> navigateEditEstate()
+            R.id.search_estate -> searchEstateDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -160,10 +133,14 @@ class EstateListFragment : Fragment() {
             findViewById<Button>(R.id.search_cancel).setOnClickListener {
                 customDialog.dismiss()
             }
+            findViewById<Button>(R.id.search_button).setOnClickListener {
+                filterEstateList()
+            }
             show()
+
+
         }
     }
-
 
     private fun setTypeSpinner(dialogView: View) {
         val typesSpinner : AutoCompleteTextView = dialogView.findViewById(R.id.searchEstateTypeSpinnerView)
@@ -176,6 +153,36 @@ class EstateListFragment : Fragment() {
         })
 
     }
+
+    private fun filterEstateList() {
+        TODO("Not yet implemented")
+    }
+
+
+
+    // NAVIGATION
+
+    private fun navigateCreateEstate() {
+        NavHostFragment.findNavController(this)
+            .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(-1L))
+    }
+
+    private fun navigateEditEstate() {
+        NavHostFragment.findNavController(this)
+            .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(
+                estate?.estate?.startTime!!
+            ))
+    }
+
+    private fun navigateMapView() {
+        if (Utils.isInternetAvailable(context)) {
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.mapFragment)
+        } else {
+            infoSnackBar(binding.root, getString(R.string.internet_required))
+        }
+    }
+
 
 }
 
