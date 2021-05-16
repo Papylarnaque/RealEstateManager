@@ -2,10 +2,8 @@ package com.openclassrooms.realestatemanager.database.dao
 
 import android.database.Cursor
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Estate
 
@@ -58,5 +56,9 @@ interface EstateDao {
 
     @Query("SELECT * FROM estate_table")
     fun getEstateList(): Cursor
+
+    @Transaction
+    @RawQuery
+    fun filterEstateList(searchEstate: SimpleSQLiteQuery): LiveData<List<DetailedEstate>>
 
 }

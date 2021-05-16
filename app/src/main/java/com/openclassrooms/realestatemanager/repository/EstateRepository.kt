@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.repository
 
 import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.database.dao.EstateDao
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Estate
@@ -14,6 +15,10 @@ class EstateRepository(private val estateDao: EstateDao) {
     suspend fun update(estate: Estate) = estateDao.updateEstate(estate)
 
     fun getEstate(estateKey: Long): LiveData<DetailedEstate> = estateDao.getEstate(estateKey)
+
+    fun filterEstateList(simpleSQLiteQuery: SimpleSQLiteQuery): LiveData<List<DetailedEstate>> =
+        estateDao.filterEstateList(simpleSQLiteQuery)
+
 
 }
 

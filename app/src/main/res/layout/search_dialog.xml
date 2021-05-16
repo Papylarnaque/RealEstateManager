@@ -18,17 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <com.google.android.material.slider.RangeSlider-->
-<!--        android:id="@+id/search_price"-->
-<!--        style="@style/Widget.MaterialComponents.Slider"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:valueFrom="@integer/create_price_minimum"-->
-<!--        android:valueTo="@{integer/create_price_maximum_length}.pow(10)"-->
-<!--        android:autofillHints="@string/create_price_text"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/search_title" />-->
+    <!--    <com.google.android.material.slider.RangeSlider-->
+    <!--        android:id="@+id/search_price"-->
+    <!--        style="@style/Widget.MaterialComponents.Slider"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:valueFrom="@integer/create_price_minimum"-->
+    <!--        android:valueTo="@{integer/create_price_maximum_length}.pow(10)"-->
+    <!--        android:autofillHints="@string/create_price_text"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/search_title" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchEstateTypeSpinner"
@@ -48,17 +48,43 @@
             android:labelFor="@id/searchEstateTypeSpinnerView" />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <com.google.android.material.slider.RangeSlider-->
-<!--        android:id="@+id/search_surface"-->
-<!--        style="@style/Widget.MaterialComponents.Slider"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:valueFrom="@integer/create_price_minimum"-->
-<!--        android:valueTo="@{integer/create_price_maximum_length}.pow(10)"-->
-<!--        android:autofillHints="@string/create_surface_text"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/searchEstateTypeSpinner" />-->
+    <TextView
+        android:id="@+id/search_price_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="@string/create_price_text"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchEstateTypeSpinner" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/search_price"
+        style="Theme.MaterialComponents.Light.DarkActionBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:stepSize="50000"
+        android:valueFrom="@integer/create_price_minimum"
+        android:valueTo="@integer/create_price_maximum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/search_price_text_view" />
+
+    <!--    <com.google.android.material.slider.RangeSlider-->
+    <!--        android:id="@+id/search_surface"-->
+    <!--        style="@style/Widget.MaterialComponents.Slider"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:valueFrom="@integer/create_price_minimum"-->
+    <!--        android:valueTo="@{integer/create_price_maximum_length}.pow(10)"-->
+    <!--        android:autofillHints="@string/create_surface_text"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/searchEstateTypeSpinner" />-->
 
     <Button
         android:id="@+id/search_cancel"
@@ -88,5 +114,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/search_cancel"
         app:layout_constraintTop_toBottomOf="@id/searchEstateTypeSpinner" />
+
+    <Button
+        android:id="@+id/search_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:text="@string/reset_dialog"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_button" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

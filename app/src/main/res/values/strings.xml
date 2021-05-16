@@ -91,6 +91,7 @@
     <string name="search_estate">Search an estate</string>
     <string name="search_type_title_text">Type</string>
     <string name="search_button_text">Search</string>
+    <string name="reset_dialog">RESET</string>
 
 
 </resources>

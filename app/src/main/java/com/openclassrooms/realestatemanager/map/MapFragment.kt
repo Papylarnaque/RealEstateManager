@@ -46,10 +46,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
 
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        mapView.onSaveInstanceState(outState)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,15 +152,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         mapView.onStop()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        mapView.onDestroy()
+//    }
+//
+//    override fun onLowMemory() {
+//        super.onLowMemory()
+//        mapView.onLowMemory()
+//    }
 
     // ---------------------- MANAGE MARKERS ----------------------//
 
@@ -173,12 +173,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
                 }
             }
         }
-
-//        GeocodeService.geocodeResults.observe(
-//            requireActivity()
-//        ) { changedGeocodeResults ->
-//            setMarkers(changedGeocodeResults)
-//        }
 
         GeocodeService.estateGeocode.observe(
             requireActivity()
@@ -219,10 +213,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     }
 
     private fun onEstateClick(estateKey: Long) {
-        navController.navigate(
-            MapFragmentDirections
-                .actionMapFragmentToDetailFragment(estateKey)
-        )
+        if (requireContext().resources.getBoolean(R.bool.isTablet)) {
+            navController.navigate(MapFragmentDirections
+                .actionMapFragmentToListFragment(estateKey))
+        } else {
+            navController.navigate(
+                MapFragmentDirections
+                    .actionMapFragmentToDetailFragment(estateKey)
+                // TODO Fix navigation to detail while in tablet landscape mode
+            )
+        }
     }
 
 
@@ -263,6 +263,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val TAG = "MapFragment"
         private const val INITIAL_ZOOM = 10f
-        private val NYC_LATLNG = LatLng(40.7805722,-73.99308)
+        private val NYC_LATLNG = LatLng(40.7805722, -73.99308)
     }
 }

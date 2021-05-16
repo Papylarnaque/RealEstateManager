@@ -1,12 +1,15 @@
 package com.openclassrooms.realestatemanager.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
+import com.openclassrooms.realestatemanager.database.model.EstateSearch
 import com.openclassrooms.realestatemanager.database.model.Poi
 import com.openclassrooms.realestatemanager.database.model.Type
 import com.openclassrooms.realestatemanager.repository.EstateRepository
@@ -39,4 +42,20 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
         _navigateToEstateDetail.value = estate
     }
 
+    fun filterEstateList(searchEstate: EstateSearch?): LiveData<List<DetailedEstate>> {
+        StringBuilder().run {
+            append(
+                """
+                    SELECT DISTINCT e.*
+                    FROM estate_table AS e
+                    LEFT JOIN type_table AS t ON t.type_id = e.type_id
+                """
+            )
+                .append("WHERE (t.name = '${searchEstate?.type}' OR '${searchEstate?.type}'= '') ")
+                .append("AND (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
+
+            Log.i("ListDetailViewModel", this.toString())
+            return estateRepository.filterEstateList(SimpleSQLiteQuery(this.toString()))
+        }
+    }
 }

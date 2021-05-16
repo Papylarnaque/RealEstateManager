@@ -210,8 +210,11 @@ class DetailFragment : Fragment() {
         } else {
         if (requireContext().resources.getBoolean(R.bool.isTablet)) {
             NavHostFragment.findNavController(requireParentFragment())
-                .navigate(R.id.action_detailFragment_to_listFragment)
-//            viewModel.onEstateClicked(viewModel.navigateToEstateDetail.value!!)
+                .navigate(
+                    DetailFragmentDirections
+                        .actionDetailFragmentToListFragment(detailedEstate.estate?.startTime!!)
+                )
+//                .navigate(R.id.action_detailFragment_to_listFragment)
         }}
 
 

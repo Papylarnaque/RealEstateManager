@@ -11,9 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.slider.RangeSlider
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
+import com.openclassrooms.realestatemanager.database.model.EstateSearch
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.utils.Utils
@@ -25,12 +28,14 @@ class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var navController: NavController
+    private val args: EstateListFragmentArgs by navArgs()
     private val viewModel: ListDetailViewModel by viewModels()
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
     private var estate: DetailedEstate? = null
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
     })
+    private lateinit var typesSpinner : AutoCompleteTextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,13 +89,18 @@ class EstateListFragment : Fragment() {
         viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
             it.let {
                 detailedEstatesList = it
-                notifyListChanged()
+                notifyListChanged(it)
             }
         }
     }
 
-    private fun notifyListChanged() {
-        estateListAdapter.submitList(detailedEstatesList as MutableList<DetailedEstate>)
+    private fun notifyListChanged(list: List<DetailedEstate>) {
+        estateListAdapter.submitList(list as MutableList<DetailedEstate>)
+        if (args.estateKey != -1L && requireContext().resources.getBoolean(R.bool.isTablet)){
+            for (estate in list){
+                if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
+            }
+        }
     }
 
     private fun onEstateClick() {
@@ -122,6 +132,7 @@ class EstateListFragment : Fragment() {
     private fun searchEstateDialog() {
         val dialogView = layoutInflater.inflate(R.layout.search_dialog, null)
         setTypeSpinner(dialogView)
+        setPriceSlider(dialogView)
 
         val customDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -134,30 +145,43 @@ class EstateListFragment : Fragment() {
                 customDialog.dismiss()
             }
             findViewById<Button>(R.id.search_button).setOnClickListener {
-                filterEstateList()
+                filterEstateList(dialogView)
+                customDialog.dismiss()
+            }
+            findViewById<Button>(R.id.search_reset).setOnClickListener {
+                notifyListChanged(detailedEstatesList)
+                customDialog.dismiss()
             }
             show()
-
-
         }
     }
 
     private fun setTypeSpinner(dialogView: View) {
-        val typesSpinner : AutoCompleteTextView = dialogView.findViewById(R.id.searchEstateTypeSpinnerView)
-
+        typesSpinner = dialogView.findViewById(R.id.searchEstateTypeSpinnerView)
         viewModel.allTypes().observe(viewLifecycleOwner, { it ->
             val types = it.map { it.typeName }
             val adapter = ArrayAdapter(requireContext(), R.layout.list_item, types)
             typesSpinner.setAdapter(adapter)
-
         })
-
     }
 
-    private fun filterEstateList() {
-        TODO("Not yet implemented")
+    private fun setPriceSlider(dialogView: View) {
+        dialogView.findViewById<RangeSlider>(R.id.search_price).values = mutableListOf(100000f, 10000000f)
+        // TODO Handle Price Range with bette precision
     }
 
+    private fun filterEstateList(dialogView: View) {
+        val searchEstate = EstateSearch(
+//            type = typesSpinner.text.toString(),
+            type = dialogView.findViewById<AutoCompleteTextView>(R.id.searchEstateTypeSpinnerView).text.toString(),
+            priceRange = IntRange(
+            start = dialogView.findViewById<RangeSlider>(R.id.search_price).valueFrom.toInt(),
+                endInclusive = dialogView.findViewById<RangeSlider>(R.id.search_price).valueTo.toInt()
+        ))
+        viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
+            notifyListChanged(it)
+        })
+    }
 
 
     // NAVIGATION
@@ -169,9 +193,11 @@ class EstateListFragment : Fragment() {
 
     private fun navigateEditEstate() {
         NavHostFragment.findNavController(this)
-            .navigate(EstateListFragmentDirections.actionListFragmentToCreationFragment(
-                estate?.estate?.startTime!!
-            ))
+            .navigate(
+                EstateListFragmentDirections.actionListFragmentToCreationFragment(
+                    estate?.estate?.startTime!!
+                )
+            )
     }
 
     private fun navigateMapView() {
