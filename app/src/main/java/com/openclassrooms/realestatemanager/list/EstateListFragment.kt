@@ -23,7 +23,8 @@ import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.infoSnackBar
 import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 
-// TODO() Implement Filter depending on PRICE & AVAILABILITY
+// TODO Keep filter when navigating back from detail fragment ?
+// TODO Show that filter is active or not in list
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
@@ -35,7 +36,7 @@ class EstateListFragment : Fragment() {
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
     })
-    private lateinit var typesSpinner : AutoCompleteTextView
+    private lateinit var typesSpinner: AutoCompleteTextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,8 +97,8 @@ class EstateListFragment : Fragment() {
 
     private fun notifyListChanged(list: List<DetailedEstate>) {
         estateListAdapter.submitList(list as MutableList<DetailedEstate>)
-        if (args.estateKey != -1L && requireContext().resources.getBoolean(R.bool.isTablet)){
-            for (estate in list){
+        if (args.estateKey != -1L && requireContext().resources.getBoolean(R.bool.isTablet)) {
+            for (estate in list) {
                 if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
             }
         }
@@ -133,6 +134,7 @@ class EstateListFragment : Fragment() {
         val dialogView = layoutInflater.inflate(R.layout.search_dialog, null)
         setTypeSpinner(dialogView)
         setPriceSlider(dialogView)
+        setSurfaceSlider(dialogView)
 
         val customDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -166,18 +168,43 @@ class EstateListFragment : Fragment() {
     }
 
     private fun setPriceSlider(dialogView: View) {
-        dialogView.findViewById<RangeSlider>(R.id.search_price).values = mutableListOf(100000f, 10000000f)
-        // TODO Handle Price Range with bette precision
+        val minPrice = 0f
+        val maxPrice = 100000000f
+        val stepPrice = 1000000f
+        val priceRangeSlider = dialogView.findViewById<RangeSlider>(R.id.search_price)
+        priceRangeSlider.valueFrom = minPrice
+        priceRangeSlider.valueTo = maxPrice
+        priceRangeSlider.values = mutableListOf(minPrice, maxPrice)
+        priceRangeSlider.stepSize = stepPrice
+    }
+
+    private fun setSurfaceSlider(dialogView: View) {
+        val minSurface = 0f
+        val maxSurface = 10000f
+        val stepSurface = 100f
+        val surfaceRangeSlider = dialogView.findViewById<RangeSlider>(R.id.search_surface)
+        surfaceRangeSlider.valueFrom = minSurface
+        surfaceRangeSlider.valueTo = maxSurface
+        surfaceRangeSlider.values = mutableListOf(minSurface, maxSurface)
+        surfaceRangeSlider.stepSize = stepSurface
     }
 
     private fun filterEstateList(dialogView: View) {
         val searchEstate = EstateSearch(
-//            type = typesSpinner.text.toString(),
             type = dialogView.findViewById<AutoCompleteTextView>(R.id.searchEstateTypeSpinnerView).text.toString(),
             priceRange = IntRange(
-            start = dialogView.findViewById<RangeSlider>(R.id.search_price).valueFrom.toInt(),
-                endInclusive = dialogView.findViewById<RangeSlider>(R.id.search_price).valueTo.toInt()
-        ))
+                start = dialogView.findViewById<RangeSlider>(R.id.search_price).values.first()
+                    .toInt(),
+                endInclusive = dialogView.findViewById<RangeSlider>(R.id.search_price).values.last()
+                    .toInt()
+            ),
+            surfaceRange = IntRange(
+                start = dialogView.findViewById<RangeSlider>(R.id.search_surface).values.first()
+                    .toInt(),
+                endInclusive = dialogView.findViewById<RangeSlider>(R.id.search_surface).values.last()
+                    .toInt()
+            )
+        )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
             notifyListChanged(it)
         })

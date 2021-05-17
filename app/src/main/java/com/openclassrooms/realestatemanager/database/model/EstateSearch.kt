@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.database.model
 class EstateSearch(
     var type: String?,
     var priceRange: IntRange,
+    var surfaceRange: IntRange
 ) {
 //    fun toString(context: Context): String {
 //        return StringBuilder().run {

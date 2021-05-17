@@ -53,6 +53,8 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
             )
                 .append("WHERE (t.name = '${searchEstate?.type}' OR '${searchEstate?.type}'= '') ")
                 .append("AND (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
+                .append("AND (e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
+                        "OR e.surface IS NULL") // Surface not mandatory in Detail creation
 
             Log.i("ListDetailViewModel", this.toString())
             return estateRepository.filterEstateList(SimpleSQLiteQuery(this.toString()))

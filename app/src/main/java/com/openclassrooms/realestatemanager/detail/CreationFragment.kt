@@ -362,7 +362,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getPrice(): Int {
-        val priceMin = resources.getInteger(R.integer.create_price_minimum)
+        val priceMin = resources.getInteger(R.integer.create_price_minimum) -1
         binding.createPriceEdit.text.toString().toIntOrNull().let {
             return when (it) {
                 null -> {
