@@ -13,15 +13,20 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
+import com.google.android.material.textview.MaterialTextView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.EstateSearch
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.detail.DetailFragment
 import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.utils.Utils.getFormattedDateFromMillis
 import com.openclassrooms.realestatemanager.utils.infoSnackBar
 import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
+import java.util.*
 
 // TODO Keep filter when navigating back from detail fragment ?
 // TODO Show that filter is active or not in list
@@ -96,11 +101,26 @@ class EstateListFragment : Fragment() {
     }
 
     private fun notifyListChanged(list: List<DetailedEstate>) {
-        estateListAdapter.submitList(list as MutableList<DetailedEstate>)
-        if (args.estateKey != -1L && requireContext().resources.getBoolean(R.bool.isTablet)) {
-            for (estate in list) {
-                if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
+        if (list.isEmpty()) {
+            binding.recyclerviewEstateList.visibility = View.INVISIBLE
+            binding.emptyList.visibility = View.VISIBLE
+            if (binding.detailFragmentContainer != null){
+                binding.detailFragmentContainer!!.visibility = View.INVISIBLE
             }
+        } else {
+            binding.emptyList.visibility = View.INVISIBLE
+            binding.recyclerviewEstateList.visibility = View.VISIBLE
+            estateListAdapter.submitList(list as MutableList<DetailedEstate>)
+            if (args.estateKey != -1L && requireContext().resources.getBoolean(R.bool.isTablet)) {
+                for (estate in list) {
+                    if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
+                }
+            }
+            if (binding.detailFragmentContainer != null){
+                binding.detailFragmentContainer!!.visibility = View.VISIBLE
+                viewModel.onEstateClicked(list[0])
+            }
+
         }
     }
 
@@ -126,15 +146,19 @@ class EstateListFragment : Fragment() {
         }
     }
 
+// TODO() How to export that search dialog to another file or function ?
 
     /**
      * Handle estate search
      */
     private fun searchEstateDialog() {
         val dialogView = layoutInflater.inflate(R.layout.search_dialog, null)
-        setTypeSpinner(dialogView)
-        setPriceSlider(dialogView)
-        setSurfaceSlider(dialogView)
+        with(dialogView) {
+            setTypeSpinner(this)
+            setPriceSlider(this)
+            setSurfaceSlider(this)
+            setCreationDatePicker(this)
+        }
 
         val customDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -189,6 +213,65 @@ class EstateListFragment : Fragment() {
         surfaceRangeSlider.stepSize = stepSurface
     }
 
+
+    private fun setCreationDatePicker(dialogView: View) {
+        val creationDatePicker = dialogView.findViewById<MaterialTextView>(R.id.search_create_date)
+
+        creationDatePicker.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.dateRangePicker()
+            builder.setCalendarConstraints(limitRange().build())
+            val picker = builder.build()
+
+            builder.setTitleText(R.string.create_pickerdate_title)
+            picker.show(parentFragmentManager, picker.toString())
+
+            picker.addOnPositiveButtonClickListener {
+
+            }
+            picker.addOnNegativeButtonClickListener {
+
+            }
+            picker.addOnPositiveButtonClickListener {
+//                val timeZoneUTC = TimeZone.getDefault()
+//                val offsetFromUTC = timeZoneUTC.getOffset(Date().time) * -1
+                val startDate = getFormattedDateFromMillis(it.first/*.plus(offsetFromUTC)*/)
+                val endDate = getFormattedDateFromMillis(it.second/*.plus(offsetFromUTC)*/)
+
+                if (it.first != null) searchCreationStartDate = it.first!!
+                if (it.second != null) searchCreationEndDate = it.second!!
+
+                if (it.first == it.second) {
+                    creationDatePicker.text =
+                        getString(R.string.search_create_date_oneday, startDate.toString())
+                } else {
+                    creationDatePicker.text =
+                        getString(
+                            R.string.search_create_date,
+                            startDate.toString(),
+                            endDate.toString()
+                        )
+                }
+            }
+
+        }
+    }
+
+    private fun limitRange(): CalendarConstraints.Builder {
+        val constraintsBuilderRange = CalendarConstraints.Builder()
+
+        val calendarStart: Calendar = Calendar.getInstance()
+        val calendarEnd: Calendar = Calendar.getInstance()
+
+        val minDate = calendarStart.timeInMillis - 31556952000 // one year
+        val maxDate = calendarEnd.timeInMillis // current date
+
+        constraintsBuilderRange.setStart(minDate)
+        constraintsBuilderRange.setEnd(maxDate)
+
+        return constraintsBuilderRange
+    }
+
+
     private fun filterEstateList(dialogView: View) {
         val searchEstate = EstateSearch(
             type = dialogView.findViewById<AutoCompleteTextView>(R.id.searchEstateTypeSpinnerView).text.toString(),
@@ -203,10 +286,15 @@ class EstateListFragment : Fragment() {
                     .toInt(),
                 endInclusive = dialogView.findViewById<RangeSlider>(R.id.search_surface).values.last()
                     .toInt()
+            ),
+            createDateRange = LongRange(
+                start = searchCreationStartDate,
+                endInclusive = searchCreationEndDate
             )
         )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
             notifyListChanged(it)
+            infoSnackBar(binding.root, getString(R.string.search_notification))
         })
     }
 
@@ -236,6 +324,12 @@ class EstateListFragment : Fragment() {
         }
     }
 
+    companion object {
+        var searchCreationStartDate: Long = 0 // oldest calendar possible
+        var searchCreationEndDate: Long = Calendar.getInstance().timeInMillis
+
+
+    }
 
 }
 

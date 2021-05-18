@@ -8,6 +8,21 @@
         android:layout_height="match_parent"
         >
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/emptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='No Estate Available'
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_estate_list"
             android:layout_width="0dp"
