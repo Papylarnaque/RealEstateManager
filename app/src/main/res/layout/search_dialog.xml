@@ -113,6 +113,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_surface" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/search_sold_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:thumbTint="@color/green"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/edit_estate_availability"
+                app:layout_constraintEnd_toStartOf="@id/search_sold_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_create_date" />
+
+            <TextView
+                android:id="@+id/search_sold_date"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:drawablePadding="@dimen/margin_small"
+                android:hint="@string/search_sold_date_hint"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_calendar_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/search_sold_switch"
+                app:layout_constraintTop_toTopOf="@id/search_sold_switch"
+                app:layout_constraintBottom_toBottomOf="@id/search_sold_switch" />
+
             <Button
                 android:id="@+id/search_cancel"
                 android:layout_width="0dp"
@@ -124,7 +150,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toStartOf="@id/search_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_create_date" />
+                app:layout_constraintTop_toBottomOf="@id/search_sold_switch" />
 
 
             <Button
@@ -138,7 +164,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_cancel"
-                app:layout_constraintTop_toBottomOf="@id/search_create_date" />
+                app:layout_constraintTop_toBottomOf="@id/search_sold_switch" />
 
             <Button
                 android:id="@+id/search_reset"

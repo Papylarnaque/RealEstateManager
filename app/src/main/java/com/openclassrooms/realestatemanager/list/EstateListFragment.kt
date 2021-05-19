@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
@@ -104,7 +105,7 @@ class EstateListFragment : Fragment() {
         if (list.isEmpty()) {
             binding.recyclerviewEstateList.visibility = View.INVISIBLE
             binding.emptyList.visibility = View.VISIBLE
-            if (binding.detailFragmentContainer != null){
+            if (binding.detailFragmentContainer != null) {
                 binding.detailFragmentContainer!!.visibility = View.INVISIBLE
             }
         } else {
@@ -116,7 +117,7 @@ class EstateListFragment : Fragment() {
                     if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
                 }
             }
-            if (binding.detailFragmentContainer != null){
+            if (binding.detailFragmentContainer != null) {
                 binding.detailFragmentContainer!!.visibility = View.VISIBLE
                 viewModel.onEstateClicked(list[0])
             }
@@ -158,6 +159,8 @@ class EstateListFragment : Fragment() {
             setPriceSlider(this)
             setSurfaceSlider(this)
             setCreationDatePicker(this)
+            soldStatus = false
+            setSoldDateSwitchAndPicker(this)
         }
 
         val customDialog = AlertDialog.Builder(requireContext())
@@ -181,6 +184,7 @@ class EstateListFragment : Fragment() {
             show()
         }
     }
+
 
     private fun setTypeSpinner(dialogView: View) {
         typesSpinner = dialogView.findViewById(R.id.searchEstateTypeSpinnerView)
@@ -232,10 +236,8 @@ class EstateListFragment : Fragment() {
 
             }
             picker.addOnPositiveButtonClickListener {
-//                val timeZoneUTC = TimeZone.getDefault()
-//                val offsetFromUTC = timeZoneUTC.getOffset(Date().time) * -1
-                val startDate = getFormattedDateFromMillis(it.first/*.plus(offsetFromUTC)*/)
-                val endDate = getFormattedDateFromMillis(it.second/*.plus(offsetFromUTC)*/)
+                val startDate = getFormattedDateFromMillis(it.first)
+                val endDate = getFormattedDateFromMillis(it.second)
 
                 if (it.first != null) searchCreationStartDate = it.first!!
                 if (it.second != null) searchCreationEndDate = it.second!!
@@ -256,13 +258,63 @@ class EstateListFragment : Fragment() {
         }
     }
 
+
+    private fun setSoldDateSwitchAndPicker(dialogView: View) {
+        val soldDateSwitch = dialogView.findViewById<SwitchMaterial>(R.id.search_sold_switch)
+        soldDateSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isChecked) {
+                setSoldDatePicker(dialogView)
+                soldStatus = true
+            }
+            else {
+                dialogView.findViewById<MaterialTextView>(R.id.search_sold_date).visibility =
+                    View.GONE
+                soldStatus = false
+            }
+        }
+    }
+
+    private fun setSoldDatePicker(dialogView: View) {
+        val soldDatePicker = dialogView.findViewById<MaterialTextView>(R.id.search_sold_date)
+        soldDatePicker.visibility = View.VISIBLE
+
+        soldDatePicker.setOnClickListener {
+            val builder = MaterialDatePicker.Builder.dateRangePicker()
+            builder.setCalendarConstraints(limitRange().build())
+            val picker = builder.build()
+
+            builder.setTitleText(R.string.create_pickerdate_title)
+            picker.show(parentFragmentManager, picker.toString())
+
+            picker.addOnPositiveButtonClickListener {
+                val startDate = getFormattedDateFromMillis(it.first)
+                val endDate = getFormattedDateFromMillis(it.second)
+
+                if (it.first != null) searchSoldStartDate = it.first!!
+                if (it.second != null) searchSoldEndDate = it.second!!
+
+                if (it.first == it.second) {
+                    soldDatePicker.text =
+                        getString(R.string.search_sold_date_oneday, startDate.toString())
+                } else {
+                    soldDatePicker.text =
+                        getString(
+                            R.string.search_sold_date,
+                            startDate.toString(),
+                            endDate.toString()
+                        )
+                }
+            }
+
+        }
+    }
+
     private fun limitRange(): CalendarConstraints.Builder {
         val constraintsBuilderRange = CalendarConstraints.Builder()
 
-        val calendarStart: Calendar = Calendar.getInstance()
         val calendarEnd: Calendar = Calendar.getInstance()
 
-        val minDate = calendarStart.timeInMillis - 31556952000 // one year
+        val minDate = 0L // one year
         val maxDate = calendarEnd.timeInMillis // current date
 
         constraintsBuilderRange.setStart(minDate)
@@ -288,8 +340,11 @@ class EstateListFragment : Fragment() {
                     .toInt()
             ),
             createDateRange = LongRange(
-                start = searchCreationStartDate,
-                endInclusive = searchCreationEndDate
+                start = searchCreationStartDate, endInclusive = searchCreationEndDate
+            ),
+            soldStatus = soldStatus,
+            soldDateRange = LongRange(
+                start = searchSoldStartDate, endInclusive = searchSoldEndDate
             )
         )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
@@ -325,10 +380,11 @@ class EstateListFragment : Fragment() {
     }
 
     companion object {
-        var searchCreationStartDate: Long = 0 // oldest calendar possible
+        var searchCreationStartDate: Long = 0L // oldest calendar possible
         var searchCreationEndDate: Long = Calendar.getInstance().timeInMillis
-
-
+        var soldStatus: Boolean = false
+        var searchSoldStartDate: Long = 0L // oldest calendar possible
+        var searchSoldEndDate: Long = Calendar.getInstance().timeInMillis
     }
 
 }

@@ -56,6 +56,10 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
                 .append("AND ((e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
                         "OR e.surface IS NULL) ") // Surface not mandatory in Detail creation
                 .append("AND (e.start_time_milli BETWEEN '${searchEstate?.createDateRange?.first}' AND '${searchEstate?.createDateRange?.last}') ")
+                .append("AND (${searchEstate?.soldStatus} = false AND e.end_time_milli IS NULL) " +
+                            "OR (${searchEstate?.soldStatus} = true " +
+                            "AND e.end_time_milli BETWEEN '${searchEstate?.soldDateRange?.first}' " +
+                            "AND '${searchEstate?.soldDateRange?.last}') ")
 
 
             Log.i("ListDetailViewModel", this.toString())

@@ -13,9 +13,12 @@
     <string name="search_type_title_text">Type</string>
     <string name="search_button_text">Search</string>
     <string name="reset_dialog">RESET</string>
-    <string name="search_create_date_hint">Select a creation date</string>
+    <string name="search_create_date_hint">Select a creation date interval</string>
+    <string name="search_sold_date_hint">Select a sold date interval</string>
     <string name="search_create_date">Created between %1$s and %2$s</string>
-    <string name="search_create_date_oneday">"Estate created on %1$s"</string>
+    <string name="search_create_date_oneday">"Estates created on %1$s"</string>
+    <string name="search_sold_date">Sold between %1$s and %2$s</string>
+    <string name="search_sold_date_oneday">"Estates sold on %1$s"</string>
 
     <!--  DETAIL  -->
     <string name="item_estate_first_line_text">%1$s</string>
@@ -53,7 +56,7 @@
     <string name="create_employee_text">Employee</string>
     <string name="edit_estate_titlebar">Edit the Estate</string>
     <string name="add_estate_titlebar">Add a new Estate</string>
-    <string name="edit_estate_availability">Available</string>
+    <string name="edit_estate_availability">Available  </string>
     <string name="edit_estate_sold">Sold</string>
     <string name="create_employee">%1$s %2$s</string>
     <string name="create_pois_text">Pois </string>
