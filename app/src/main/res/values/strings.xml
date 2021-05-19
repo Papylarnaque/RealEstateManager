@@ -17,8 +17,12 @@
     <string name="search_sold_date_hint">Select a sold date interval</string>
     <string name="search_create_date">Created between %1$s and %2$s</string>
     <string name="search_create_date_oneday">"Estates created on %1$s"</string>
-    <string name="search_sold_date">Sold between %1$s and %2$s</string>
+    <string name="search_sold_date">Sold between %1$s \nand %2$s</string>
     <string name="search_sold_date_oneday">"Estates sold on %1$s"</string>
+    <string name="search_creation_pickerdate_title">Select the creation interval</string>
+    <string name="search_sale_pickerdate_title">Select the sale interval</string>
+    <string name="search_notification">Estate List filtered with your parameters.</string>
+    <string name="create_picture_text">"Minimum picture "</string>
 
     <!--  DETAIL  -->
     <string name="item_estate_first_line_text">%1$s</string>
@@ -100,7 +104,7 @@
     <string name="sold_tag_description">Sold tag on the estate</string>
     <string name="detail_map_description">Static map for the estate</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
-    <string name="search_notification">Estate List filtered with your parameters.</string>
+
 
 
 </resources>

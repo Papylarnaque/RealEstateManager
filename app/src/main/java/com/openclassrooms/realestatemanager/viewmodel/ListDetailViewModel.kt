@@ -1,12 +1,10 @@
 package com.openclassrooms.realestatemanager.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.EstateSearch
@@ -43,27 +41,7 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun filterEstateList(searchEstate: EstateSearch?): LiveData<List<DetailedEstate>> {
-        StringBuilder().run {
-            append(
-                """
-                    SELECT DISTINCT e.*
-                    FROM estate_table AS e
-                    LEFT JOIN type_table AS t ON t.type_id = e.type_id
-                """
-            )
-                .append("WHERE (t.name = '${searchEstate?.type}' OR '${searchEstate?.type}'= '') ")
-                .append("AND (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
-                .append("AND ((e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
-                        "OR e.surface IS NULL) ") // Surface not mandatory in Detail creation
-                .append("AND (e.start_time_milli BETWEEN '${searchEstate?.createDateRange?.first}' AND '${searchEstate?.createDateRange?.last}') ")
-                .append("AND (${searchEstate?.soldStatus} = false AND e.end_time_milli IS NULL) " +
-                            "OR (${searchEstate?.soldStatus} = true " +
-                            "AND e.end_time_milli BETWEEN '${searchEstate?.soldDateRange?.first}' " +
-                            "AND '${searchEstate?.soldDateRange?.last}') ")
-
-
-            Log.i("ListDetailViewModel", this.toString())
-            return estateRepository.filterEstateList(SimpleSQLiteQuery(this.toString()))
-        }
+        return estateRepository.filterEstateList(searchEstate)
     }
+
 }

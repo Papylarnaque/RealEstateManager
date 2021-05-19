@@ -13,6 +13,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
@@ -161,6 +163,7 @@ class EstateListFragment : Fragment() {
             setCreationDatePicker(this)
             soldStatus = false
             setSoldDateSwitchAndPicker(this)
+            setPictureNumberToggle(this)
         }
 
         val customDialog = AlertDialog.Builder(requireContext())
@@ -184,7 +187,6 @@ class EstateListFragment : Fragment() {
             show()
         }
     }
-
 
     private fun setTypeSpinner(dialogView: View) {
         typesSpinner = dialogView.findViewById(R.id.searchEstateTypeSpinnerView)
@@ -224,9 +226,9 @@ class EstateListFragment : Fragment() {
         creationDatePicker.setOnClickListener {
             val builder = MaterialDatePicker.Builder.dateRangePicker()
             builder.setCalendarConstraints(limitRange().build())
+            builder.setTitleText(R.string.search_creation_pickerdate_title)
             val picker = builder.build()
 
-            builder.setTitleText(R.string.create_pickerdate_title)
             picker.show(parentFragmentManager, picker.toString())
 
             picker.addOnPositiveButtonClickListener {
@@ -281,9 +283,9 @@ class EstateListFragment : Fragment() {
         soldDatePicker.setOnClickListener {
             val builder = MaterialDatePicker.Builder.dateRangePicker()
             builder.setCalendarConstraints(limitRange().build())
+            builder.setTitleText(R.string.search_sale_pickerdate_title)
             val picker = builder.build()
 
-            builder.setTitleText(R.string.create_pickerdate_title)
             picker.show(parentFragmentManager, picker.toString())
 
             picker.addOnPositiveButtonClickListener {
@@ -324,6 +326,25 @@ class EstateListFragment : Fragment() {
     }
 
 
+    private fun setPictureNumberToggle(dialogView: View) {
+        val pictureNumberGroup = dialogView.findViewById<MaterialButtonToggleGroup>(R.id.search_picture_togglegroup)
+
+        for (pictureNumber in 1.rangeTo(4 )) {
+            val pictureButton = layoutInflater.inflate(
+                R.layout.search_picture_materialbutton,
+                pictureNumberGroup,
+                false
+            ) as MaterialButton
+            pictureButton.text = pictureNumber.toString()
+
+            pictureNumberGroup.addView(pictureButton, pictureNumberGroup.childCount)
+
+        }
+        pictureNumberGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            searchPictureNumber = pictureNumberGroup.findViewById<MaterialButton>(group.checkedButtonId).text.toString().toInt()
+        }
+    }
+
     private fun filterEstateList(dialogView: View) {
         val searchEstate = EstateSearch(
             type = dialogView.findViewById<AutoCompleteTextView>(R.id.searchEstateTypeSpinnerView).text.toString(),
@@ -345,12 +366,23 @@ class EstateListFragment : Fragment() {
             soldStatus = soldStatus,
             soldDateRange = LongRange(
                 start = searchSoldStartDate, endInclusive = searchSoldEndDate
-            )
+            ),
+            pictureMinNumber = searchPictureNumber
         )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
             notifyListChanged(it)
             infoSnackBar(binding.root, getString(R.string.search_notification))
+            resetFilter()
         })
+    }
+
+    private fun resetFilter() {
+        searchCreationStartDate = 0L
+        searchCreationEndDate = Calendar.getInstance().timeInMillis
+        soldStatus = false
+        searchSoldStartDate = 0L
+        searchSoldEndDate= Calendar.getInstance().timeInMillis
+        searchPictureNumber = 0
     }
 
 
@@ -385,6 +417,7 @@ class EstateListFragment : Fragment() {
         var soldStatus: Boolean = false
         var searchSoldStartDate: Long = 0L // oldest calendar possible
         var searchSoldEndDate: Long = Calendar.getInstance().timeInMillis
+        var searchPictureNumber: Int = 0
     }
 
 }

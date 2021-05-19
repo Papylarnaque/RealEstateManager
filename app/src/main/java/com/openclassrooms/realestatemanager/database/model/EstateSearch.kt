@@ -6,5 +6,6 @@ class EstateSearch(
     val surfaceRange: IntRange,
     val createDateRange: LongRange,
     val soldStatus: Boolean,
-    val soldDateRange: LongRange
+    val soldDateRange: LongRange,
+    val pictureMinNumber: Int
 )

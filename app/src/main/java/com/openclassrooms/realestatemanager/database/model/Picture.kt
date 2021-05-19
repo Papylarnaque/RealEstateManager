@@ -17,9 +17,6 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Picture(
-//    @PrimaryKey(autoGenerate = true)
-//    @ColumnInfo(name = "picture_id")
-//    var pictureId: Long,
     @PrimaryKey
     @ColumnInfo(name = "picture_url")
     var url: String = "",
