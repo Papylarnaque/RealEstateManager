@@ -18,8 +18,8 @@ import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.utils.StaticMapBuilder.Companion.buildUrl
 import com.openclassrooms.realestatemanager.utils.Utils
+import com.openclassrooms.realestatemanager.utils.Utils.getFormattedDateFromMillis
 import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailFragment : Fragment() {
@@ -153,23 +153,16 @@ class DetailFragment : Fragment() {
 
 
     private fun bindDates() {
-        val dateFormat = "dd/MM/yyyy"
-        // Create a DateFormatter object for displaying date in specified format.
-        val formatter = SimpleDateFormat(dateFormat, Locale.US)
-
         // Start Time
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = detailedEstate.estate?.startTime!!
         binding.detailDateStart.text = getString(
             R.string.detail_date_start,
-            formatter.format(calendar.time)
+            getFormattedDateFromMillis(detailedEstate.estate?.startTime!!)
         )
 
         if (detailedEstate.estate!!.endTime != null) {
-            calendar.timeInMillis = detailedEstate.estate!!.endTime!!
             binding.detailDateSold.text = getString(
                 R.string.detail_date_sold,
-                formatter.format(calendar.time)
+                getFormattedDateFromMillis(detailedEstate.estate?.endTime!!)
             )
             binding.detailDateSold.visibility = View.VISIBLE
         }
