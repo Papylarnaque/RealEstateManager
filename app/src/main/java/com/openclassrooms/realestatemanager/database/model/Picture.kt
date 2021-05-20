@@ -21,7 +21,7 @@ data class Picture(
     @ColumnInfo(name = "picture_url")
     var url: String = "",
 
-    @ColumnInfo(name = "estate_id")
+    @ColumnInfo(name = "estate_id", index = true)
     var estateId: Long? = null,
 
     @ColumnInfo(name = "picture_name")

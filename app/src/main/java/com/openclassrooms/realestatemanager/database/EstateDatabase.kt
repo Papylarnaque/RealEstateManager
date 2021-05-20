@@ -15,7 +15,7 @@ import java.util.*
 
 @Database(
     entities = [Estate::class, Poi::class, Employee::class, Type::class, Picture::class],
-    version = 2, exportSchema = false
+    version = 3, exportSchema = false
 )
 abstract class EstateDatabase : RoomDatabase() {
 

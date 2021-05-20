@@ -50,7 +50,7 @@ data class Estate(
         @ColumnInfo(name = "postal_code")
         val estateCityPostalCode: String?,
 
-        @ColumnInfo(name = "employee_id")
+        @ColumnInfo(name = "employee_id", index = true)
         val employeeId: Int,
 
         @ColumnInfo(name = "poi_id")

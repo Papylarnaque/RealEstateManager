@@ -27,6 +27,7 @@ interface EstateDao {
      *
      * @param start_time_milli to match
      */
+    @Transaction
     @Query("SELECT * FROM estate_table WHERE start_time_milli = :start_time_milli")
     fun getEstate(start_time_milli: Long): LiveData<DetailedEstate>
 
@@ -46,7 +47,7 @@ interface EstateDao {
     @Query("SELECT * FROM estate_table ORDER BY start_time_milli DESC")
     fun getAllCursorEstates(): Cursor
 
-
+    @Transaction
     @Query("SELECT * from estate_table")
     fun getDetailedEstates(): LiveData<List<DetailedEstate>>
 
