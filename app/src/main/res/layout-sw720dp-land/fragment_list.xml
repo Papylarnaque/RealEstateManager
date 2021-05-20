@@ -15,6 +15,7 @@
             android:text="@string/no_estate_available"
             android:textAlignment="center"
             android:textSize="24sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/detail_fragment_container"
             app:layout_constraintHorizontal_weight="3"
