@@ -7,5 +7,6 @@ class EstateSearch(
     val createDateRange: LongRange,
     val soldStatus: Boolean,
     val soldDateRange: LongRange,
-    val pictureMinNumber: Int
+    val pictureMinNumber: Int,
+    val poiList: List<Int>?
 )

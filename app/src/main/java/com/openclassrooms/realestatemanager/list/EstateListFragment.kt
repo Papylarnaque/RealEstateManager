@@ -15,6 +15,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
@@ -164,6 +166,7 @@ class EstateListFragment : Fragment() {
             soldStatus = false
             setSoldDateSwitchAndPicker(this)
             setPictureNumberToggle(this)
+            setPoisCheckList(this)
         }
 
         val customDialog = AlertDialog.Builder(requireContext())
@@ -267,8 +270,7 @@ class EstateListFragment : Fragment() {
             if (buttonView.isChecked) {
                 setSoldDatePicker(dialogView)
                 soldStatus = true
-            }
-            else {
+            } else {
                 dialogView.findViewById<MaterialTextView>(R.id.search_sold_date).visibility =
                     View.GONE
                 soldStatus = false
@@ -327,9 +329,10 @@ class EstateListFragment : Fragment() {
 
 
     private fun setPictureNumberToggle(dialogView: View) {
-        val pictureNumberGroup = dialogView.findViewById<MaterialButtonToggleGroup>(R.id.search_picture_togglegroup)
+        val pictureNumberGroup =
+            dialogView.findViewById<MaterialButtonToggleGroup>(R.id.search_picture_togglegroup)
 
-        for (pictureNumber in 1.rangeTo(4 )) {
+        for (pictureNumber in 1.rangeTo(4)) {
             val pictureButton = layoutInflater.inflate(
                 R.layout.search_picture_materialbutton,
                 pictureNumberGroup,
@@ -341,8 +344,27 @@ class EstateListFragment : Fragment() {
 
         }
         pictureNumberGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            searchPictureNumber = pictureNumberGroup.findViewById<MaterialButton>(group.checkedButtonId).text.toString().toInt()
+            searchPictureNumber =
+                pictureNumberGroup.findViewById<MaterialButton>(group.checkedButtonId).text.toString()
+                    .toInt()
         }
+    }
+
+    private fun setPoisCheckList(dialogView: View) {
+        val poiChipGroup = dialogView.findViewById<ChipGroup>(R.id.search_poi)
+        viewModel.allPois().observe(viewLifecycleOwner, {
+            poiChipGroup.removeAllViews()
+            for (poi in it) {
+                val chip = layoutInflater.inflate(
+                    R.layout.create_poi,
+                    poiChipGroup,
+                    false
+                ) as Chip
+                chip.id = poi.poiId
+                chip.text = poi.poiName
+                poiChipGroup.addView(chip, poiChipGroup.childCount - 1)
+            }
+        })
     }
 
     private fun filterEstateList(dialogView: View) {
@@ -367,11 +389,12 @@ class EstateListFragment : Fragment() {
             soldDateRange = LongRange(
                 start = searchSoldStartDate, endInclusive = searchSoldEndDate
             ),
-            pictureMinNumber = searchPictureNumber
+            pictureMinNumber = searchPictureNumber,
+            poiList = dialogView.findViewById<ChipGroup>(R.id.search_poi).checkedChipIds
         )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
             notifyListChanged(it)
-            infoSnackBar(binding.root, getString(R.string.search_notification))
+            infoSnackBar(binding.root, getString(R.string.search_notification)  + searchEstate.poiList.toString())
             resetFilter()
         })
     }
@@ -381,7 +404,7 @@ class EstateListFragment : Fragment() {
         searchCreationEndDate = Calendar.getInstance().timeInMillis
         soldStatus = false
         searchSoldStartDate = 0L
-        searchSoldEndDate= Calendar.getInstance().timeInMillis
+        searchSoldEndDate = Calendar.getInstance().timeInMillis
         searchPictureNumber = 0
     }
 
@@ -418,6 +441,7 @@ class EstateListFragment : Fragment() {
         var searchSoldStartDate: Long = 0L // oldest calendar possible
         var searchSoldEndDate: Long = Calendar.getInstance().timeInMillis
         var searchPictureNumber: Int = 0
+        var searchPois: MutableList<Int>? = null
     }
 
 }

@@ -149,11 +149,33 @@
                 android:id="@+id/search_picture_togglegroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_picture_text_view">
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+                app:layout_constraintTop_toBottomOf="@id/search_picture_text_view"
+                app:singleSelection="true" />
+
+            <TextView
+                android:id="@+id/search_poi_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:text="@string/search_poi_text"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_picture_togglegroup" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/search_poi"
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipSpacingVertical="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/search_poi_text_view"
+                app:selectionRequired="false" />
+
 
             <Button
                 android:id="@+id/search_cancel"
@@ -166,7 +188,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toStartOf="@id/search_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_picture_togglegroup" />
+                app:layout_constraintTop_toBottomOf="@id/search_poi" />
 
 
             <Button
@@ -180,7 +202,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_cancel"
-                app:layout_constraintTop_toBottomOf="@id/search_picture_togglegroup" />
+                app:layout_constraintTop_toBottomOf="@id/search_poi" />
 
             <Button
                 android:id="@+id/search_reset"

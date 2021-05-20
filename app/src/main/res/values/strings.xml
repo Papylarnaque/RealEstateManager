@@ -23,6 +23,7 @@
     <string name="search_sale_pickerdate_title">Select the sale interval</string>
     <string name="search_notification">Estate List filtered with your parameters.</string>
     <string name="create_picture_text">"Minimum picture "</string>
+    <string name="search_poi_text">Nearby Points of Interest</string>
 
     <!--  DETAIL  -->
     <string name="item_estate_first_line_text">%1$s</string>
@@ -39,7 +40,7 @@
     <string name="detail_estate_address_streetnumber">%1$s,&#160;  </string>  <!--1 white space-->
     <string name="detail_estate_address_postalcode">%1$s &#160; </string>
     <string name="detail_employee_text">Estate managed by \n%1$s %2$s</string>
-    <string name="detail_pois_title">Nearby POIs</string>
+    <string name="detail_pois_title">Nearby Points of Interest</string>
     <string name="detail_date_start">Created on\n%1$s</string>
     <string name="detail_date_sold">Sold on\n%1$s</string>
 
