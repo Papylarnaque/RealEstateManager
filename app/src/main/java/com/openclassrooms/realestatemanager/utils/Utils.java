@@ -19,7 +19,7 @@ public class Utils {
     public static final Float EUR_DOLLAR_RATIO = 0.812f;
     public static final String DATEFORMAT = "dd/MM/yyyy";
     /**
-     * Conversion d'un prix d'un bien immobilier (Dollars vers Euros)
+     * Convert estate price (Dollars to Euros)
      *
      * @param dollars amount to be converted
      * @return the corresponding euro amount
@@ -29,7 +29,7 @@ public class Utils {
     }
 
     /**
-     * Conversion d'un prix d'un bien immobilier (Euros vers Dollars)
+     * Convert estate price (Euros to Dollars)
      *
      * @param euros amount to be converted
      * @return the corresponding US dollar amount
@@ -39,7 +39,7 @@ public class Utils {
     }
 
     /**
-     * Conversion de la date d'aujourd'hui en un format plus approprié
+     * Format today date
      *
      * @return the current Date formatted as a String dd/MM/yyyy
      */
@@ -54,7 +54,7 @@ public class Utils {
     }
 
     /**
-     * Vérification de la connexion réseau
+     * Check the Internet connection
      *
      * @param context from which the method is called
      * @return a Boolean stating the status of the internet availability
