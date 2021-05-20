@@ -77,7 +77,6 @@
             android:id="@+id/item_estate_third_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/detail_estate_price_dollar(Integer.toString(it.estate.estatePrice))}"
             android:textColor="@color/green"
             android:textSize="20sp"
             android:textStyle="bold"

@@ -65,8 +65,8 @@
             android:text="@{it.estate.estateCity.toString()}"
             android:textSize="15sp"
             android:textStyle="italic"
-            app:layout_constraintTop_toBottomOf="@+id/item_estate_first_line"
             app:layout_constraintStart_toStartOf="@+id/item_estate_first_line"
+            app:layout_constraintTop_toBottomOf="@+id/item_estate_first_line"
             tools:text="Nantes"
             tools:textSize="15sp"
             tools:textStyle="italic" />
@@ -75,7 +75,6 @@
             android:id="@+id/item_estate_third_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/detail_estate_price_dollar(Integer.toString(it.estate.estatePrice))}"
             android:textColor="@color/green"
             android:textSize="20sp"
             android:textStyle="bold"

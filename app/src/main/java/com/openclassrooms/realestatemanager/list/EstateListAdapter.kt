@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.databinding.ItemEstateBinding
+import com.openclassrooms.realestatemanager.utils.formatPrice
 
 
 class EstateListAdapter(private val clickListener: EstateListener) :
@@ -31,16 +32,17 @@ class EstateListAdapter(private val clickListener: EstateListener) :
 
         fun bind(item: DetailedEstate, clickListener: EstateListener) {
             binding.it = item
-            if (!item.pictures?.isEmpty()!!){
-            loadImage(binding.itemEstatePicture, item.pictures!![0].url)}
+            if (!item.pictures?.isEmpty()!!) {
+                loadImage(binding.itemEstatePicture, item.pictures!![0].url)
+            }
             binding.clickListener = clickListener
+            binding.itemEstateThirdLine.text = item.estate?.estatePrice?.let { formatPrice(it) + "$"}
             // if SOLD
             if (item.estate?.endTime != null) {
                 binding.detailSoldTag.visibility = View.VISIBLE
                 binding.itemEstateThirdLine.visibility = View.INVISIBLE
             }
-
-            binding.executePendingBindings()
+//            binding.executePendingBindings()
         }
 
         companion object {

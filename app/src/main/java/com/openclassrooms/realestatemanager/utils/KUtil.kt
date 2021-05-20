@@ -7,6 +7,9 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 
 fun infoSnackBar(view: View, MESSAGE: String) {
@@ -44,6 +47,12 @@ fun buildAddress(detailedEstate: DetailedEstate): String {
     addressBuilder.append(postal)
 
     return addressBuilder.toString()
+}
+
+fun formatPrice(price: Int): String {
+    val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
+    formatter.applyPattern("#,###,###,###")
+    return formatter.format(price.toLong()).toString()
 }
 
 
