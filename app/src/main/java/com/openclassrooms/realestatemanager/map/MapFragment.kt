@@ -45,12 +45,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     private val viewModel: ListDetailViewModel by viewModels({ requireParentFragment() })
     private var detailedEstatesList: List<DetailedEstate> = emptyList()
 
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        mapView.onSaveInstanceState(outState)
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -152,15 +146,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         mapView.onStop()
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        mapView.onDestroy()
-//    }
-//
-//    override fun onLowMemory() {
-//        super.onLowMemory()
-//        mapView.onLowMemory()
-//    }
 
     // ---------------------- MANAGE MARKERS ----------------------//
 
@@ -168,10 +153,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
             it.let {
                 detailedEstatesList = it
-                for (estate in detailedEstatesList) {
-                    GeocodeService.getGeocode(estate)
-                }
+                notifyEstateListChanged(it)
             }
+        }
+    }
+
+    private fun notifyEstateListChanged(list: List<DetailedEstate>) {
+        for (estate in list) {
+            GeocodeService.getGeocode(estate)
         }
 
         GeocodeService.estateGeocode.observe(
@@ -181,6 +170,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         }
 
     }
+
 
     // ---------------------- MARKERS SETUP ----------------------//
 
@@ -214,8 +204,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
 
     private fun onEstateClick(estateKey: Long) {
         if (requireContext().resources.getBoolean(R.bool.isTablet)) {
-            navController.navigate(MapFragmentDirections
-                .actionMapFragmentToListFragment(estateKey))
+            navController.navigate(
+                MapFragmentDirections
+                    .actionMapFragmentToListFragment(estateKey)
+            )
         } else {
             navController.navigate(
                 MapFragmentDirections

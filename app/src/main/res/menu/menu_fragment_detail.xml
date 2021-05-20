@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_menu">
+    android:id="@+id/detail_menu">
 
 
     <item
         android:id="@+id/convert_price"
         android:icon="@drawable/ic_baseline_euro_24"
         android:title="@string/add_property_text"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/edit_estate"
         android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/add_property_text"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>
