@@ -9,7 +9,7 @@ import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.model.EstateSearch
 
 class EstateRepository(private val estateDao: EstateDao) {
-
+    
     val allDetailedEstates: LiveData<List<DetailedEstate>> = estateDao.getDetailedEstates()
 
     suspend fun insert(estate: Estate) = estateDao.insert(estate)
@@ -30,28 +30,32 @@ class EstateRepository(private val estateDao: EstateDao) {
                     ) AS p ON p.estate_id = e.start_time_milli
                 """
             )
-                .append("WHERE (t.name = '${searchEstate?.type}' OR '${searchEstate?.type}'= '') ")
-                .append("AND (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
-                .append(
-                    "AND ((e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
-                            "OR e.surface IS NULL) "
-                ) // Surface not mandatory in Detail creation
-                .append("AND (e.start_time_milli BETWEEN '${searchEstate?.createDateRange?.first}' AND '${searchEstate?.createDateRange?.last}') ")
-                .append(
-                    "AND (${searchEstate?.soldStatus} = false AND e.end_time_milli IS NULL) " +
-                            "OR (${searchEstate?.soldStatus} = true " +
-                            "AND e.end_time_milli BETWEEN '${searchEstate?.soldDateRange?.first}' " +
-                            "AND '${searchEstate?.soldDateRange?.last}') "
+            append("WHERE (t.name = '${searchEstate?.type}' OR '${searchEstate?.type}'= '') ")
+            append("AND (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
+            append(
+                "AND ((e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
+                        "OR e.surface IS NULL) "
+            ) // Surface not mandatory in Detail creation
+            append("AND (e.start_time_milli BETWEEN '${searchEstate?.createDateRange?.first}' AND '${searchEstate?.createDateRange?.last}') ")
+            if (searchEstate?.soldStatus == false) {
+                append("AND e.end_time_milli IS NULL ")
+            } else {
+                append(
+                    "AND e.end_time_milli BETWEEN '${searchEstate?.soldDateRange?.first}' " +
+                            "AND '${searchEstate?.soldDateRange?.last}' "
                 )
-                .append("GROUP BY e.start_time_milli ")
-                .append("""HAVING p.picturesCount >= ${searchEstate?.pictureMinNumber}""")
+            }
+            // Manage POI research
+            if (searchEstate?.poiList?.isNotEmpty() == true) {
+                for (poi in searchEstate.poiList) {
+                    append("AND e.poi_id LIKE '%|${poi}|%' ")
+                }
+            }
+            append("GROUP BY e.start_time_milli ")
+            append("""HAVING p.picturesCount >= ${searchEstate?.pictureMinNumber}""")
 
             Log.i("ListDetailViewModel", this.toString())
             return estateDao.filterEstateList(SimpleSQLiteQuery(this.toString()))
         }
     }
-
-
 }
-
-

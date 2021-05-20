@@ -57,7 +57,7 @@ class CreationFragment : Fragment() {
     private lateinit var types: List<String>
     private lateinit var allEmployees: List<Employee>
     private lateinit var employees: List<String>
-    private lateinit var estatePoisIdList: List<String>
+    private var estatePoisIdList: List<String>? = null
 
     // Pictures functionality val
     private val takePicture =
@@ -320,7 +320,7 @@ class CreationFragment : Fragment() {
                 chip.text = poi.poiName
                 poiChipGroup.addView(chip, poiChipGroup.childCount - 1)
                 if (editMode) {
-                    if (estatePoisIdList.contains(chip.id.toString()))
+                    if (estatePoisIdList?.contains(chip.id.toString()) == true)
                         chip.isChecked = true
                 }
             }
@@ -429,7 +429,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getPois(): String {
-        return poiChipGroup.checkedChipIds.joinToString("|")
+        return poiChipGroup.checkedChipIds.joinToString("|", prefix =  "|", postfix = "|")
     }
 
     private fun getEstateAvailability(): Long? {
@@ -481,7 +481,6 @@ class CreationFragment : Fragment() {
                 picture.displayName = editPictureName.text.toString()
                 viewModel.savePicture(picture)
                 notifyPicturesChanged(listPicture)
-                // TODO Fix crash when landscape click on confirm button (similar to edit estate crash in landscape)
             }
 
             val negativeButtonClick = { dialog: DialogInterface, _: Int ->

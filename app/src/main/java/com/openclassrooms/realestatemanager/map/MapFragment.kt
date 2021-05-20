@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.map
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -212,7 +211,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
             navController.navigate(
                 MapFragmentDirections
                     .actionMapFragmentToDetailFragment(estateKey)
-                // TODO Fix navigation to detail while in tablet landscape mode
             )
         }
     }
@@ -220,7 +218,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
 
     // ---------------------- COMPASS BUTTON ----------------------//
 
-    @SuppressLint("MissingPermission")
     override fun onMyLocationButtonClick(): Boolean {
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).

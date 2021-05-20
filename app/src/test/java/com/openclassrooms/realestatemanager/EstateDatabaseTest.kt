@@ -87,8 +87,6 @@ class EstateDatabaseTest {
         employeeRepository = EmployeeRepository(employeeDao)
         poiRepository = PoiRepository(poiDao)
 
-
-        // TODO Fix Test with updated DB
         initDB()
     }
 
