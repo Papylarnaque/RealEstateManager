@@ -121,7 +121,7 @@ class EstateListFragment : Fragment() {
                     if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
                 }
             }
-            if (binding.detailFragmentContainer != null) {
+            if (binding.detailFragmentContainer != null && estate == null) {
                 binding.detailFragmentContainer!!.visibility = View.VISIBLE
                 viewModel.onEstateClicked(list[0])
             }
@@ -266,7 +266,7 @@ class EstateListFragment : Fragment() {
 
     private fun setSoldDateSwitchAndPicker(dialogView: View) {
         val soldDateSwitch = dialogView.findViewById<SwitchMaterial>(R.id.search_sold_switch)
-        soldDateSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        soldDateSwitch.setOnCheckedChangeListener { buttonView, _ ->
             if (buttonView.isChecked) {
                 setSoldDatePicker(dialogView)
                 soldStatus = true
@@ -343,7 +343,7 @@ class EstateListFragment : Fragment() {
             pictureNumberGroup.addView(pictureButton, pictureNumberGroup.childCount)
 
         }
-        pictureNumberGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        pictureNumberGroup.addOnButtonCheckedListener { group, _, _ ->
             searchPictureNumber =
                 pictureNumberGroup.findViewById<MaterialButton>(group.checkedButtonId).text.toString()
                     .toInt()
@@ -394,7 +394,7 @@ class EstateListFragment : Fragment() {
         )
         viewModel.filterEstateList(searchEstate).observe(viewLifecycleOwner, {
             notifyListChanged(it)
-            infoSnackBar(binding.root, getString(R.string.search_notification)  + searchEstate.poiList.toString())
+            infoSnackBar(binding.root, getString(R.string.search_notification))
             resetFilter()
         })
     }
