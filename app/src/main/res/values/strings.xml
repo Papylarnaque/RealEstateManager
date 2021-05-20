@@ -105,7 +105,7 @@
     <string name="sold_tag_description">Sold tag on the estate</string>
     <string name="detail_map_description">Static map for the estate</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
-
+    <string name="no_estate_available">No Estate Available</string>
 
 
 </resources>
