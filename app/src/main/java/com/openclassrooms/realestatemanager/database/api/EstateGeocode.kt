@@ -1,12 +1,14 @@
 package com.openclassrooms.realestatemanager.database.api
 
-class EstateGeocode (
+class EstateGeocode(
 
     var startTime: Long,
+
+    var endTime: Long?,
 
     var lat: Double? = null,
 
     var lng: Double? = null,
 
-    var address: String? = null
+    var address: String? = null,
 )

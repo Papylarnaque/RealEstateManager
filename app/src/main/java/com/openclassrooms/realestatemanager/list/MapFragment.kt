@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.map
+package com.openclassrooms.realestatemanager.list
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -174,6 +174,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     // ---------------------- MARKERS SETUP ----------------------//
 
     private fun setMarkers(item: EstateGeocode) {
+        val itemIcon =
+            if (item.endTime != null) {
+                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+            } else {
+                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+            }
         val newMarker = googleMap.addMarker(
             MarkerOptions()
                 .position(
@@ -182,7 +188,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
                         item.lng!!
                     )
                 )
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                .icon(itemIcon)
                 .title(item.address.toString())
         )
         newMarker?.tag = item.startTime

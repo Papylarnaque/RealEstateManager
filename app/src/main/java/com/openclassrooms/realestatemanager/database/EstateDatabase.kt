@@ -175,11 +175,12 @@ abstract class EstateDatabase : RoomDatabase() {
                 )
             )
 
-            val startTime2: Long = Calendar.getInstance().timeInMillis
+            val startTime2: Long = 1615860275000
+            val endTime2: Long = 1615960275000
             estateDao.insert(
                 Estate(
                     startTime = startTime2,
-                    endTime = null,
+                    endTime = endTime2,
                     estateTypeId = 3,
                     estatePrice = 12500000,
                     employeeId = 1,

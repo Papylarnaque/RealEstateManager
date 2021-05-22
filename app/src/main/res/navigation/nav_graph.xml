@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_listFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_searchDialogFragment"
+            app:destination="@id/searchDialogFragment" />
     </fragment>
 
     <fragment
@@ -82,7 +85,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.openclassrooms.realestatemanager.map.MapFragment"
+        android:name="com.openclassrooms.realestatemanager.list.MapFragment"
         android:label="MapFragment" >
         <action
             android:id="@+id/action_mapFragment_to_detailFragment"
@@ -91,5 +94,9 @@
             android:id="@+id/action_mapFragment_to_listFragment"
             app:destination="@id/listFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/searchDialogFragment"
+        android:name="com.openclassrooms.realestatemanager.list.SearchDialogFragment"
+        android:label="SearchDialogFragment" />
 
 </navigation>

@@ -54,6 +54,7 @@ object GeocodeService {
     private fun convertToEstateGeocode(value: DetailedEstate, value1: List<ResultAPIMap>) {
         listenEstateGeocode.value = EstateGeocode(
             startTime = value.estate!!.startTime,
+            endTime = value.estate!!.endTime,
             lat = value1[0].geometry?.location?.lat,
             lng = value1[0].geometry?.location?.lng,
             address = value1[0].address
