@@ -12,6 +12,7 @@ import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -41,21 +42,21 @@ internal class UtilsTest {
     }
 
     @Test
-    fun isInternetConnectionAvailable() {
-        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+    fun isConnectionAvailable() {
+        val cm = mock(ConnectivityManager::class.java)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            val networkInfo = Mockito.mock(NetworkInfo::class.java)
-            Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(true)
-            Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
+            val ni = mock(NetworkInfo::class.java)
+            Mockito.`when`(ni.isConnectedOrConnecting).thenReturn(true)
+            Mockito.`when`(cm.activeNetworkInfo).thenReturn(ni)
         } else {
-            val networkCapabilities = Mockito.mock(NetworkCapabilities::class.java)
-            Mockito.`when`(networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)).thenReturn(true)
-            Mockito.`when`(connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)).thenReturn(networkCapabilities)
+            val nc = mock(NetworkCapabilities::class.java)
+            Mockito.`when`(nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)).thenReturn(true)
+            Mockito.`when`(cm.getNetworkCapabilities(cm.activeNetwork)).thenReturn(nc)
         }
 
-        val context = Mockito.mock(MockContext::class.java)
-        Mockito.`when`(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager)
+        val context = mock(MockContext::class.java)
+        Mockito.`when`(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(cm)
 
         Assert.assertTrue(Utils.isInternetAvailable(context))
     }

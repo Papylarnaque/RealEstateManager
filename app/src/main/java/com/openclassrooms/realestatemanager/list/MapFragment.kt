@@ -148,7 +148,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     // ---------------------- MANAGE MARKERS ----------------------//
 
     private fun getEstates() {
-        viewModel.allDetailedEstates?.observe(viewLifecycleOwner) {
+        viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
             it.let {
                 notifyEstateListChanged(it)
             }

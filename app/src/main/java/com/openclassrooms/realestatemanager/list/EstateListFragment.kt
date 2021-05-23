@@ -140,7 +140,6 @@ class EstateListFragment : Fragment() {
         navController.navigate(
             EstateListFragmentDirections.actionListFragmentToSearchDialogFragment()
         )
-        viewModel.allDetailedEstates?.removeObservers(viewLifecycleOwner)
     }
 
     // NAVIGATION

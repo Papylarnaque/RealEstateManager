@@ -148,9 +148,7 @@ class DetailFragment : Fragment() {
     private fun bindMapView() {
         val staticUrl = buildUrl(detailedEstate)
         binding.detailMapView.load(staticUrl)
-        Log.i("DetailFragment", "Static MAP url = $staticUrl")
     }
-
 
     private fun bindDates() {
         // Start Time
@@ -196,23 +194,18 @@ class DetailFragment : Fragment() {
         }
     }
 
-
     override fun onResume() {
         if (this@DetailFragment.findNavController().currentDestination?.id == R.id.listFragment) {
             // do nothing
         } else {
-        if (requireContext().resources.getBoolean(R.bool.isTablet)) {
-            NavHostFragment.findNavController(requireParentFragment())
-                .navigate(
-                    DetailFragmentDirections
-                        .actionDetailFragmentToListFragment(detailedEstate.estate?.startTime!!)
-                )
-//                .navigate(R.id.action_detailFragment_to_listFragment)
-        }}
-
-
+            if (requireContext().resources.getBoolean(R.bool.isTablet)) {
+                NavHostFragment.findNavController(requireParentFragment())
+                    .navigate(
+                        DetailFragmentDirections
+                            .actionDetailFragmentToListFragment(detailedEstate.estate?.startTime!!)
+                    )
+            }
+        }
         super.onResume()
     }
-
-
 }

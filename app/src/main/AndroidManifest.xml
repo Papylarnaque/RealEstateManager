@@ -41,7 +41,7 @@
         </activity>
 
         <provider
-            android:name=".database.provider.ContentProvider"
+            android:name="com.openclassrooms.realestatemanager.provider.ContentProvider"
             android:authorities="fr.openclassrooms.realestatemanager.database.provider"
             android:exported="false" />
     </application>

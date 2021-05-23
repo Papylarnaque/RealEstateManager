@@ -30,7 +30,7 @@ class ContentProviderTest {
     @Test
     fun testQuery() {
         val cursor = contentResolver.query(
-            ContentUris.withAppendedId(com.openclassrooms.realestatemanager.database.provider.ContentProvider.uri, id),
+            ContentUris.withAppendedId(com.openclassrooms.realestatemanager.provider.ContentProvider.uri, id),
             null,
             null,
             null,

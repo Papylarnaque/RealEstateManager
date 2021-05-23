@@ -22,6 +22,10 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
 
     private val viewModel: ListDetailViewModel by activityViewModels()
     private lateinit var binding: FragmentSearchBinding
+    private val navController = Navigation.findNavController(
+        requireActivity(),
+        R.id.nav_host_fragment
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchBinding.bind(view)
@@ -235,18 +239,19 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         }
         binding.searchButton.setOnClickListener {
             filterEstateList()
-            Navigation.findNavController(
-                requireActivity(),
-                R.id.nav_host_fragment
-            ).navigate(R.id.listFragment)
+            navigateToList()
         }
         binding.searchReset.setOnClickListener {
             viewModel.filterEstate(null)
-            Navigation.findNavController(
-                requireActivity(),
-                R.id.nav_host_fragment
-            ).navigate(R.id.listFragment)
+            navigateToList()
         }
+    }
+
+    private fun navigateToList() {
+        Navigation.findNavController(
+            requireActivity(),
+            R.id.nav_host_fragment
+        ).navigate(R.id.listFragment)
     }
 
     private fun filterEstateList() {
