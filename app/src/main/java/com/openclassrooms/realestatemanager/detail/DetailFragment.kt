@@ -6,7 +6,7 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,7 +26,7 @@ class DetailFragment : Fragment() {
 
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
-    private val viewModel: ListDetailViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: ListDetailViewModel by activityViewModels()
     private lateinit var detailedEstate: DetailedEstate
     private val pictureListAdapter = DetailPictureListAdapter(DetailPictureListener { picture ->
         // TODO() viewModel.onPictureClicked(picture)

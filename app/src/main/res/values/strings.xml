@@ -22,6 +22,7 @@
     <string name="search_creation_pickerdate_title">Select the creation interval</string>
     <string name="search_sale_pickerdate_title">Select the sale interval</string>
     <string name="search_notification">Estate List filtered with your parameters.</string>
+    <string name="search_notification_reset">Estate List filter is now reset.</string>
     <string name="create_picture_text">"Minimum picture "</string>
     <string name="search_poi_text">Nearby Points of Interest</string>
 

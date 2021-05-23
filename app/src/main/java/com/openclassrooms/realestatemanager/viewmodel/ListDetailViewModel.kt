@@ -24,10 +24,27 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val typeDao = EstateDatabase.getDatabase(application, viewModelScope).typeDao()
     private val typeRepository: TypeRepository = TypeRepository(typeDao)
 
-    val allDetailedEstates: LiveData<List<DetailedEstate>> = estateRepository.allDetailedEstates
     fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
     fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
     fun getEstate(id: Long): LiveData<DetailedEstate> = estateRepository.getEstate(id)
+
+    var allDetailedEstates: LiveData<List<DetailedEstate>> = estateRepository.allDetailedEstates
+
+    // Manage Search
+    private val _type: MutableLiveData<String>? = null
+    val type: LiveData<String>? = _type
+
+    fun updateType(type: String) {
+        if (_type?.value != type) {
+            _type?.value = type
+        }
+    }
+
+    fun filterEstate(searchEstate: EstateSearch?) {
+        allDetailedEstates =  estateRepository.filterEstateList(searchEstate)
+    }
+
+
 
     /**
      * Navigation for the EstateListDetail fragment.
@@ -39,9 +56,4 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     fun onEstateClicked(estate: DetailedEstate) {
         _navigateToEstateDetail.value = estate
     }
-
-    fun filterEstateList(searchEstate: EstateSearch?): LiveData<List<DetailedEstate>> {
-        return estateRepository.filterEstateList(searchEstate)
-    }
-
 }

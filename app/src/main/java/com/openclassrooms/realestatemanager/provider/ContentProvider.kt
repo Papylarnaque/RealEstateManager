@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.database.provider
+package com.openclassrooms.realestatemanager.provider
 
 import android.content.ContentProvider
 import android.content.ContentValues

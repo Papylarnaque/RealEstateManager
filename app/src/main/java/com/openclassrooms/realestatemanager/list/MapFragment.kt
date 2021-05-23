@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -41,8 +41,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     private lateinit var mapView: MapView
     private var permissionDenied = false
     private lateinit var googleMap: GoogleMap
-    private val viewModel: ListDetailViewModel by viewModels({ requireParentFragment() })
-    private var detailedEstatesList: List<DetailedEstate> = emptyList()
+    private val viewModel: ListDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -149,9 +148,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     // ---------------------- MANAGE MARKERS ----------------------//
 
     private fun getEstates() {
-        viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
+        viewModel.allDetailedEstates?.observe(viewLifecycleOwner) {
             it.let {
-                detailedEstatesList = it
                 notifyEstateListChanged(it)
             }
         }
@@ -225,8 +223,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     // ---------------------- COMPASS BUTTON ----------------------//
 
     override fun onMyLocationButtonClick(): Boolean {
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
         return false
     }
 
