@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
@@ -30,29 +29,31 @@ fun infoSnackBar(view: View, MESSAGE: String) {
     snackBar.show()
 }
 
-fun buildAddress(detailedEstate: DetailedEstate): String {
+fun buildAddress(it: DetailedEstate): String {
+    with(it.estate) {
+        val number: Int? = this?.estateStreetNumber
+        val street: String? = this?.estateStreet
+        val city: String? = this?.estateCity
+        val postal: String? = this?.estateCityPostalCode
 
-    val number: Int? = detailedEstate.estate?.estateStreetNumber
-    val street: String? = detailedEstate.estate?.estateStreet
-    val city: String? = detailedEstate.estate?.estateCity
-    val postal: String? = detailedEstate.estate?.estateCityPostalCode
+        val addressBuilder: StringBuilder = StringBuilder()
+        addressBuilder.append(number)
+        addressBuilder.append("+")
+        addressBuilder.append(street)
+        addressBuilder.append("+")
+        addressBuilder.append(city)
+        addressBuilder.append("+")
+        addressBuilder.append(postal)
 
-    val addressBuilder: StringBuilder = StringBuilder()
-    addressBuilder.append(number)
-    addressBuilder.append("+")
-    addressBuilder.append(street)
-    addressBuilder.append("+")
-    addressBuilder.append(city)
-    addressBuilder.append("+")
-    addressBuilder.append(postal)
-
-    return addressBuilder.toString()
+        return addressBuilder.toString()
+    }
 }
 
 fun formatPrice(price: Int): String {
-    val formatter = NumberFormat.getInstance(Locale.US) as DecimalFormat
-    formatter.applyPattern("#,###,###,###")
-    return formatter.format(price.toLong()).toString()
+    return NumberFormat.getCurrencyInstance(Locale.US).run {
+        maximumFractionDigits = 0
+        format(price.toFloat())
+    }
 }
 
 

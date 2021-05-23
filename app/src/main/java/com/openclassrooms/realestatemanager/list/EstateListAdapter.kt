@@ -36,7 +36,7 @@ class EstateListAdapter(private val clickListener: EstateListener) :
                 loadImage(binding.itemEstatePicture, item.pictures!![0].url)
             }
             binding.clickListener = clickListener
-            binding.itemEstateThirdLine.text = item.estate?.estatePrice?.let { formatPrice(it) + "$"}
+            binding.itemEstateThirdLine.text = item.estate?.estatePrice?.let { formatPrice(it) }
             // if SOLD
             if (item.estate?.endTime != null) {
                 binding.detailSoldTag.visibility = View.VISIBLE

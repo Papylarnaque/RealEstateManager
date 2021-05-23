@@ -23,8 +23,10 @@
     <string name="search_sale_pickerdate_title">Select the sale interval</string>
     <string name="search_notification">Estate List filtered with your parameters.</string>
     <string name="search_notification_reset">Estate List filter is now reset.</string>
-    <string name="create_picture_text">"Minimum picture "</string>
+    <string name="search_picture_text">"Minimum picture "</string>
     <string name="search_poi_text">Nearby Points of Interest</string>
+    <string name="search_endtime_switch_available">Available  </string>
+    <string name="search_endtime_switch_sold">Sold  </string>
 
     <!--  DETAIL  -->
     <string name="item_estate_first_line_text">%1$s</string>
@@ -107,6 +109,13 @@
     <string name="detail_map_description">Static map for the estate</string>
     <string name="item_estate_picture_description">Picture of the estate</string>
     <string name="no_estate_available">No Estate Available</string>
+    <string name="loan_title_text">Calculate a Loan</string>
+    <string name="loan_amount_text">Amount to loan</string>
+    <string name="loan_result_text">Monthly loan refund</string>
+    <string name="loan_interest_text">Interest rate</string>
+    <string name="loan_insurance_text">Insurance rate</string>
+    <string name="loan_duration_text">Refund duration</string>
+    <string name="return_dialog">Return</string>
 
 
 </resources>

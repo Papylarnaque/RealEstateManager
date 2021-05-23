@@ -106,7 +106,7 @@ class DetailFragment : Fragment() {
 
             android.R.id.home -> {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
-                return true;
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
@@ -119,6 +119,12 @@ class DetailFragment : Fragment() {
         val mLayoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
+
+        binding.detailEstateLoan.setOnClickListener {
+            findNavController().navigate(
+                R.id.loanFragment
+            )
+        }
     }
 
     private fun getEstate() {
@@ -139,6 +145,7 @@ class DetailFragment : Fragment() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
         pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
+        if (detailedEstate.estate?.endTime == null) binding.detailEstateLoan.visibility = View.VISIBLE
         bindDates()
         bindPois()
         bindMapView()

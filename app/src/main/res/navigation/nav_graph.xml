@@ -81,6 +81,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_up" />
+        <action
+            android:id="@+id/action_detailFragment_to_loanFragment"
+            app:destination="@id/loanFragment" />
     </fragment>
 
     <fragment
@@ -102,4 +105,9 @@
         android:id="@+id/searchDialogFragment"
         android:name="com.openclassrooms.realestatemanager.list.SearchDialogFragment"
         android:label="SearchDialogFragment" />
+    <dialog
+        android:id="@+id/loanFragment"
+        android:name="com.openclassrooms.realestatemanager.loan.LoanFragment"
+        android:label="LoanFragment"/>
+
 </navigation>

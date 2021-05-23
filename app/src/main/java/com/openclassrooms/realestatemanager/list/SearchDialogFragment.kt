@@ -27,12 +27,23 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         binding = FragmentSearchBinding.bind(view)
         binding.lifecycleOwner = viewLifecycleOwner
         super.onViewCreated(view, savedInstanceState)
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        );
+        setDialogSize()
         initBindings()
         configDialogActions()
+    }
+
+    private fun setDialogSize() {
+        if (requireContext().resources.getBoolean(R.bool.isTablet)) {
+            dialog?.window?.setLayout(
+                1200,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        } else {
+            dialog?.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
     }
 
     private fun initBindings() {
@@ -84,7 +95,6 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         }
     }
 
-
     private fun setCreationDatePicker() {
         binding.searchCreateDate.setOnClickListener {
             val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -128,10 +138,12 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         binding.searchSoldSwitch.setOnCheckedChangeListener { buttonView, _ ->
             if (buttonView.isChecked) {
                 setSoldDatePicker()
+                binding.searchSoldSwitch.text = getString(R.string.search_endtime_switch_sold)
                 soldStatus = true
             } else {
                 binding.searchSoldDate.visibility =
                     View.GONE
+                binding.searchSoldSwitch.text = getString(R.string.search_endtime_switch_available)
                 soldStatus = false
             }
         }
