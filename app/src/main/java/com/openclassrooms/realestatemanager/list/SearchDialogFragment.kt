@@ -22,10 +22,6 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
 
     private val viewModel: ListDetailViewModel by activityViewModels()
     private lateinit var binding: FragmentSearchBinding
-    private val navController = Navigation.findNavController(
-        requireActivity(),
-        R.id.nav_host_fragment
-    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchBinding.bind(view)
