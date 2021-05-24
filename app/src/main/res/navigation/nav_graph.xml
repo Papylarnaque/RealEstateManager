@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_listFragment_to_searchDialogFragment"
             app:destination="@id/searchDialogFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_dayNightFragment"
+            app:destination="@id/dayNightFragment" />
     </fragment>
 
     <fragment
@@ -109,5 +112,9 @@
         android:id="@+id/loanFragment"
         android:name="com.openclassrooms.realestatemanager.loan.LoanFragment"
         android:label="LoanFragment"/>
+    <fragment
+        android:id="@+id/dayNightFragment"
+        android:name="com.openclassrooms.realestatemanager.settings.DayNightFragment"
+        android:label="DayNightFragment" />
 
 </navigation>

@@ -41,10 +41,8 @@ class EstateListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getEstates()
         onEstateClick()
-
         navController = Navigation.findNavController(
             requireActivity(),
             R.id.nav_host_fragment
@@ -68,19 +66,22 @@ class EstateListFragment : Fragment() {
             R.id.add_estate -> navigateCreateEstate()
             R.id.open_map -> navigateMapView()
             R.id.edit_estate -> navigateEditEstate()
-            R.id.search_estate -> searchEstateDialog()
+            R.id.search_estate -> navigateSearchDialog()
+            R.id.settings_daynight -> navigateDayNightSettings()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun initBindings() {
         binding = FragmentListBinding.inflate(layoutInflater)
-        binding.recyclerviewEstateList.adapter = estateListAdapter
-        binding.recyclerviewEstateList.layoutManager = LinearLayoutManager(context)
+        binding.recyclerviewEstateList.apply {
+            adapter = estateListAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 
     private fun getEstates() {
-        viewModel.allDetailedEstates.observeForever {
+        viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
             notifyListChanged(it)
         }
     }
@@ -101,16 +102,15 @@ class EstateListFragment : Fragment() {
                     if (estate.estate?.startTime == args.estateKey) viewModel.onEstateClicked(estate)
                 }
             }
+            // Select first estate by default on Tablet mode
             if (binding.detailFragmentContainer != null && estate == null) {
                 binding.detailFragmentContainer!!.visibility = View.VISIBLE
                 viewModel.onEstateClicked(list[0])
             }
-
         }
     }
 
     private fun onEstateClick() {
-        // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
             it?.let {
                 estate = it
@@ -121,7 +121,7 @@ class EstateListFragment : Fragment() {
                             .actionListFragmentToDetailFragment(it.estate!!.startTime)
                     )
                 }
-                // If LANDSCAPE and MASTER-DETAIL dual layout
+                // DUAL layout
                 else {
                     childFragmentManager.beginTransaction()
                         .replace(binding.detailFragmentContainer!!.id, DetailFragment())
@@ -129,17 +129,6 @@ class EstateListFragment : Fragment() {
                 }
             }
         }
-    }
-
-// TODO() How to export that search dialog to another file or function ?
-
-    /**
-     * Handle estate search
-     */
-    private fun searchEstateDialog() {
-        navController.navigate(
-            EstateListFragmentDirections.actionListFragmentToSearchDialogFragment()
-        )
     }
 
     // NAVIGATION
@@ -167,6 +156,16 @@ class EstateListFragment : Fragment() {
         }
     }
 
+    private fun navigateSearchDialog() {
+        navController.navigate(
+            EstateListFragmentDirections.actionListFragmentToSearchDialogFragment()
+        )
+    }
+
+    private fun navigateDayNightSettings() {
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.dayNightFragment)
+    }
 
 }
 

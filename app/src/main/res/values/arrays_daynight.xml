@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="darkmode_preference_entries">
+        <item>@string/enabled</item>
+        <item>@string/disabled</item>
+        <item>@string/system_default</item>
+    </string-array>
+
+    <string-array name="darkmode_preference_entry_values">
+        <item>@string/enabled_value</item>
+        <item>@string/disabled_value</item>
+        <item>@string/system_default_value</item>
+    </string-array>
+</resources>

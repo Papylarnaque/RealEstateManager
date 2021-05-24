@@ -2,7 +2,7 @@
     <string name="app_name">Real Estate Manager</string>
 
     <!--  MENU  -->
-    <string name="add_property_text">Add a property</string>
+    <string name="add_estate_text">Add an Estate</string>
     <string name="open_map_text">Open Maps</string>
 
     <string name="lorem_ipsum">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</string>
@@ -116,6 +116,20 @@
     <string name="loan_insurance_text">Insurance rate</string>
     <string name="loan_duration_text">Refund duration</string>
     <string name="return_dialog">Return</string>
+
+
+    <!-- Settings -->
+    <string name="dark_mode_title">Dark Mode</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="system_default">System Default</string>
+
+    <string name="dark_mode_key" translatable="false">darkMode</string>
+    <string name="enabled_value" translatable="false">enabled</string>
+    <string name="disabled_value" translatable="false">disabled</string>
+    <string name="system_default_value" translatable="false">default</string>
+    <string name="settings_daynight">Settings</string>
+    <string name="edit_sale_pickerdate_title">Select the sale date</string>
 
 
 </resources>
