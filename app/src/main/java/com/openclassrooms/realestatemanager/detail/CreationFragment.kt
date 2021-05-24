@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.detail
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +17,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.openclassrooms.realestatemanager.MainActivity
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.*
@@ -132,11 +133,10 @@ class CreationFragment : Fragment() {
             setPoisCheckList()
         }
 
-        binding.createRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-        binding.createRecyclerviewPictures.layoutManager = mLayoutManager
-
+        binding.createRecyclerviewPictures.apply {
+            adapter = pictureListAdapter
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        }
         binding.createTakePicture.setOnClickListener {
             // Open camera for image
             takePicture.launch(null)
@@ -149,37 +149,29 @@ class CreationFragment : Fragment() {
 
         binding.editEstateAvailability.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked && endTime == null) {
-                // Get Current Date
-                val c = Calendar.getInstance()
-                val mYear = c[Calendar.YEAR]
-                val mMonth = c[Calendar.MONTH]
-                val mDay = c[Calendar.DAY_OF_MONTH]
 
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    { _, year, monthOfYear, dayOfMonth ->
-                        val c1 = Calendar.getInstance()
-                        c1.set(Calendar.YEAR, year)
-                        c1.set(Calendar.MONTH, monthOfYear)
-                        c1.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        endTime = c1.timeInMillis
-                        bindSoldDate(endTime!!)
-                    }, mYear, mMonth, mDay
-                )
+                val builder = MaterialDatePicker.Builder.datePicker()
+                builder.setCalendarConstraints(limitRange().build())
+                builder.setTitleText(R.string.search_sale_pickerdate_title)
+                builder.setTitleText(R.string.edit_sale_pickerdate_title)
+                val picker = builder.build()
+                picker.show(parentFragmentManager, picker.toString())
 
-                datePickerDialog.setTitle(R.string.create_pickerdate_title)
-                datePickerDialog.datePicker.minDate = estateKey
-                datePickerDialog.datePicker.maxDate = c.timeInMillis
-                datePickerDialog.show()
+                picker.addOnPositiveButtonClickListener {
+                    endTime = it
+                    bindSoldDate(it)
+                }
 
+                picker.addOnNegativeButtonClickListener {
+                    binding.editEstateAvailability.isChecked = true
+                }
             } else if (isChecked) {
                 endTime = null
                 binding.createDateSold.visibility = View.INVISIBLE
             }
         }
 
-
-        binding.createEstate.setOnClickListener {
+        binding.createSaveEstate.setOnClickListener {
             val estate = shareEstate()
             if (!errorMessage.isNullOrEmpty()) {
                 errorMessage?.let { infoSnackBar(requireView(), it) }
@@ -189,6 +181,20 @@ class CreationFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun limitRange(): CalendarConstraints.Builder {
+        val constraintsBuilderRange = CalendarConstraints.Builder()
+
+        val calendarEnd: Calendar = Calendar.getInstance()
+
+        val minDate = estateKey // one year
+        val maxDate = calendarEnd.timeInMillis // current date
+
+        constraintsBuilderRange.setStart(minDate)
+        constraintsBuilderRange.setEnd(maxDate)
+
+        return constraintsBuilderRange
     }
 
     private fun bindSoldDate(endTime: Long) {
@@ -201,11 +207,11 @@ class CreationFragment : Fragment() {
 
 
     private fun bindDates() {
-        if (detailedEstate.estate?.startTime != null){
-        binding.createDateStart.text = getString(
-            R.string.detail_date_start,
-            getFormattedDateFromMillis(detailedEstate.estate?.startTime!!)
-        )
+        if (detailedEstate.estate?.startTime != null) {
+            binding.createDateStart.text = getString(
+                R.string.detail_date_start,
+                getFormattedDateFromMillis(detailedEstate.estate?.startTime!!)
+            )
             binding.createDateStart.visibility = View.VISIBLE
         }
 
@@ -362,7 +368,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getPrice(): Int {
-        val priceMin = resources.getInteger(R.integer.create_price_minimum) -1
+        val priceMin = resources.getInteger(R.integer.create_price_minimum) - 1
         binding.createPriceEdit.text.toString().toIntOrNull().let {
             return when (it) {
                 null -> {
@@ -429,7 +435,7 @@ class CreationFragment : Fragment() {
     }
 
     private fun getPois(): String {
-        return poiChipGroup.checkedChipIds.joinToString("|", prefix =  "|", postfix = "|")
+        return poiChipGroup.checkedChipIds.joinToString("|", prefix = "|", postfix = "|")
     }
 
     private fun getEstateAvailability(): Long? {
@@ -445,7 +451,9 @@ class CreationFragment : Fragment() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                NavHostFragment.findNavController(this).navigateUp()
+                NavHostFragment.findNavController(this).navigate(
+                    CreationFragmentDirections.actionCreationFragmentToDetailFragment(estateKey)
+                )
             } ?: NavHostFragment.findNavController(this)
                 .navigate(R.id.action_creationFragment_to_listFragment)
 
@@ -487,7 +495,10 @@ class CreationFragment : Fragment() {
                 dialog.dismiss()
             }
 
-            setPositiveButton(getString(R.string.create_picture_click_dialog_positivebutton), positiveButtonClick)
+            setPositiveButton(
+                getString(R.string.create_picture_click_dialog_positivebutton),
+                positiveButtonClick
+            )
             setNegativeButton(getString(R.string.cancel_dialog), negativeButtonClick)
             show()
         }
@@ -509,14 +520,20 @@ class CreationFragment : Fragment() {
                 viewModel.deletePicture(picture) // async deletion
                 listPicture.remove(picture) // delete then refresh view
                 notifyPicturesChanged(listPicture)
-                infoSnackBar(requireView(), getString(R.string.create_picture_delete_dialog_confirmation))
+                infoSnackBar(
+                    requireView(),
+                    getString(R.string.create_picture_delete_dialog_confirmation)
+                )
             }
 
             val negativeButtonClick = { dialog: DialogInterface, _: Int ->
                 dialog.dismiss()
             }
 
-            setPositiveButton(getString(R.string.create_picture_delete_dialog_positivebutton), positiveButtonClick)
+            setPositiveButton(
+                getString(R.string.create_picture_delete_dialog_positivebutton),
+                positiveButtonClick
+            )
             setNegativeButton(getString(R.string.cancel_dialog), negativeButtonClick)
             show()
         }

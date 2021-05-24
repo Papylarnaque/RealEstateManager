@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
@@ -60,7 +59,6 @@
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/search_price"
-                style="Theme.MaterialComponents.Light.DarkActionBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -85,7 +83,6 @@
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/search_surface"
-                style="Theme.MaterialComponents.Light.DarkActionBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -114,10 +111,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/edit_estate_availability"
+                android:checked="true"
                 app:layout_constraintEnd_toStartOf="@id/search_sold_date"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_create_date"
-                app:thumbTint="@color/green"/>
+                app:layout_constraintTop_toBottomOf="@id/search_create_date" />
 
             <TextView
                 android:id="@+id/search_sold_date"
@@ -186,7 +183,6 @@
                 android:layout_marginEnd="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:text="@string/cancel_dialog"
-                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toStartOf="@id/search_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_poi" />
@@ -200,7 +196,6 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:text="@string/search_button_text"
-                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search_cancel"
                 app:layout_constraintTop_toBottomOf="@id/search_poi" />
@@ -213,7 +208,6 @@
                 android:layout_marginEnd="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:text="@string/reset_dialog"
-                android:textColor="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

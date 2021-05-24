@@ -32,31 +32,31 @@ class EstateRepository(private val estateDao: EstateDao) {
                     ) AS p ON p.estate_id = e.start_time_milli
                 """
                 )
-                append("WHERE (e.price BETWEEN '${searchEstate?.priceRange?.first}' AND '${searchEstate?.priceRange?.last}') ")
-                if (!searchEstate?.type.isNullOrBlank()) {
-                    append("AND t.name = '${searchEstate?.type}' ")
+                append("WHERE (e.price BETWEEN '${searchEstate.priceRange.first}' AND '${searchEstate.priceRange.last}') ")
+                if (!searchEstate.type.isNullOrBlank()) {
+                    append("AND t.name = '${searchEstate.type}' ")
                 }
                 append(
-                    "AND ((e.surface BETWEEN '${searchEstate?.surfaceRange?.first}' AND '${searchEstate?.surfaceRange?.last}') " +
+                    "AND ((e.surface BETWEEN '${searchEstate.surfaceRange.first}' AND '${searchEstate.surfaceRange.last}') " +
                             "OR e.surface IS NULL) "
                 )
-                append("AND (e.start_time_milli BETWEEN '${searchEstate?.createDateRange?.first}' AND '${searchEstate?.createDateRange?.last}') ")
-                if (searchEstate?.soldStatus == false) {
+                append("AND (e.start_time_milli BETWEEN '${searchEstate.createDateRange.first}' AND '${searchEstate.createDateRange.last}') ")
+                if (!searchEstate.soldStatus) {
                     append("AND e.end_time_milli IS NULL ")
                 } else {
                     append(
-                        "AND e.end_time_milli BETWEEN '${searchEstate?.soldDateRange?.first}' " +
-                                "AND '${searchEstate?.soldDateRange?.last}' "
+                        "AND e.end_time_milli BETWEEN '${searchEstate.soldDateRange.first}' " +
+                                "AND '${searchEstate.soldDateRange.last}' "
                     )
                 }
                 // Manage POI research
-                if (searchEstate?.poiList?.isNotEmpty() == true) {
+                if (searchEstate.poiList?.isNotEmpty() == true) {
                     for (poi in searchEstate.poiList) {
                         append("AND e.poi_id LIKE '%|${poi}|%' ")
                     }
                 }
                 append("GROUP BY e.start_time_milli ")
-                append("""HAVING p.picturesCount >= ${searchEstate?.pictureMinNumber}""")
+                append("""HAVING p.picturesCount >= ${searchEstate.pictureMinNumber}""")
 
                 Log.i("ListDetailViewModel", this.toString())
                 return estateDao.filterEstateList(SimpleSQLiteQuery(this.toString()))

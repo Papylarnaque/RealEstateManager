@@ -7,12 +7,12 @@
     <item
         android:id="@+id/convert_price"
         android:icon="@drawable/ic_baseline_euro_24"
-        android:title="@string/add_property_text"
+        android:title="@string/add_estate_text"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/edit_estate"
         android:icon="@drawable/ic_baseline_edit_24"
-        android:title="@string/add_property_text"
+        android:title="@string/edit_estate_titlebar"
         app:showAsAction="ifRoom" />
 </menu>

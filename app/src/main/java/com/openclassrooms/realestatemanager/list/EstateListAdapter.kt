@@ -42,7 +42,7 @@ class EstateListAdapter(private val clickListener: EstateListener) :
                 binding.detailSoldTag.visibility = View.VISIBLE
                 binding.itemEstateThirdLine.visibility = View.INVISIBLE
             }
-//            binding.executePendingBindings()
+
         }
 
         companion object {

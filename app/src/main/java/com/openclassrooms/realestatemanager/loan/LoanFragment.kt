@@ -89,8 +89,8 @@ class LoanFragment : DialogFragment(R.layout.fragment_loan), Slider.OnChangeList
             setLabelFormatter { formatPrice(it.toInt()) }
             addOnChangeListener(this@LoanFragment)
             value = 1000000f
-            valueFrom = 0f
-            valueTo = 100000000f
+            valueFrom = 100000f
+            valueTo = 10000000f
         }
     }
 

@@ -17,7 +17,7 @@ fun infoSnackBar(view: View, MESSAGE: String) {
         Snackbar.LENGTH_LONG
     )
     val snackBarView = snackBar.view
-    snackBarView.setBackgroundColor(Color.BLACK)
+    snackBarView.setBackgroundColor(Color.DKGRAY)
     val textView =
         snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
     textView.setTextColor(Color.WHITE)

@@ -18,7 +18,6 @@ import com.openclassrooms.realestatemanager.utils.copyImageFromStream
 import com.openclassrooms.realestatemanager.utils.generateFilename
 import com.openclassrooms.realestatemanager.utils.getImagesFolder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -58,7 +57,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     fun saveEstate(editMode: Boolean, estate: Estate, listPicture: List<Picture>) {
         if (editMode) {
-            GlobalScope.launch {
+            viewModelScope.launch {
                 estateRepository.update(estate)
                 Log.i(
                     "CreationViewModel",
@@ -66,7 +65,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
                 )
             }
         } else {
-            GlobalScope.launch {
+            viewModelScope.launch {
                 estateRepository.insert(estate)
                 Log.i(
                     "CreationViewModel ",

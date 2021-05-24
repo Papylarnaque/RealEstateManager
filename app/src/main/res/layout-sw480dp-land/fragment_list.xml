@@ -27,7 +27,6 @@
             android:id="@+id/recyclerview_estate_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/layout_border"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"

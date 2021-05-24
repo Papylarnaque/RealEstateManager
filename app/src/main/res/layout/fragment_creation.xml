@@ -142,9 +142,7 @@
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="textMultiLine"
                         android:singleLine="false"
-                        android:text="@={detailedEstate.estate.estateDescription}"
-                        android:textColor="@color/colorPrimary"
-                        tools:textColorHint="@color/colorPrimaryText" />
+                        android:text="@={detailedEstate.estate.estateDescription}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,8 +166,7 @@
                         android:drawableStart="@drawable/ic_baseline_surface_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="number|textMultiLine"
-                        android:text='@{detailedEstate.estate.estateSurface== null ? "" : Integer.toString(detailedEstate.estate.estateSurface) }'
-                        android:textColor="@color/colorPrimary" />
+                        android:text='@{detailedEstate.estate.estateSurface== null ? "" : Integer.toString(detailedEstate.estate.estateSurface) }' />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,8 +189,7 @@
                         android:drawableStart="@drawable/ic_baseline_rooms_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="number"
-                        android:text='@{detailedEstate.estate.estateRooms== null ? "" : Integer.toString(detailedEstate.estate.estateRooms) }'
-                        android:textColor="@color/colorPrimary" />
+                        android:text='@{detailedEstate.estate.estateRooms== null ? "" : Integer.toString(detailedEstate.estate.estateRooms) }' />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -217,8 +213,7 @@
                         android:drawableStart="@drawable/ic_baseline_address_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="textPostalAddress"
-                        android:text="@{detailedEstate.estate.estateStreet}"
-                        android:textColor="@color/colorPrimary" />
+                        android:text="@{detailedEstate.estate.estateStreet}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -237,8 +232,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number"
-                        android:text='@{detailedEstate.estate.estateStreetNumber== null ? "" : Integer.toString(detailedEstate.estate.estateStreetNumber) }'
-                        android:textColor="@color/colorPrimary" />
+                        android:text='@{detailedEstate.estate.estateStreetNumber== null ? "" : Integer.toString(detailedEstate.estate.estateStreetNumber) }' />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -258,8 +252,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="number|textMultiLine"
-                        android:text='@{detailedEstate.estate.estateCityPostalCode== null ? "" : detailedEstate.estate.estateCityPostalCode }'
-                        android:textColor="@color/colorPrimary" />
+                        android:text='@{detailedEstate.estate.estateCityPostalCode== null ? "" : detailedEstate.estate.estateCityPostalCode }' />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!--    ADDRESS - CITY    -->
@@ -280,8 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPostalAddress|textCapCharacters"
-                        android:text="@{detailedEstate.estate.estateCity}"
-                        android:textColor="@color/colorPrimary" />
+                        android:text="@{detailedEstate.estate.estateCity}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -304,8 +296,7 @@
                         android:drawableStart="@drawable/ic_baseline_person_24"
                         android:drawablePadding="@dimen/margin_small"
                         android:inputType="textNoSuggestions|textFilter"
-                        android:labelFor="@+id/createEstateEmployeeSpinnerEdit"
-                        android:textColor="@color/colorPrimary" />
+                        android:labelFor="@+id/createEstateEmployeeSpinnerEdit" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!--    POIS    -->
@@ -316,12 +307,10 @@
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/create_pois_text"
-                    android:textColorHint="@color/gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/createEstateEmployeeSpinner"
-                    tools:hint="Pois"
-                    tools:textColorHint="@color/gray" />
+                    tools:hint="Pois" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/createPoisChipGroup"
@@ -361,9 +350,8 @@
                     android:visibility="invisible"
                     app:drawableStartCompat="@drawable/ic_calendar_24"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/create_guideline_vertical"
                     app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
-                    tools:layout_editor_absoluteX="51dp"
-                    tools:layout_editor_absoluteY="665dp"
                     tools:text="Created on \n25/12/2020" />
 
                 <TextView
@@ -378,8 +366,7 @@
                     app:drawableStartCompat="@drawable/ic_calendar_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
-                    tools:layout_editor_absoluteX="51dp"
-                    tools:layout_editor_absoluteY="665dp"
+                    app:layout_constraintStart_toStartOf="@id/create_guideline_vertical"
                     tools:text="Sold on \n01/01/2021" />
 
                 <!-- Additional bottom space for UX when scrolling to bottom -->
@@ -388,9 +375,7 @@
                     android:layout_height="@dimen/detail_estate_picture_height"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"
-                    tools:layout_editor_absoluteX="158dp"
-                    tools:layout_editor_absoluteY="798dp" />
+                    app:layout_constraintTop_toBottomOf="@id/edit_estate_availability"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -399,7 +384,7 @@
         <!--    CREATE BUTTON    -->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/create_estate"
+            android:id="@+id/create_save_estate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="45dp"

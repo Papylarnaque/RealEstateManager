@@ -1,45 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.RealEstateManager.DayNight" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primaryLight</item>
+        <item name="colorPrimaryVariant">@color/primaryVariantLight</item>
+        <item name="colorAccent">@color/green</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondaryVariant</item>
+        <!--text fields.-->
+        <item name="android:colorBackground">@color/white_50</item>
+        <item name="colorSurface">@color/white_50</item>
+        <item name="colorError">@color/red_600</item>
+        <!--"On" colors -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/black_900</item>
+        <item name="colorOnBackground">@color/black_900</item>
+        <item name="colorOnSurface">@color/black_900</item>
+        <item name="colorOnError">@color/white</item>
 
-    <!--Final, top-level theme-->
-    <style name="Theme.RealEstateManager.DayNight" parent="Theme.RealEstateManager" />
-
-    <style name="Theme.RealEstateManager" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/red</item>
-
-<!--        <item name="android:actionMenuTextColor">@color/black</item>-->
-        <item name="android:textColor">@color/black</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSwitchThumbNormal">@color/black</item>
-
-        <item name="sliderStyle">@style/Widget.App.Slider</item>
-        <item name="switchStyle">@style/Widget.App.Switch</item>
-    </style>
-
-
-    <!--Sliders Theme-->
-    <style name="Widget.App.Slider" parent="Widget.MaterialComponents.Slider">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Slider</item>
-        <item name="labelStyle">@style/Widget.App.Tooltip</item>
-    </style>
-
-    <style name="ThemeOverlay.App.Slider" parent="">
-        <item name="colorPrimary">?attr/colorAccent</item>
-        <item name="colorOnPrimary">?attr/colorSecondary</item>
-        <item name="colorOnSurface">?attr/colorPrimary</item>
-    </style>
-
-    <style name="Widget.App.Tooltip" parent="Widget.MaterialComponents.Tooltip">
-        <item name="android:textAppearance">@style/TextAppearance.App.Tooltip</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
-    </style>
-
-    <style name="TextAppearance.App.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
-        <item name="android:textColor">?attr/colorSecondary</item>
+        <!--Component styles-->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
     </style>
 
 </resources>

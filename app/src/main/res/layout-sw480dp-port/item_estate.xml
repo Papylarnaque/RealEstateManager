@@ -20,7 +20,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_estate_height"
-        android:background="@drawable/layout_border"
+        android:background="@drawable/border_bottom"
         android:onClick="@{() -> clickListener.onClick(it)}"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -77,14 +77,14 @@
             android:id="@+id/item_estate_third_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
+            android:textColor="?attr/colorAccent"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/item_estate_second_line"
             tools:text="555.475.000 $"
-            tools:textColor="@color/green"
+            tools:textColor="?attr/colorAccent"
             tools:textSize="20sp"
             tools:textStyle="bold" />
 

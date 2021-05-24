@@ -105,12 +105,6 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
             picker.show(parentFragmentManager, picker.toString())
 
             picker.addOnPositiveButtonClickListener {
-
-            }
-            picker.addOnNegativeButtonClickListener {
-
-            }
-            picker.addOnPositiveButtonClickListener {
                 val startDate = getFormattedDateFromMillis(it.first)
                 val endDate = getFormattedDateFromMillis(it.second)
 
@@ -137,14 +131,14 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
     private fun setSoldDateSwitchAndPicker() {
         binding.searchSoldSwitch.setOnCheckedChangeListener { buttonView, _ ->
             if (buttonView.isChecked) {
-                setSoldDatePicker()
-                binding.searchSoldSwitch.text = getString(R.string.search_endtime_switch_sold)
-                soldStatus = true
-            } else {
                 binding.searchSoldDate.visibility =
                     View.GONE
                 binding.searchSoldSwitch.text = getString(R.string.search_endtime_switch_available)
                 soldStatus = false
+            } else {
+                setSoldDatePicker()
+                binding.searchSoldSwitch.text = getString(R.string.search_endtime_switch_sold)
+                soldStatus = true
             }
         }
     }
@@ -241,7 +235,7 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
     }
 
     private fun configDialogActions() {
-        binding.searchTitle.text = getString(R.string.search_type_title_text)
+        binding.searchTitle.text = getString(R.string.search_estate)
         binding.searchCancel.setOnClickListener {
             dismiss()
         }

@@ -5,7 +5,7 @@
     style="@style/Widget.MaterialComponents.Chip.Filter"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:chipStrokeColor="@color/lightgray"
+    app:chipStrokeColor="?attr/colorAccent"
     app:chipStrokeWidth="1dp"
     app:checkedIconEnabled="false"
     app:chipBackgroundColor="@color/chip_bg_states" />
