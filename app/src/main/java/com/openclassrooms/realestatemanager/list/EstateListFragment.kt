@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -28,6 +29,7 @@ class EstateListFragment : Fragment() {
     private var estate: DetailedEstate? = null
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
+        view?.isSelected = true
     })
 
     override fun onCreateView(
@@ -126,6 +128,9 @@ class EstateListFragment : Fragment() {
                     childFragmentManager.beginTransaction()
                         .replace(binding.detailFragmentContainer!!.id, DetailFragment())
                         .commit()
+
+                    binding.recyclerviewEstateList.background =
+                        getDrawable(requireContext(), R.drawable.border_right)
                 }
             }
         }

@@ -25,7 +25,7 @@
     <item
         android:id="@+id/edit_estate"
         android:icon="@drawable/ic_baseline_edit_24"
-        android:title="@string/add_estate_text"
+        android:title="@string/edit_estate_titlebar"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
