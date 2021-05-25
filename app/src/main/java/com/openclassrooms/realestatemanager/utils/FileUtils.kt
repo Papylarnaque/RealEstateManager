@@ -14,7 +14,7 @@ enum class Source {
     CAMERA, PICKER;
 
     override fun toString(): String {
-        return name.toLowerCase(Locale.getDefault())
+        return name.lowercase(Locale.getDefault())
     }
 }
 
