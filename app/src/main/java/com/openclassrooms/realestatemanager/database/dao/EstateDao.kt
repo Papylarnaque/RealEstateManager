@@ -6,6 +6,7 @@ import androidx.room.*
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Estate
+import com.openclassrooms.realestatemanager.database.model.EstateWithPoi
 
 @Dao
 interface EstateDao {
@@ -62,4 +63,13 @@ interface EstateDao {
     @RawQuery
     fun filterEstateList(searchEstate: SimpleSQLiteQuery): LiveData<List<DetailedEstate>>
 
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(join: EstateWithPoi)
+
+    @Query("DELETE FROM estate_with_poi_table WHERE estate_id = :estateId AND poi_id IN(:poiIds)")
+    suspend fun deleteEstatePois(estateId: Long, poiIds: List<Int>)
+
+    @Query("DELETE FROM estate_with_poi_table WHERE estate_id = :estateId")
+    suspend fun deleteEstatePois(estateId: Long)
 }

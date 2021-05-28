@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @Database(
-    entities = [Estate::class, Poi::class, Employee::class, Type::class, Picture::class],
-    version = 3, exportSchema = false
+    entities = [Estate::class, Poi::class, Employee::class, Type::class, Picture::class, EstateWithPoi::class],
+    version = 1, exportSchema = false
 )
 abstract class EstateDatabase : RoomDatabase() {
 
@@ -81,26 +81,49 @@ abstract class EstateDatabase : RoomDatabase() {
             employeeDao: EmployeeDao,
             poiDao: PoiDao,
             typeDao: TypeDao,
-            pictureDao: PictureDao
+            pictureDao: PictureDao,
         ) {
             // CLEAN DB
+            pictureDao.deleteAll()
+            estateDao.deleteAll()
             estateDao.deleteAll()
             employeeDao.deleteAll()
             poiDao.deleteAll()
             typeDao.deleteAll()
-            pictureDao.deleteAll()
+
 
             // INSERT DATA
             employeeDao.insert(
                 Employee(
-                    employeeFirstName = "Etienne", employeeLastName = "DOC", employeeId = 1
+                    employeeFirstName = "Joseph", employeeLastName = "PARRY", employeeId = 1
                 )
             )
             employeeDao.insert(
                 Employee(
-                    employeeFirstName = "Aurélie", employeeLastName = "ROC", employeeId = 2
+                    employeeFirstName = "Quinton", employeeLastName = "SPENCER", employeeId = 2
                 )
             )
+            employeeDao.insert(
+                Employee(
+                    employeeFirstName = "Quinn", employeeLastName = "LYNCH", employeeId = 3
+                )
+            )
+            employeeDao.insert(
+                Employee(
+                    employeeFirstName = "Randall", employeeLastName = "RAY", employeeId = 4
+                )
+            )
+            employeeDao.insert(
+                Employee(
+                    employeeFirstName = "Ayaan", employeeLastName = "WHITNEY", employeeId = 5
+                )
+            )
+            employeeDao.insert(
+                Employee(
+                    employeeFirstName = "Colt", employeeLastName = "ROBERTSON", employeeId = 6
+                )
+            )
+
 
             typeDao.insert(Type(typeId = 1, typeName = "Duplex"))
             typeDao.insert(Type(typeId = 2, typeName = "Loft"))
@@ -115,6 +138,8 @@ abstract class EstateDatabase : RoomDatabase() {
             poiDao.insert(Poi(poiId = 4, poiName = "Municipal Garden"))
             poiDao.insert(Poi(poiId = 5, poiName = "Restaurants"))
             poiDao.insert(Poi(poiId = 777, poiName = "Airport"))
+            poiDao.insert(Poi(poiId = 6, poiName = "Museum"))
+            poiDao.insert(Poi(poiId = 7, poiName = "Bank"))
 
             val startTime1: Long = 1615760275000 // Sunday 14 March 2021
             estateDao.insert(
@@ -131,7 +156,6 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateStreet = "Central Park West",
                     estateStreetNumber = 15,
                     estateCityPostalCode = "",
-                    estatePois = "1|5"
                 )
             )
             pictureDao.insert(
@@ -175,6 +199,13 @@ abstract class EstateDatabase : RoomDatabase() {
                 )
             )
 
+            estateDao.insert(
+                EstateWithPoi(startTime1,1)
+            )
+            estateDao.insert(
+                EstateWithPoi(startTime1,911)
+            )
+
             val startTime2: Long = 1615860275000
             val endTime2: Long = 1615960275000
             estateDao.insert(
@@ -183,15 +214,14 @@ abstract class EstateDatabase : RoomDatabase() {
                     endTime = endTime2,
                     estateTypeId = 3,
                     estatePrice = 12500000,
-                    employeeId = 1,
+                    employeeId = 3,
                     estateCity = "NEW-YORK",
                     estateDescription = "A Fifth Avenue Masterpiece with open Central Park and Reservoir Views, this sprawling 12 room Pre-War Cooperative is pristine and ready to move in due to a recent full renovation by Ferguson Shamamian. The interiors were meticulously curated by the world-renowned designer, Bunny Williams, the distinguished expert in creating homes that are as grand and stylish as they are comfortable and serene. This residence is far from the exception, featuring finest quality finishes throughout and an atmosphere of sophistication that can be compared to nothing else available. Stepping into the private jewel box 14th floor elevator landing, one is welcomed by spectacular light bouncing from the glossy custom patinaed Venetian Plaster adorning the walls of a double-wide Gallery and pouring through to illuminate the rest of the open yet classic floorplan.",
-                    estateSurface = 100,
-                    estateRooms = 1,
+                    estateSurface = 300,
+                    estateRooms = 8,
                     estateStreet = "Fifth Avenue",
                     estateStreetNumber = 1158,
                     estateCityPostalCode = "WA 98109",
-                    estatePois = "777|911|1|3"
                 )
             )
             pictureDao.insert(
@@ -211,6 +241,13 @@ abstract class EstateDatabase : RoomDatabase() {
                 )
             )
 
+            estateDao.insert(
+                EstateWithPoi(startTime2,777)
+            )
+            estateDao.insert(
+                EstateWithPoi(startTime2,6)
+            )
+
             val startTime3: Long = Calendar.getInstance().timeInMillis
             estateDao.insert(
                 Estate(
@@ -218,16 +255,15 @@ abstract class EstateDatabase : RoomDatabase() {
                     endTime = null,
                     estateTypeId = 4,
                     estatePrice = 1500000,
-                    employeeId = 1,
+                    employeeId = 6,
                     estateCity = "NEW-YORK",
                     estateDescription = "A nice residence in the heart of Manhattan. " +
                             "Located at the 50th floor",
                     estateSurface = 200,
-                    estateRooms = 8,
+                    estateRooms = 6,
                     estateStreet = "Park Avenue",
                     estateStreetNumber = 432,
                     estateCityPostalCode = null,
-                    estatePois = "777|911|1|3"
                 )
             )
             pictureDao.insert(
@@ -255,6 +291,12 @@ abstract class EstateDatabase : RoomDatabase() {
                 )
             )
 
+            estateDao.insert(
+                EstateWithPoi(startTime3,911)
+            )
+            estateDao.insert(
+                EstateWithPoi(startTime3,5)
+            )
 
             Log.i("EstateDatabase", "Database populated")
         }

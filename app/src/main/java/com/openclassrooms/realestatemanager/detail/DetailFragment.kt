@@ -38,17 +38,20 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         initBindings()
+        loanClickListener()
         getEstate()
         setBackNav()
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onViewCreated(view, savedInstanceState)
     }
 
+    /**
+     * Menu creation
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // If TabletMode, Menu managed by EstateList
         if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
@@ -57,6 +60,9 @@ class DetailFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    /**
+     * Menu items
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //get item id to handle item clicks
         when (item.itemId) {
@@ -115,11 +121,14 @@ class DetailFragment : Fragment() {
     private fun initBindings() {
         binding = FragmentDetailBinding.inflate(layoutInflater)
 
-        binding.detailRecyclerviewPictures.adapter = pictureListAdapter
-        val mLayoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-        binding.detailRecyclerviewPictures.layoutManager = mLayoutManager
+        binding.detailRecyclerviewPictures.apply {
+            adapter = pictureListAdapter
+            layoutManager =
+                StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        }
+    }
 
+    private fun loanClickListener() {
         binding.detailEstateLoan.setOnClickListener {
             findNavController().navigate(
                 R.id.loanFragment
@@ -145,7 +154,8 @@ class DetailFragment : Fragment() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
         pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
-        if (detailedEstate.estate?.endTime == null) binding.detailEstateLoan.visibility = View.VISIBLE
+        if (detailedEstate.estate?.endTime == null) binding.detailEstateLoan.visibility =
+            View.VISIBLE
         bindDates()
         bindPois()
         bindMapView()
@@ -174,17 +184,17 @@ class DetailFragment : Fragment() {
     }
 
     private fun bindPois() {
-        val estatePoisIdList = detailedEstate.estate?.estatePois!!.split("|")
+        val estatePoisList = detailedEstate.poiList
         val poisStr = StringBuilder()
         viewModel.allPois().observe(viewLifecycleOwner, {
             for (poi in it) {
-                if (estatePoisIdList.contains(poi.poiId.toString())) {
-                    if (poisStr.isEmpty()) {
-                        poisStr.append(poi.poiName)
-                    } else {
-                        poisStr.append(", " + poi.poiName)
+                if (estatePoisList?.contains(poi) == true) {
+                        if (poisStr.isEmpty()) {
+                            poisStr.append(poi.poiName)
+                        } else {
+                            poisStr.append(", " + poi.poiName)
+                        }
                     }
-                }
             }
             binding.detailPoisContent.text = poisStr
         })

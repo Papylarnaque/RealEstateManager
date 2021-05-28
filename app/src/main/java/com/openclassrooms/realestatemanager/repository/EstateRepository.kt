@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.database.dao.EstateDao
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
 import com.openclassrooms.realestatemanager.database.model.Estate
 import com.openclassrooms.realestatemanager.database.model.EstateSearch
+import com.openclassrooms.realestatemanager.database.model.EstateWithPoi
 
 class EstateRepository(private val estateDao: EstateDao) {
 
@@ -27,6 +28,7 @@ class EstateRepository(private val estateDao: EstateDao) {
                     SELECT DISTINCT e.*
                     FROM estate_table AS e
                     LEFT JOIN type_table AS t ON t.type_id = e.type_id
+                    LEFT JOIN estate_with_poi_table AS ewp ON ewp.estate_id = e.start_time_milli
                     LEFT JOIN (SELECT estate_id, COUNT(estate_id) AS picturesCount
                     FROM picture_table GROUP BY estate_id
                     ) AS p ON p.estate_id = e.start_time_milli
@@ -50,11 +52,28 @@ class EstateRepository(private val estateDao: EstateDao) {
                     )
                 }
                 // Manage POI research
-                if (searchEstate.poiList?.isNotEmpty() == true) {
+                if (searchEstate.poiList?.isEmpty() == false) {
+                    append("AND ewp.estate_id IN ( ")
+                    append(
+                        """
+                                SELECT estate_id
+                                FROM estate_with_poi_table
+                                WHERE poi_id = '${searchEstate.poiList[0]}'
+                            """
+                    )
                     for (poi in searchEstate.poiList) {
-                        append("AND e.poi_id LIKE '%|${poi}|%' ")
+                        append(
+                            """
+                                    INTERSECT
+                                    SELECT estate_id
+                                    FROM estate_with_poi_table
+                                    WHERE poi_id = '${poi}'
+                                """
+                        )
                     }
+                    append(") ")
                 }
+
                 append("GROUP BY e.start_time_milli ")
                 append("""HAVING p.picturesCount >= ${searchEstate.pictureMinNumber}""")
 
@@ -63,4 +82,15 @@ class EstateRepository(private val estateDao: EstateDao) {
             }
         }
     }
+
+
+    suspend fun deleteEstatePoi(estateId: Long) = estateDao.deleteEstatePois(estateId)
+
+    suspend fun insert(estateWithPoi: EstateWithPoi) = estateDao.insert(estateWithPoi)
+
+    suspend fun insert(estateId: Long, poiId: Int) {
+        estateDao.insert(EstateWithPoi(estateId, poiId))
+    }
+
+
 }

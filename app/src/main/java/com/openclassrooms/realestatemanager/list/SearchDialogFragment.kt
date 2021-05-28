@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -281,6 +282,7 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
                 poiList = binding.searchPoi.checkedChipIds
             )
         )
+    Log.i("SDF", binding.searchPoi.checkedChipIds.toString())
     }
 
     companion object {

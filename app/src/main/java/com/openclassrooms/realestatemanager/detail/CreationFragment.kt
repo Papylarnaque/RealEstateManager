@@ -58,7 +58,7 @@ class CreationFragment : Fragment() {
     private lateinit var types: List<String>
     private lateinit var allEmployees: List<Employee>
     private lateinit var employees: List<String>
-    private var estatePoisIdList: List<String>? = null
+    private var estatePoisList: List<Poi>? = null
 
     // Pictures functionality val
     private val takePicture =
@@ -149,7 +149,7 @@ class CreationFragment : Fragment() {
 
         binding.editEstateAvailability.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked && endTime == null) {
-
+                binding.editEstateAvailability.text = getString(R.string.edit_estate_sold)
                 val builder = MaterialDatePicker.Builder.datePicker()
                 builder.setCalendarConstraints(limitRange().build())
                 builder.setTitleText(R.string.search_sale_pickerdate_title)
@@ -164,20 +164,23 @@ class CreationFragment : Fragment() {
 
                 picker.addOnNegativeButtonClickListener {
                     binding.editEstateAvailability.isChecked = true
+                    binding.editEstateAvailability.text = getString(R.string.edit_estate_availability)
                 }
             } else if (isChecked) {
                 endTime = null
                 binding.createDateSold.visibility = View.INVISIBLE
+                binding.editEstateAvailability.text = getString(R.string.edit_estate_availability)
             }
         }
 
         binding.createSaveEstate.setOnClickListener {
             val estate = shareEstate()
+            val pois = getPois()
             if (!errorMessage.isNullOrEmpty()) {
                 errorMessage?.let { infoSnackBar(requireView(), it) }
                 errorMessage = null
             } else {
-                viewModel.saveEstate(editMode, estate, listPicture)
+                viewModel.saveEstate(editMode, estate, listPicture, pois)
             }
         }
 
@@ -238,7 +241,6 @@ class CreationFragment : Fragment() {
             estateStreet = getEstateStreet(),
             estateRooms = getRooms(),
             estateSurface = getSurface(),
-            estatePois = getPois(),
             employeeId = getEmployee(),
             estateDescription = getDescription(),
             estatePrice = getPrice(),
@@ -311,7 +313,7 @@ class CreationFragment : Fragment() {
     private fun setPoisCheckList() {
         if (editMode) {
             // TODO() in repository
-            estatePoisIdList = detailedEstate.estate?.estatePois!!.split("|")
+            estatePoisList = detailedEstate.poiList
         }
         poiChipGroup = binding.createPoisChipGroup
         viewModel.allPois().observe(viewLifecycleOwner, {
@@ -326,7 +328,7 @@ class CreationFragment : Fragment() {
                 chip.text = poi.poiName
                 poiChipGroup.addView(chip, poiChipGroup.childCount - 1)
                 if (editMode) {
-                    if (estatePoisIdList?.contains(chip.id.toString()) == true)
+                    if (estatePoisList?.contains(poi) == true)
                         chip.isChecked = true
                 }
             }
@@ -434,8 +436,9 @@ class CreationFragment : Fragment() {
         return createEstateCity
     }
 
-    private fun getPois(): String {
-        return poiChipGroup.checkedChipIds.joinToString("|", prefix = "|", postfix = "|")
+    private fun getPois(): List<Int> {
+        return poiChipGroup.checkedChipIds.toList()
+//        return poiChipGroup.checkedChipIds.joinToString("|", prefix = "|", postfix = "|")
     }
 
     private fun getEstateAvailability(): Long? {

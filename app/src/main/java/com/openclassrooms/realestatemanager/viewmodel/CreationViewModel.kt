@@ -54,9 +54,9 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     //--------------- CREATION & EDITION ------------------//
 
-    fun saveEstate(editMode: Boolean, estate: Estate, listPicture: List<Picture>) {
+    fun saveEstate(editMode: Boolean, estate: Estate, listPicture: List<Picture>, pois: List<Int>) {
         if (editMode) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 estateRepository.update(estate)
                 Log.i(
                     "CreationViewModel",
@@ -64,7 +64,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
                 )
             }
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 estateRepository.insert(estate)
                 Log.i(
                     "CreationViewModel ",
@@ -72,8 +72,21 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
                 )
             }
         }
+        updatePois(estate, pois)
         savePictures(listPicture)
         onEstateUpdated(estate)
+    }
+
+    private fun updatePois(estate: Estate, pois: List<Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            estateRepository.deleteEstatePoi(estate.startTime)
+        }
+
+        for (poi in pois) {
+            viewModelScope.launch(Dispatchers.IO) {
+                estateRepository.insert(estate.startTime, poi)
+            }
+        }
     }
 
 
@@ -93,7 +106,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun insertPicture(picture: Picture) {
-        viewModelScope.launch { pictureRepository.insert(picture) }
+        viewModelScope.launch(Dispatchers.IO) { pictureRepository.insert(picture) }
     }
 
 

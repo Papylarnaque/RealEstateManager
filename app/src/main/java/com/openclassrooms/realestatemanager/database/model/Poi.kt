@@ -6,9 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "poi_table")
 data class Poi(
-
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "poi_id")
+    @ColumnInfo(name = "poi_id", index = true)
     val poiId: Int,
 
     @ColumnInfo(name = "poi_name")
