@@ -147,7 +147,7 @@ class DetailFragment : Fragment() {
     private fun bindEstate() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
-        pictureListAdapter.submitList(detailedEstate.pictures as MutableList<Picture>)
+        pictureListAdapter.submitList(detailedEstate.pictures?.sortedBy { it.orderNumber } as MutableList<Picture>)
         if (detailedEstate.estate?.endTime == null) binding.detailEstateLoan.visibility =
             View.VISIBLE
         bindDates()
