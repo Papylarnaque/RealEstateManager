@@ -115,6 +115,7 @@ class EstateListFragment : Fragment() {
     private fun onEstateClickObserver() {
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
             it.let {
+                estateId = it
                 if (it != null) {
                     // If SINGLE layout mode
                     if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
