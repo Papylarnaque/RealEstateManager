@@ -34,29 +34,28 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val _allDetailedEstates: MutableLiveData<List<DetailedEstate>> = MutableLiveData()
     val allDetailedEstates: LiveData<List<DetailedEstate>> = _allDetailedEstates
 
-    private var filterStatus = false
+    private var searchEstate: MutableLiveData<EstateSearch> = MutableLiveData()
 
-
-    init {
-        if (!filterStatus) getAllEstates()
-    }
-
-    private fun updateFilterStatus(boolean: Boolean) {
-        filterStatus = boolean
+    private fun updateSearchEstate(searchEstate: EstateSearch?) {
+        this.searchEstate.value = searchEstate
     }
 
     fun filterEstates(searchEstate: EstateSearch?) {
+        updateSearchEstate(searchEstate)
         viewModelScope.launch(Dispatchers.IO) {
-            updateFilterStatus(true)
             _allDetailedEstates.postValue(estateRepository.filterEstateList(searchEstate))
         }
     }
 
     fun getAllEstates() {
         viewModelScope.launch(Dispatchers.IO) {
-            updateFilterStatus(false)
             _allDetailedEstates.postValue(estateRepository.filterEstateList(null))
         }
+    }
+
+    fun initEstates(){
+        if (searchEstate.value != null) filterEstates(searchEstate.value)
+        else getAllEstates()
     }
 
 

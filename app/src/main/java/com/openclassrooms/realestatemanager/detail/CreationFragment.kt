@@ -164,7 +164,8 @@ class CreationFragment : Fragment() {
 
                 picker.addOnNegativeButtonClickListener {
                     binding.editEstateAvailability.isChecked = true
-                    binding.editEstateAvailability.text = getString(R.string.edit_estate_availability)
+                    binding.editEstateAvailability.text =
+                        getString(R.string.edit_estate_availability)
                 }
             } else if (isChecked) {
                 endTime = null
@@ -454,12 +455,9 @@ class CreationFragment : Fragment() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                NavHostFragment.findNavController(this).navigate(
-                    CreationFragmentDirections.actionCreationFragmentToDetailFragment(estateKey)
-                )
-            } ?: NavHostFragment.findNavController(this)
-                .navigate(R.id.action_creationFragment_to_listFragment)
-
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_creationFragment_to_listFragment)
+            }
             confirmEstateSaved()
         })
     }

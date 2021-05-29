@@ -42,7 +42,7 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
             navigateUp()
         }
         binding.searchReset.setOnClickListener {
-            viewModel.getAllEstates()
+            viewModel.filterEstates(null)
             navigateUp()
         }
     }
