@@ -28,6 +28,8 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
     fun allTypes(): LiveData<List<Type>> = typeRepository.allTypes
+    fun getEstate(estateKey: Long): LiveData<DetailedEstate> =
+        estateRepository.getLiveEstate(estateKey)
 
     private val _allDetailedEstates: MutableLiveData<List<DetailedEstate>> = MutableLiveData()
     val allDetailedEstates: LiveData<List<DetailedEstate>> = _allDetailedEstates
@@ -61,12 +63,20 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     /**
      * Navigation for the EstateListDetail fragment.
      */
-    private val _navigateToEstateDetail: MutableLiveData<DetailedEstate> = MutableLiveData()
-    val navigateToEstateDetail: LiveData<DetailedEstate> = _navigateToEstateDetail
+    private val _navigateToEstateDetail: MutableLiveData<Long> = MutableLiveData()
+    val navigateToEstateDetail: LiveData<Long> = _navigateToEstateDetail
+
+    private val _currentDetailEstate: MutableLiveData<DetailedEstate> = MutableLiveData()
+    val currentDetailEstate: LiveData<DetailedEstate> = _currentDetailEstate
 
     fun onEstateClicked(estate: DetailedEstate) {
         viewModelScope.launch(Dispatchers.IO) {
-            _navigateToEstateDetail.postValue(estateRepository.getEstate(estate.estate!!.startTime))
+            _navigateToEstateDetail.postValue(estate.estate!!.startTime)
+            _currentDetailEstate.postValue(estateRepository.getEstate(estate.estate!!.startTime))
         }
+    }
+
+    fun stopEstateNavigation() {
+            _navigateToEstateDetail.value = null
     }
 }

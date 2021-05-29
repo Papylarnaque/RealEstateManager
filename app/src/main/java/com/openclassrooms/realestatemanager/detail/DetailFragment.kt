@@ -75,6 +75,7 @@ class DetailFragment : Fragment() {
                             DetailFragmentDirections
                                 .actionDetailFragmentToCreationFragment(detailedEstate.estate!!.startTime)
                         )
+                    viewModel.stopEstateNavigation()
                 }
             }
 
@@ -137,7 +138,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun getEstate() {
-        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner,{
+        viewModel.currentDetailEstate.observe(viewLifecycleOwner,{
             detailedEstate = it
             bindEstate()
         })

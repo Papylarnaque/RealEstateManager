@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#21323E</color> <!--Color primary (dark)-->
+    <color name="primary">#248CD8</color> <!--Color primary (dark)-->
     <color name="primaryDark">#00000f</color> <!--Color primary (dark)-->
     <color name="primaryLight">#334d5f</color> <!--Color primary (light)-->
-    <color name="primaryVariantDark">#002949</color> <!--Color primary variant (dark)-->
+    <color name="primaryVariantDark">#01159C</color> <!--Color primary variant (dark)-->
     <color name="primaryVariantLight">#487da4</color> <!--Color primary variant (light)-->
 
     <color name="secondary">#3e8c4c</color> <!--Color secondary-->

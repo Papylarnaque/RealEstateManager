@@ -26,7 +26,7 @@ class EstateListFragment : Fragment() {
     private lateinit var navController: NavController
     private val args: EstateListFragmentArgs by navArgs()
     private val viewModel: ListDetailViewModel by activityViewModels()
-    private var estate: DetailedEstate? = null
+    private var estateId: Long? = null
     private val estateListAdapter = EstateListAdapter(EstateListener {
         viewModel.onEstateClicked(it)
         view?.isSelected = true
@@ -53,7 +53,7 @@ class EstateListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_list_detail, menu)
-        if (estate != null) {
+        if (estateId != null) {
             menu.findItem(R.id.edit_estate).isVisible = true
             menu.findItem(R.id.convert_price).isVisible = true
         }
@@ -105,7 +105,7 @@ class EstateListFragment : Fragment() {
                 }
             }
             // Select first estate by default on Tablet mode
-            if (binding.detailFragmentContainer != null && estate == null) {
+            if (binding.detailFragmentContainer != null && estateId == null) {
                 binding.detailFragmentContainer!!.visibility = View.VISIBLE
                 viewModel.onEstateClicked(list[0])
             }
@@ -114,26 +114,28 @@ class EstateListFragment : Fragment() {
 
     private fun onEstateClickObserver() {
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
-            it?.let {
-                estate = it
-                // If SINGLE layout mode
-                if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
-                    navController.navigate(
-                        EstateListFragmentDirections
-                            .actionListFragmentToDetailFragment(it.estate!!.startTime)
-                    )
-                }
-                // DUAL layout
-                else {
-                    childFragmentManager.beginTransaction()
-                        .replace(binding.detailFragmentContainer!!.id, DetailFragment())
-                        .commit()
+            it.let {
+                if (it != null) {
+                    // If SINGLE layout mode
+                    if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
+                        navController.navigate(
+                            EstateListFragmentDirections
+                                .actionListFragmentToDetailFragment(it)
+                        )
+                    }
+                    // DUAL layout
+                    else {
+                        childFragmentManager.beginTransaction()
+                            .replace(binding.detailFragmentContainer!!.id, DetailFragment())
+                            .commit()
 
-                    binding.recyclerviewEstateList.background =
-                        getDrawable(requireContext(), R.drawable.border_right)
+                        binding.recyclerviewEstateList.background =
+                            getDrawable(requireContext(), R.drawable.border_right)
+                    }
                 }
             }
         }
+        viewModel.stopEstateNavigation()
     }
 
     // NAVIGATION
@@ -147,7 +149,7 @@ class EstateListFragment : Fragment() {
         NavHostFragment.findNavController(this)
             .navigate(
                 EstateListFragmentDirections.actionListFragmentToCreationFragment(
-                    estate?.estate?.startTime!!
+                    estateId!!
                 )
             )
     }
