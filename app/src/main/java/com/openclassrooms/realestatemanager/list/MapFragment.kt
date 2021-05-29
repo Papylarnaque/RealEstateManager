@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -49,7 +47,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
-
+        setHasOptionsMenu(true)
         mapView = binding.map
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -149,9 +147,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
 
     private fun getEstates() {
         viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
-            it.let {
-                notifyEstateListChanged(it)
-            }
+            notifyEstateListChanged(it)
         }
     }
 
@@ -159,7 +155,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         for (estate in list) {
             GeocodeService.getGeocode(estate)
         }
-
+        googleMap.clear()
         GeocodeService.estateGeocode.observe(
             requireActivity()
         ) { estateGeocode ->
@@ -219,6 +215,28 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         }
     }
 
+    // ---------------------- SEARCH NAVIGATION ----------------------//
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_fragment_map, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    /**
+     * Handle item clicks of menu
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search_estate -> navigateSearchDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun navigateSearchDialog() {
+        navController.navigate(
+            MapFragmentDirections.actionMapFragmentToSearchDialogFragment()
+        )
+    }
 
     // ---------------------- COMPASS BUTTON ----------------------//
 

@@ -137,17 +137,10 @@ class DetailFragment : Fragment() {
     }
 
     private fun getEstate() {
-        if (viewModel.navigateToEstateDetail.value != null) {
-            detailedEstate = viewModel.navigateToEstateDetail.value!!
+        viewModel.navigateToEstateDetail.observe(viewLifecycleOwner,{
+            detailedEstate = it
             bindEstate()
-        } else {
-            viewModel.getEstate(args.estateKey).observe(viewLifecycleOwner, {
-                detailedEstate = it
-                bindEstate()
-                //save estate in VM
-                viewModel.onEstateClicked(it)
-            })
-        }
+        })
     }
 
     private fun bindEstate() {
@@ -206,7 +199,7 @@ class DetailFragment : Fragment() {
             if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
                 NavHostFragment.findNavController(requireParentFragment())
                     .navigate(R.id.action_detailFragment_to_listFragment)
-                viewModel.navigateToEstateDetail.value = null
+//                viewModel.navigateToEstateDetail.value = null
             }
         }
     }

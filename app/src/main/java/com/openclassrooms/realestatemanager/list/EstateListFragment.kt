@@ -43,8 +43,8 @@ class EstateListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getEstates()
-        onEstateClick()
+        estatesObserver()
+        onEstateClickObserver()
         navController = Navigation.findNavController(
             requireActivity(),
             R.id.nav_host_fragment
@@ -82,7 +82,7 @@ class EstateListFragment : Fragment() {
         }
     }
 
-    private fun getEstates() {
+    private fun estatesObserver() {
         viewModel.allDetailedEstates.observe(viewLifecycleOwner) {
             notifyListChanged(it)
         }
@@ -112,7 +112,7 @@ class EstateListFragment : Fragment() {
         }
     }
 
-    private fun onEstateClick() {
+    private fun onEstateClickObserver() {
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner) { it ->
             it?.let {
                 estate = it

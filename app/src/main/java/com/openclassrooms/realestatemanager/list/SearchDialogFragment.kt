@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -31,6 +30,21 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         setDialogSize()
         initBindings()
         configDialogActions()
+    }
+
+    private fun configDialogActions() {
+        binding.searchTitle.text = getString(R.string.search_estate)
+        binding.searchCancel.setOnClickListener {
+            dismiss()
+        }
+        binding.searchButton.setOnClickListener {
+            filterEstateList()
+            navigateUp()
+        }
+        binding.searchReset.setOnClickListener {
+            viewModel.getAllEstates()
+            navigateUp()
+        }
     }
 
     private fun setDialogSize() {
@@ -65,10 +79,9 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
             binding.searchEstateTypeSpinnerView.setAdapter(adapter)
         })
 
-        //TODO not observed ?
-        binding.searchEstateTypeSpinnerView.onItemSelectedListener.let {
-            viewModel.updateType(binding.searchEstateTypeSpinnerView.text.toString())
-        }
+//        binding.searchEstateTypeSpinnerView.onItemSelectedListener.let {
+//            viewModel.updateType(binding.searchEstateTypeSpinnerView.text.toString())
+//        }
 
     }
 
@@ -235,30 +248,15 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
         }
     }
 
-    private fun configDialogActions() {
-        binding.searchTitle.text = getString(R.string.search_estate)
-        binding.searchCancel.setOnClickListener {
-            dismiss()
-        }
-        binding.searchButton.setOnClickListener {
-            filterEstateList()
-            navigateToList()
-        }
-        binding.searchReset.setOnClickListener {
-            viewModel.filterEstate(null)
-            navigateToList()
-        }
-    }
-
-    private fun navigateToList() {
+    private fun navigateUp() {
         Navigation.findNavController(
             requireActivity(),
             R.id.nav_host_fragment
-        ).navigate(R.id.listFragment)
+        ).navigateUp()
     }
 
     private fun filterEstateList() {
-        viewModel.filterEstate(
+        viewModel.filterEstates(
             EstateSearch(
                 type = binding.searchEstateTypeSpinnerView.text.toString(),
                 priceRange = IntRange(
@@ -282,7 +280,6 @@ class SearchDialogFragment : DialogFragment(R.layout.fragment_search) {
                 poiList = binding.searchPoi.checkedChipIds
             )
         )
-    Log.i("SDF", binding.searchPoi.checkedChipIds.toString())
     }
 
     companion object {

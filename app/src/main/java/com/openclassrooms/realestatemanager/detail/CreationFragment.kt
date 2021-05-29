@@ -101,7 +101,7 @@ class CreationFragment : Fragment() {
      * EDIT MODE specific bindings
      */
     private fun editModeBinding() {
-        viewModel.getEstateWithId(args.estateKey).observe(viewLifecycleOwner, {
+        viewModel.getEstate(estateKey).observe(viewLifecycleOwner, {
             this.detailedEstate = it
             if (it != null) {
                 binding.detailedEstate = it

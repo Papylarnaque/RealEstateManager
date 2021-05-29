@@ -11,16 +11,16 @@ import com.openclassrooms.realestatemanager.database.model.EstateWithPoi
 
 class EstateRepository(private val estateDao: EstateDao) {
 
-    val allDetailedEstates: LiveData<List<DetailedEstate>> = estateDao.getDetailedEstates()
-
     suspend fun insert(estate: Estate) = estateDao.insert(estate)
 
     suspend fun update(estate: Estate) = estateDao.updateEstate(estate)
 
-    fun getEstate(estateKey: Long): LiveData<DetailedEstate> = estateDao.getEstate(estateKey)
+    fun getLiveEstate(estateKey: Long): LiveData<DetailedEstate> = estateDao.getLiveEstate(estateKey)
 
-    fun filterEstateList(searchEstate: EstateSearch?): LiveData<List<DetailedEstate>> {
-        return if (searchEstate == null) allDetailedEstates
+    suspend fun getEstate(estateKey: Long): DetailedEstate = estateDao.getEstate(estateKey)
+
+    suspend fun filterEstateList(searchEstate: EstateSearch?): List<DetailedEstate> {
+        return if (searchEstate == null) estateDao.getDetailedEstates()
         else {
             StringBuilder().run {
                 append(

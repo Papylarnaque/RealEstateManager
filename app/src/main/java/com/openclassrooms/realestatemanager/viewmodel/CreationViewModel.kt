@@ -52,6 +52,14 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     fun allPois(): LiveData<List<Poi>> = poiRepository.allPois
 
 
+    //--------------- EDIT MODE FUNCTIONS ------------------//
+
+    fun getEstate(estateKey: Long): LiveData<DetailedEstate> =
+        estateRepository.getLiveEstate(estateKey)
+
+    fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> =
+        pictureRepository.getEstatePictures(estateKey)
+
     //--------------- CREATION & EDITION ------------------//
 
     fun saveEstate(editMode: Boolean, estate: Estate, listPicture: List<Picture>, pois: List<Int>) {
@@ -110,16 +118,6 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-//--------------- EDIT MODE FUNCTIONS ------------------//
-
-    fun getEstateWithId(estateKey: Long): LiveData<DetailedEstate> {
-        return estateRepository.getEstate(estateKey)
-    }
-
-    fun getEstatePictures(estateKey: Long): LiveData<List<Picture>> {
-        return pictureRepository.getEstatePictures(estateKey)
-    }
-
 //----------------- MANAGE PICTURES --------------------//
 
 
@@ -172,12 +170,14 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
     /**
      * Navigation notification
      */
-    private val _navigateToEstateDetail = MutableLiveData<Estate>()
+    private val _navigateToEstateDetail = MutableLiveData<DetailedEstate>()
     val navigateToEstateDetail
         get() = _navigateToEstateDetail
 
     private fun onEstateUpdated(estate: Estate) {
-        _navigateToEstateDetail.value = estate
+        viewModelScope.launch(Dispatchers.IO) {
+            _navigateToEstateDetail.postValue(estateRepository.getEstate(estate.startTime))
+        }
     }
 
 

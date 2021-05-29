@@ -72,7 +72,7 @@ object Permissions {
                 arguments?.getInt(ARGUMENT_PERMISSION_REQUEST_CODE) ?: 0
             return AlertDialog.Builder(activity)
                 .setMessage(R.string.permission_rationale_location)
-                .setPositiveButton(R.string.permission_accept) { dialog, which -> // After click on Ok, request the permission.
+                .setPositiveButton(R.string.permission_accept) { _, _ -> // After click on Ok, request the permission.
                     ActivityCompat.requestPermissions(
                         requireActivity(),
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),

@@ -30,7 +30,11 @@ interface EstateDao {
      */
     @Transaction
     @Query("SELECT * FROM estate_table WHERE start_time_milli = :start_time_milli")
-    fun getEstate(start_time_milli: Long): LiveData<DetailedEstate>
+    suspend fun getEstate(start_time_milli: Long): DetailedEstate
+
+    @Transaction
+    @Query("SELECT * FROM estate_table WHERE start_time_milli = :start_time_milli")
+    fun getLiveEstate(start_time_milli: Long): LiveData<DetailedEstate>
 
     /**
      * Selects and returns all rows in the table,
@@ -50,7 +54,7 @@ interface EstateDao {
 
     @Transaction
     @Query("SELECT * from estate_table")
-    fun getDetailedEstates(): LiveData<List<DetailedEstate>>
+    suspend fun getDetailedEstates(): List<DetailedEstate>
 
 
     @Query("DELETE FROM estate_table")
@@ -61,7 +65,7 @@ interface EstateDao {
 
     @Transaction
     @RawQuery
-    fun filterEstateList(searchEstate: SimpleSQLiteQuery): LiveData<List<DetailedEstate>>
+    suspend fun filterEstateList(searchEstate: SimpleSQLiteQuery): List<DetailedEstate>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
