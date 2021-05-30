@@ -151,7 +151,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.10.0'
 
     // Mockito for Android tests
-    testImplementation 'org.mockito:mockito-android:3.10.0'
+    androidTestImplementation 'org.mockito:mockito-android:3.10.0'
 
     // Room Test helpers
     testImplementation "androidx.room:room-testing:$room_version"

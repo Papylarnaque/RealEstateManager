@@ -48,7 +48,6 @@ class EstateDatabaseTest {
         estateRooms = 8,
         estateSurface = 320,
         estateDescription = "Nice house in the heart of Nantes",
-        estatePois = "1"
     )
     private val estate2 = Estate(
         startTime = startTime2,
@@ -63,7 +62,6 @@ class EstateDatabaseTest {
         estateRooms = 10,
         estateSurface = 400,
         estateDescription = "Nice flat in the heart of Lille",
-        estatePois = "911"
     )
 
 
@@ -92,14 +90,34 @@ class EstateDatabaseTest {
 
     private fun initDB() = runBlocking {
         // INSERT DATA
-        employeeRepository.insert(
+        employeeDao.insert(
             Employee(
-                employeeFirstName = "Etienne", employeeLastName = "DESCAMPS", employeeId = 1
+                employeeFirstName = "Joseph", employeeLastName = "PARRY", employeeId = 1
             )
         )
-        employeeRepository.insert(
+        employeeDao.insert(
             Employee(
-                employeeFirstName = "Aurélie", employeeLastName = "RAYMOND", employeeId = 2
+                employeeFirstName = "Quinton", employeeLastName = "SPENCER", employeeId = 2
+            )
+        )
+        employeeDao.insert(
+            Employee(
+                employeeFirstName = "Quinn", employeeLastName = "LYNCH", employeeId = 3
+            )
+        )
+        employeeDao.insert(
+            Employee(
+                employeeFirstName = "Randall", employeeLastName = "RAY", employeeId = 4
+            )
+        )
+        employeeDao.insert(
+            Employee(
+                employeeFirstName = "Ayaan", employeeLastName = "WHITNEY", employeeId = 5
+            )
+        )
+        employeeDao.insert(
+            Employee(
+                employeeFirstName = "Colt", employeeLastName = "ROBERTSON", employeeId = 6
             )
         )
 
@@ -141,7 +159,7 @@ class EstateDatabaseTest {
         estateDao.insert(estate1)
         estateDao.insert(estate2)
 
-        assert(estateDao.getEstate(startTime2).value?.equals(estate2) == true)
+        assert(estateDao.getEstate(startTime2).equals(estate2))
 
     }
 
@@ -164,15 +182,13 @@ class EstateDatabaseTest {
             estateStreet = "rue de Paris",
             estateRooms = 8,
             estateSurface = 320,
-            estatePois = "91  1"
         )
 
         estateDao.updateEstate(newEstate)
 
-        assert(estateDao.getEstate(startTime2).value?.equals(estate2) == true)
-        assert(estateDao.getEstate(startTime2).value?.equals(newEstate) == true)
+        assert(estateDao.getEstate(startTime2).equals(estate2))
+        assert(estateDao.getEstate(startTime2).equals(newEstate))
 
     }
-
 
 }
