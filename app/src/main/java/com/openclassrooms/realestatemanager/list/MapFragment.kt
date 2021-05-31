@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -47,7 +49,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
-        setHasOptionsMenu(true)
         mapView = binding.map
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -213,29 +214,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
                     .actionMapFragmentToDetailFragment(estateKey)
             )
         }
-    }
-
-    // ---------------------- SEARCH NAVIGATION ----------------------//
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_map, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    /**
-     * Handle item clicks of menu
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.search_estate -> navigateSearchDialog()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun navigateSearchDialog() {
-        navController.navigate(
-            MapFragmentDirections.actionMapFragmentToSearchDialogFragment()
-        )
     }
 
     // ---------------------- COMPASS BUTTON ----------------------//

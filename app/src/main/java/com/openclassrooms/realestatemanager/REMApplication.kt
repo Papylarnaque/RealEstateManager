@@ -3,23 +3,13 @@ package com.openclassrooms.realestatemanager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import androidx.preference.PreferenceManager
-import com.openclassrooms.realestatemanager.database.EstateDatabase
-import com.openclassrooms.realestatemanager.repository.EstateRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 
 class REMApplication : MultiDexApplication() {
 
-    private val applicationScope = CoroutineScope(SupervisorJob())
-    private val db by lazy { EstateDatabase.getDatabase(this, applicationScope) }
-    val estateRepository by lazy {
-        EstateRepository(
-            db.estateDao()
-        )
-    }
-
     override fun onCreate() {
         super.onCreate()
+        ListDetailViewModel(this).filterEstates(null)
         setupDarkModePreference()
     }
 

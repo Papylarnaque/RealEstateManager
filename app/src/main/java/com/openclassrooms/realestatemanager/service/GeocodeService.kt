@@ -16,6 +16,7 @@ import retrofit2.Response
 object GeocodeService {
 
     private const val TAG = "GeocodeService"
+    private val apiMap: APIRequest = APIClient.client.create(APIRequest::class.java)
 
     // Nearby Places API variables
     private val listenEstateGeocode: MutableLiveData<EstateGeocode> =
@@ -23,7 +24,6 @@ object GeocodeService {
     val estateGeocode: LiveData<EstateGeocode> = listenEstateGeocode
 
     fun getGeocode(detailedEstate: DetailedEstate) {
-        val apiMap: APIRequest = APIClient.client.create(APIRequest::class.java)
         val geocodes: Call<ResultsAPIMap?>? = apiMap.getGeocode(
             buildAddress(detailedEstate),
             BuildConfig.GEOCODE_API_KEY

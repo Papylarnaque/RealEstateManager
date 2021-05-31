@@ -47,7 +47,7 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun getAllEstates() {
+    private fun getAllEstates() {
         viewModelScope.launch(Dispatchers.IO) {
             _allDetailedEstates.postValue(estateRepository.filterEstateList(null))
         }

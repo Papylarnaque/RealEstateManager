@@ -299,6 +299,8 @@ abstract class EstateDatabase : RoomDatabase() {
             )
 
             Log.i("EstateDatabase", "Database populated")
+
+
         }
 
 
