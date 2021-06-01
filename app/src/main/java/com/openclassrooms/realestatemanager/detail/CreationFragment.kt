@@ -181,7 +181,7 @@ class CreationFragment : Fragment() {
                 errorMessage?.let { infoSnackBar(requireView(), it) }
                 errorMessage = null
             } else {
-                viewModel.saveEstate(editMode, estate, listPicture, pois)
+                viewModel.saveEstate(estate, listPicture, pois)
             }
         }
 

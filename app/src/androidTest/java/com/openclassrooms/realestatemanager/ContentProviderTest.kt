@@ -49,7 +49,6 @@ class ContentProviderTest {
         cursor?.getColumnIndexOrThrow("city")
         cursor?.getColumnIndexOrThrow("postal_code")
         cursor?.getColumnIndexOrThrow("employee_id")
-        cursor?.getColumnIndexOrThrow("poi_id")
         cursor?.close()
     }
 }

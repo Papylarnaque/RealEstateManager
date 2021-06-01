@@ -11,7 +11,7 @@ import com.openclassrooms.realestatemanager.database.model.EstateWithPoi
 
 class EstateRepository(private val estateDao: EstateDao) {
 
-    suspend fun insert(estate: Estate) = estateDao.insert(estate)
+    suspend fun insert(estate: Estate): Long = estateDao.insert(estate)
 
     suspend fun update(estate: Estate) = estateDao.updateEstate(estate)
 

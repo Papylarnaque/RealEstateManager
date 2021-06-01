@@ -11,8 +11,8 @@ import com.openclassrooms.realestatemanager.database.model.EstateWithPoi
 @Dao
 interface EstateDao {
 
-    @Insert
-    suspend fun insert(estate: Estate)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(estate: Estate): Long
 
     /**
      * When updating a row with a value already set in a column,

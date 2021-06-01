@@ -62,27 +62,19 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
 
     //--------------- CREATION & EDITION ------------------//
 
-    fun saveEstate(editMode: Boolean, estate: Estate, listPicture: List<Picture>, pois: List<Int>) {
-        if (editMode) {
-            viewModelScope.launch(Dispatchers.IO) {
-                estateRepository.update(estate)
-                Log.i(
-                    "CreationViewModel",
-                    "updated an existing estate with id ${estate.startTime}"
-                )
-            }
-        } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                estateRepository.insert(estate)
-                Log.i(
-                    "CreationViewModel ",
-                    "added a new estate with id ${estate.startTime}"
-                )
-            }
+    fun saveEstate(estate: Estate, listPicture: List<Picture>, pois: List<Int>) {
+        var estateId = 0L
+        viewModelScope.launch(Dispatchers.IO) {
+            estateId = estateRepository.insert(estate)
+            Log.i(
+                "CreationViewModel ",
+                "added a new estate with id ${estate.startTime}"
+            )
+            if (estateId == estate.startTime) onEstateUpdated(estate)
         }
         updatePois(estate, pois)
         savePictures(listPicture)
-        onEstateUpdated(estate)
+
     }
 
     private fun updatePois(estate: Estate, pois: List<Int>) {
