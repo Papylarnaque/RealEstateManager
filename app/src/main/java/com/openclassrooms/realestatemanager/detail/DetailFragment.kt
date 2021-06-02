@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.model.DetailedEstate
-import com.openclassrooms.realestatemanager.database.model.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.utils.StaticMapBuilder.Companion.buildUrl
 import com.openclassrooms.realestatemanager.utils.Utils
@@ -147,7 +146,7 @@ class DetailFragment : Fragment() {
     private fun bindEstate() {
         binding.detailedEstate = this.detailedEstate
         binding.detailEstateScrollview.visibility = View.VISIBLE
-        pictureListAdapter.submitList(detailedEstate.pictures?.sortedBy { it.orderNumber } as MutableList<Picture>)
+        pictureListAdapter.submitList(detailedEstate.pictures?.sortedBy { it.orderNumber })
         if (detailedEstate.estate?.endTime == null) binding.detailEstateLoan.visibility =
             View.VISIBLE
         bindDates()

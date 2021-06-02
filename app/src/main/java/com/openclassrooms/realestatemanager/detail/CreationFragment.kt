@@ -488,7 +488,6 @@ class CreationFragment : Fragment() {
 
             val positiveButtonClick = { _: DialogInterface, _: Int ->
                 picture.displayName = editPictureName.text.toString()
-                viewModel.savePicture(picture)
                 notifyPicturesChanged(listPicture)
             }
 
