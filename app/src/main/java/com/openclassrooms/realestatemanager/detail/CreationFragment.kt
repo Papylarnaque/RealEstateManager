@@ -455,9 +455,11 @@ class CreationFragment : Fragment() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_creationFragment_to_listFragment)
-            }
+                NavHostFragment.findNavController(this).navigate(
+                    CreationFragmentDirections.actionCreationFragmentToDetailFragment()
+                )
+            } ?: NavHostFragment.findNavController(this)
+                .navigate(R.id.action_creationFragment_to_listFragment)
             confirmEstateSaved()
         })
     }

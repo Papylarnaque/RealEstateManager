@@ -122,7 +122,7 @@ class EstateListFragment : Fragment() {
                     if (!requireContext().resources.getBoolean(R.bool.isTablet)) {
                         navController.navigate(
                             EstateListFragmentDirections
-                                .actionListFragmentToDetailFragment(it)
+                                .actionListFragmentToDetailFragment()
                         )
                     }
                     // DUAL layout

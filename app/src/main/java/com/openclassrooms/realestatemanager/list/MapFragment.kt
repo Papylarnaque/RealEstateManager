@@ -211,7 +211,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         } else {
             navController.navigate(
                 MapFragmentDirections
-                    .actionMapFragmentToDetailFragment(estateKey)
+                    .actionMapFragmentToDetailFragment()
             )
         }
     }

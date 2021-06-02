@@ -68,6 +68,9 @@ class ListDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val _currentDetailEstate: MutableLiveData<DetailedEstate> = MutableLiveData()
     val currentDetailEstate: LiveData<DetailedEstate> = _currentDetailEstate
 
+    fun currentDetailEstate(): LiveData<DetailedEstate> = estateRepository.getLiveEstate(
+        currentDetailEstate.value?.estate?.startTime!!)
+
     fun onEstateClicked(estate: DetailedEstate) {
         viewModelScope.launch(Dispatchers.IO) {
             _navigateToEstateDetail.postValue(estate.estate!!.startTime)

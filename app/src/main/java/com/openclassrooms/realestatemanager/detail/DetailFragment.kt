@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.openclassrooms.realestatemanager.R
@@ -23,7 +22,6 @@ import java.util.*
 
 class DetailFragment : Fragment() {
 
-    private val args: DetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: ListDetailViewModel by activityViewModels()
     private lateinit var detailedEstate: DetailedEstate
@@ -137,7 +135,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun getEstate() {
-        viewModel.currentDetailEstate.observe(viewLifecycleOwner,{
+        viewModel.currentDetailEstate().observe(viewLifecycleOwner,{
             detailedEstate = it
             bindEstate()
         })
@@ -199,7 +197,6 @@ class DetailFragment : Fragment() {
             if (this@DetailFragment.findNavController().currentDestination?.id == R.id.detailFragment) {
                 NavHostFragment.findNavController(requireParentFragment())
                     .navigate(R.id.action_detailFragment_to_listFragment)
-//                viewModel.navigateToEstateDetail.value = null
             }
         }
     }
@@ -212,7 +209,7 @@ class DetailFragment : Fragment() {
                 NavHostFragment.findNavController(requireParentFragment())
                     .navigate(
                         DetailFragmentDirections
-                            .actionDetailFragmentToListFragment(detailedEstate.estate?.startTime!!)
+                            .actionDetailFragmentToListFragment(viewModel.currentDetailEstate.value?.estate?.startTime!!)
                     )
             }
         }
