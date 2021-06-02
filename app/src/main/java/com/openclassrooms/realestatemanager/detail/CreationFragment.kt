@@ -455,11 +455,9 @@ class CreationFragment : Fragment() {
         // When an item is clicked.
         viewModel.navigateToEstateDetail.observe(viewLifecycleOwner, { estate ->
             estate?.let {
-                NavHostFragment.findNavController(this).navigate(
-                    CreationFragmentDirections.actionCreationFragmentToDetailFragment()
-                )
-            } ?: NavHostFragment.findNavController(this)
-                .navigate(R.id.action_creationFragment_to_listFragment)
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_creationFragment_to_listFragment)
+            }
             confirmEstateSaved()
         })
     }
@@ -519,7 +517,6 @@ class CreationFragment : Fragment() {
             setMessage(getString(R.string.create_picture_delete_dialog_message))
 
             val positiveButtonClick = { _: DialogInterface, _: Int ->
-                viewModel.deletePicture(picture) // async deletion
                 listPicture.remove(picture) // delete then refresh view
                 notifyPicturesChanged(listPicture)
                 infoSnackBar(

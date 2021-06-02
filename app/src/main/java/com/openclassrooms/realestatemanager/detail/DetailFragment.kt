@@ -135,7 +135,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun getEstate() {
-        viewModel.currentDetailEstate().observe(viewLifecycleOwner,{
+        viewModel.currentDetailEstate.observe(viewLifecycleOwner,{
             detailedEstate = it
             bindEstate()
         })
@@ -213,6 +213,7 @@ class DetailFragment : Fragment() {
                     )
             }
         }
+
         super.onResume()
     }
 }
