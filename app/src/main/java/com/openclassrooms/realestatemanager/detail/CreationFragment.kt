@@ -35,7 +35,6 @@ val IMAGE_MIME_TYPE = arrayOf("image/jpeg", "image/png")
 
 class CreationFragment : Fragment() {
 
-    // TODO Keep typed data while rotating device
     private val args: CreationFragmentArgs by navArgs()
     private var errorMessage: String? = null
     private var editMode = false
@@ -140,7 +139,6 @@ class CreationFragment : Fragment() {
         binding.createTakePicture.setOnClickListener {
             // Open camera for image
             takePicture.launch(null)
-            // TODO() NavigateUp from Camera navigates back to the creationFragment
         }
 
         binding.createPickGallery.setOnClickListener {
@@ -313,7 +311,6 @@ class CreationFragment : Fragment() {
 
     private fun setPoisCheckList() {
         if (editMode) {
-            // TODO() in repository
             estatePoisList = detailedEstate.poiList
         }
         poiChipGroup = binding.createPoisChipGroup

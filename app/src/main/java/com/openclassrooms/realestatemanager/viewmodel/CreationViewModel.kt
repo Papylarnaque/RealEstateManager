@@ -139,7 +139,7 @@ class CreationViewModel(application: Application) : AndroidViewModel(application
         val imageStream = FileOutputStream(imageFile)
 
         context.contentResolver.openInputStream(uri)?.let {
-            // TODO() compress picture copied to app folder ?
+            // TODO() compress picture copied to app folder
 //            compressPicture(BitmapFactory.decodeStream(it), imageStream)
             copyImageFromStream(it, imageStream)
         }

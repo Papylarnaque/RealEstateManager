@@ -18,8 +18,6 @@ import com.openclassrooms.realestatemanager.utils.Utils
 import com.openclassrooms.realestatemanager.utils.infoSnackBar
 import com.openclassrooms.realestatemanager.viewmodel.ListDetailViewModel
 
-// TODO Keep filter when navigating back from detail fragment ?
-// TODO Show that filter is active or not in list
 class EstateListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding

@@ -155,7 +155,7 @@ abstract class EstateDatabase : RoomDatabase() {
                     estateRooms = 5,
                     estateStreet = "Central Park West",
                     estateStreetNumber = 15,
-                    estateCityPostalCode = "",
+                    estateCityPostalCode = null,
                 )
             )
             pictureDao.insert(

@@ -17,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.IOException
-import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class EstateDatabaseTest {
@@ -34,34 +33,36 @@ class EstateDatabaseTest {
     private lateinit var employeeRepository: EmployeeRepository
     private lateinit var poiRepository: PoiRepository
 
-    private val startTime2: Long = 99999999
+    private val startTime1: Long = 1615760275000 // Sunday 14 March 2021
     private val estate1 = Estate(
-        startTime = Calendar.getInstance().timeInMillis,
+        startTime = startTime1,
         endTime = null,
-        estateTypeId = 1,
-        estatePrice = 650000,
+        estateTypeId = 4,
+        estatePrice = 5750000,
         employeeId = 1,
-        estateCity = "Nantes",
-        estateCityPostalCode = "44000",
+        estateCity = "NEW-YORK",
+        estateDescription = "Apt. PH43 ",
+        estateSurface = 250,
+        estateRooms = 5,
+        estateStreet = "Central Park West",
         estateStreetNumber = 15,
-        estateStreet = "rue de Paris",
-        estateRooms = 8,
-        estateSurface = 320,
-        estateDescription = "Nice house in the heart of Nantes",
+        estateCityPostalCode = null,
     )
+    private val startTime2: Long = 1615860275000
+    private val endTime2: Long = 1615960275000
     private val estate2 = Estate(
         startTime = startTime2,
-        endTime = null,
-        estateTypeId = 2,
-        estatePrice = 1000000,
-        employeeId = 2,
-        estateCity = "Lille",
-        estateCityPostalCode = "59000",
-        estateStreetNumber = 23,
-        estateStreet = "rue de Paris",
-        estateRooms = 10,
-        estateSurface = 400,
-        estateDescription = "Nice flat in the heart of Lille",
+        endTime = endTime2,
+        estateTypeId = 3,
+        estatePrice = 12500000,
+        employeeId = 3,
+        estateCity = "NEW-YORK",
+        estateDescription = "A Fifth Avenue Masterpiece with open Central Park and Reservoir Views, this sprawling 12 room Pre-War Cooperative is pristine and ready to move in due to a recent full renovation by Ferguson Shamamian. The interiors were meticulously curated by the world-renowned designer, Bunny Williams, the distinguished expert in creating homes that are as grand and stylish as they are comfortable and serene. This residence is far from the exception, featuring finest quality finishes throughout and an atmosphere of sophistication that can be compared to nothing else available. Stepping into the private jewel box 14th floor elevator landing, one is welcomed by spectacular light bouncing from the glossy custom patinaed Venetian Plaster adorning the walls of a double-wide Gallery and pouring through to illuminate the rest of the open yet classic floorplan.",
+        estateSurface = 300,
+        estateRooms = 8,
+        estateStreet = "Fifth Avenue",
+        estateStreetNumber = 1158,
+        estateCityPostalCode = "WA 98109",
     )
 
 
@@ -90,32 +91,32 @@ class EstateDatabaseTest {
 
     private fun initDB() = runBlocking {
         // INSERT DATA
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Joseph", employeeLastName = "PARRY", employeeId = 1
             )
         )
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Quinton", employeeLastName = "SPENCER", employeeId = 2
             )
         )
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Quinn", employeeLastName = "LYNCH", employeeId = 3
             )
         )
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Randall", employeeLastName = "RAY", employeeId = 4
             )
         )
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Ayaan", employeeLastName = "WHITNEY", employeeId = 5
             )
         )
-        employeeDao.insert(
+        employeeRepository.insert(
             Employee(
                 employeeFirstName = "Colt", employeeLastName = "ROBERTSON", employeeId = 6
             )
