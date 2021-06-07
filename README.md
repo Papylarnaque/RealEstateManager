@@ -37,7 +37,7 @@ GEOCODE_API_KEY = "YOUR_KEY"
 The key provided can be specific to each service or be the same
 
 ## Screenshots
-<img src="/screenshots/List.png" width="250"> <img src="/screenshots/Detail.png" width="250"> <img src="/screenshots/Add.png" width="250"> <img src="/screenshots/Map.png" width="250"> <img src="/screenshots/Loan.png" width="250"> <img src="/screenshots/Edit.png" width="250"> <img src="/screenshots/Night_List.png" width="250"> <img src="/screenshots/Night_List_MapNoInternet.png" width="250"> <img src="/screenshots/Night_Detail.png" width="250"> <img src="/screenshots/Update_notification.png" width="250"> 
+<img src="/screenshots/List.png" width="250"> <img src="/screenshots/Detail.png" width="250"> <img src="/screenshots/Add.png" width="250"> <img src="/screenshots/Map.png" width="250"> <img src="/screenshots/Loan.png" width="250"> <img src="/screenshots/Edit.png" width="250"> <img src="/screenshots/Night_List.png" width="250"> <img src="/screenshots/Night_List_MapNoInternet.png" width="250"> <img src="/screenshots/Night_Detail.png" width="250"> <img src="/screenshots/Update_notification.png" width="250"> <img src="/screenshots/Search.png" width="250"> 
  <img src="/screenshots/List_Landscape_phone.png" height="250"> 
  <img src="/screenshots/List_Landscape_tablet.png" height="250"> 
 

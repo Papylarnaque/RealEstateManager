@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.database.model
 
-import android.content.ContentValues
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -54,24 +53,3 @@ data class Estate(
         @ColumnInfo(name = "employee_id", index = true)
         val employeeId: Int,
         )
-
-{
-        companion object {
-                fun fromContentValues(it: ContentValues) : Estate
-                { // For Content Provider Insert/Update purposes
-                        return Estate(it.getAsLong("startTime"),
-                        it.getAsLong("endTime"),
-                        it.getAsInteger("estateTypeId"),
-                        it.getAsInteger("price"),
-                        it.getAsInteger("surface"),
-                        it.getAsInteger("rooms_count"),
-                        it.getAsString("description"),
-                        it.getAsString("street"),
-                        it.getAsInteger("street_number"),
-                        it.getAsString("city"),
-                        it.getAsString("postal_code"),
-                        it.getAsInteger("employee_id")
-                        )
-                }
-        }
-}

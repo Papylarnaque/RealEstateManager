@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -11,7 +10,6 @@ class MainActivity : AppCompatActivity(){
 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    var twoPane: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,17 +20,8 @@ class MainActivity : AppCompatActivity(){
                 .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        isTwoPane()
-
         // Set up the action bar for use with the NavController
         setupActionBarWithNavController(navController)
-
-    }
-
-
-    override fun onResume() {
-        isTwoPane()
-        super.onResume()
     }
 
     /**
@@ -42,10 +31,6 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-
-    private fun isTwoPane() {
-        twoPane = findViewById<View>(R.id.detail_fragment_container) != null
-    }
 
 
 
